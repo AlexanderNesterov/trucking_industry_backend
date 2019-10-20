@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+  - changeSet:
+      id: 1
+      author: nesterov
+      comment: Create schema freight, tables truck, cities, cities_distances
+      changes:
+        - sqlFile:
+            path: changesets/HO-001.sql
+            relativeToChangelogFile: true
