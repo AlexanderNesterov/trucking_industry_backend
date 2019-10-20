@@ -1,7 +1,6 @@
 package com.freight.DAO;
 
 import com.freight.models.Cargo;
-
 import java.util.List;
 
 public interface CargoDAO {

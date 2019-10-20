@@ -23,6 +23,9 @@ public class Truck {
     @Column(name = "condition")
     private boolean condition;
 
+    @Column(name = "city_id")
+    private int cityId;
+
     public Truck() {
     }
 
@@ -64,6 +67,14 @@ public class Truck {
 
     public void setCondition(boolean condition) {
         this.condition = condition;
+    }
+
+    public int getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 
     @Override
