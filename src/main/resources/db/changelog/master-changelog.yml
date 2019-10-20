@@ -26,3 +26,11 @@ databaseChangeLog:
         - sqlFile:
             path: changesets/HO-003.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 4
+      author: nesterov
+      comment: Create table drivers
+      changes:
+        - sqlFile:
+            path: changesets/HO-004.sql
+            relativeToChangelogFile: true
