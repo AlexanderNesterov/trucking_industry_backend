@@ -10,3 +10,11 @@ databaseChangeLog:
         - sqlFile:
             path: changesets/HO-001.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 2
+      author: nesterov
+      comment: Create table cargo
+      changes:
+        - sqlFile:
+            path: changesets/HO-002.sql
+            relativeToChangelogFile: true
