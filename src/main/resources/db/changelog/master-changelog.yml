@@ -42,3 +42,11 @@ databaseChangeLog:
         - sqlFile:
             path: changesets/HO-005.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 6
+      author: nesterov
+      comment: Create table busy_drivers
+      changes:
+        - sqlFile:
+            path: changesets/HO-006.sql
+            relativeToChangelogFile: true
