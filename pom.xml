@@ -8,10 +8,10 @@
 		<version>2.2.0.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com</groupId>
-	<artifactId>freight</artifactId>
+	<groupId>com.example</groupId>
+	<artifactId>trucking_industry</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>freight</name>
+	<name>trucking_industry</name>
 
 	<properties>
 		<java.version>11</java.version>
