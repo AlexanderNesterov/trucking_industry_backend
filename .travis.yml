@@ -1,5 +1,8 @@
 language: java
 
+services:
+  - postgresql
+
 addons:
   sonarcloud:
     organization: "alexandernesterov"
