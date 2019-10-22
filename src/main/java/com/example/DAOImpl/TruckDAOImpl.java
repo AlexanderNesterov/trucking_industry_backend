@@ -46,9 +46,4 @@ public class TruckDAOImpl implements TruckDAO {
     public void deleteTruckById(int truckId) {
         truckRepository.deleteById(truckId);
     }
-
-    @Override
-    public List<Object> getSpecs(int truckId) {
-        return truckRepository.getRegNumAndShiftSize(truckId);
-    }
 }

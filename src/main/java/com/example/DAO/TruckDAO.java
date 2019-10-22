@@ -10,6 +10,4 @@ public interface TruckDAO {
     Truck updateTruck(Truck truck);
     void addTruck(Truck truck);
     void deleteTruckById(int truckId);
-
-    List<Object> getSpecs(int truckId);
 }

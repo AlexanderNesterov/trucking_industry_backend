@@ -39,9 +39,4 @@ public class TruckServiceImpl implements TruckService {
     public void deleteTruckById(int truckId) {
         truckDAO.deleteTruckById(truckId);
     }
-
-    @Override
-    public List<Object> getSpecs(int truckId) {
-        return truckDAO.getSpecs(truckId);
-    }
 }

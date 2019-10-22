@@ -40,9 +40,4 @@ public class TruckController {
     public void deleteTruck(@PathVariable int truckId) {
         truckService.deleteTruckById(truckId);
     }
-
-    @GetMapping("/specs/{truckId}")
-    public List<Object> getSpecs(@PathVariable int truckId) {
-        return truckService.getSpecs(truckId);
-    }
 }
