@@ -1,4 +1,4 @@
-package com.example.models;
+package com.example.modelsDB;
 
 import javax.persistence.*;
 
@@ -17,17 +17,14 @@ public class Driver {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "driver_license")
+    private String driverLicense;
+
     @Column(name = "hours_per_month")
     private double hoursPerMonth;
 
     @Column(name = "status")
-    private String status;
-
-    @Column(name = "city_id")
-    private int cityId;
-
-    @Column(name = "truck_id")
-    private int truckId;
+    private int status;
 
     public Driver() {
     }
@@ -64,27 +61,19 @@ public class Driver {
         this.hoursPerMonth = hoursPerMonth;
     }
 
-    public String getStatus() {
+    public String getDriverLicense() {
+        return driverLicense;
+    }
+
+    public void setDriverLicense(String driverLicense) {
+        this.driverLicense = driverLicense;
+    }
+
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
-    }
-
-    public int getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
-    }
-
-    public int getTruckId() {
-        return truckId;
-    }
-
-    public void setTruckId(int truckId) {
-        this.truckId = truckId;
     }
 }

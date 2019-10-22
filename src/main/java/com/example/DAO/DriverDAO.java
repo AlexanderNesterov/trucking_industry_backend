@@ -1,6 +1,6 @@
 package com.example.DAO;
 
-import com.example.models.Driver;
+import com.example.modelsDB.Driver;
 import java.util.List;
 
 public interface DriverDAO {

@@ -1,43 +1,48 @@
 package com.example.serviceImpl;
 
 import com.example.DAO.DriverDAO;
-import com.example.models.Driver;
+import com.example.models.DriverDto;
 import com.example.services.DriverService;
+import com.example.services.mappers.DriverMapper;
 import org.springframework.stereotype.Service;
-
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
+@Validated
 public class DriverServiceImpl implements DriverService {
 
     private final DriverDAO driverDAO;
+    private final DriverMapper driverMapper;
 
-    public DriverServiceImpl(DriverDAO driverDAO) {
+    public DriverServiceImpl(DriverDAO driverDAO, DriverMapper driverMapper) {
         this.driverDAO = driverDAO;
+        this.driverMapper = driverMapper;
     }
 
     @Override
-    public Driver findById(int driverId) {
-        return driverDAO.findById(driverId);
+    public DriverDto findById(int driverDtoId) {
+        return driverMapper.toDto(driverDAO.findById(driverDtoId));
     }
 
     @Override
-    public List<Driver> findAll() {
-        return driverDAO.findAll();
+    public List<DriverDto> findAll() {
+        return driverMapper.toListDto(driverDAO.findAll());
     }
 
     @Override
-    public Driver updateDriver(Driver driver) {
-        return driverDAO.updateDriver(driver);
+    public DriverDto updateDriver(@Valid DriverDto driverDto) {
+        return driverMapper.toDto(driverDAO.updateDriver(driverMapper.fromDto(driverDto)));
     }
 
     @Override
-    public void addDriver(Driver driver) {
-        driverDAO.addDriver(driver);
+    public void addDriver(@Valid DriverDto driverDto) {
+        driverDAO.addDriver(driverMapper.fromDto(driverDto));
     }
 
     @Override
-    public void deleteDriverById(int driverId) {
-        driverDAO.deleteDriverById(driverId);
+    public void deleteDriverById(int driverDtoId) {
+        driverDAO.deleteDriverById(driverDtoId);
     }
 }

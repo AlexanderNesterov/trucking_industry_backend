@@ -1,10 +1,9 @@
 package com.example.DAOImpl;
 
 import com.example.DAO.DriverDAO;
-import com.example.models.Driver;
+import com.example.modelsDB.Driver;
 import com.example.repositories.DriverRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 
