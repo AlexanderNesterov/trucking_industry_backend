@@ -1,7 +1,7 @@
 package com.example.services.mappers;
 
 import com.example.models.DriverDto;
-import com.example.modelsDB.Driver;
+import com.example.database.models.Driver;
 import org.mapstruct.Mapper;
 import java.util.List;
 

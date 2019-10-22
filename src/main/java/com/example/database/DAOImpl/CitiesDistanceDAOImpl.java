@@ -1,8 +1,8 @@
-package com.example.DAOImpl;
+package com.example.database.DAOImpl;
 
-import com.example.DAO.CitiesDistanceDAO;
+import com.example.database.DAO.CitiesDistanceDAO;
 import com.example.models.CitiesDistance;
-import com.example.repositories.CitiesDistanceRepository;
+import com.example.database.repositories.CitiesDistanceRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

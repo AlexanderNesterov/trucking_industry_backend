@@ -1,6 +1,6 @@
 package com.example.serviceImpl;
 
-import com.example.DAO.TruckDAO;
+import com.example.database.DAO.TruckDAO;
 import com.example.models.Truck;
 import com.example.services.TruckService;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.example.serviceImpl;
 
-import com.example.DAO.DriverDAO;
+import com.example.database.DAO.DriverDAO;
 import com.example.models.DriverDto;
 import com.example.services.DriverService;
 import com.example.services.mappers.DriverMapper;

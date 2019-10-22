@@ -1,8 +1,8 @@
-package com.example.DAOImpl;
+package com.example.database.DAOImpl;
 
-import com.example.DAO.CargoDAO;
+import com.example.database.DAO.CargoDAO;
 import com.example.models.Cargo;
-import com.example.repositories.CargoRepository;
+import com.example.database.repositories.CargoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

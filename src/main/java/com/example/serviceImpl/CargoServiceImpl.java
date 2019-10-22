@@ -1,6 +1,6 @@
 package com.example.serviceImpl;
 
-import com.example.DAO.CargoDAO;
+import com.example.database.DAO.CargoDAO;
 import com.example.models.Cargo;
 import com.example.services.CargoService;
 import org.springframework.stereotype.Service;

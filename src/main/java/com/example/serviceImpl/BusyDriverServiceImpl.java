@@ -1,6 +1,6 @@
 package com.example.serviceImpl;
 
-import com.example.DAO.BusyDriverDAO;
+import com.example.database.DAO.BusyDriverDAO;
 import com.example.models.BusyDriver;
 import com.example.services.BusyDriverService;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.example.DAO;
+package com.example.database.DAO;
 
 import com.example.models.Truck;
 import java.util.List;

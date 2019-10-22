@@ -1,4 +1,4 @@
-package com.example.repositories;
+package com.example.database.repositories;
 
 import com.example.models.CitiesDistance;
 import org.springframework.data.repository.CrudRepository;

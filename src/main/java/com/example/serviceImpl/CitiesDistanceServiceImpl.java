@@ -1,7 +1,7 @@
 package com.example.serviceImpl;
 
 import com.example.models.CitiesDistance;
-import com.example.DAO.CitiesDistanceDAO;
+import com.example.database.DAO.CitiesDistanceDAO;
 import com.example.services.CitiesDistanceService;
 import org.springframework.stereotype.Service;
 

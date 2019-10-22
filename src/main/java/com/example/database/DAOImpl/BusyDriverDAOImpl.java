@@ -1,8 +1,8 @@
-package com.example.DAOImpl;
+package com.example.database.DAOImpl;
 
-import com.example.DAO.BusyDriverDAO;
+import com.example.database.DAO.BusyDriverDAO;
 import com.example.models.BusyDriver;
-import com.example.repositories.BusyDriverRepository;
+import com.example.database.repositories.BusyDriverRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

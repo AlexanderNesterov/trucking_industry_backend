@@ -1,4 +1,4 @@
-package com.example.modelsDB;
+package com.example.database.models;
 
 import javax.persistence.*;
 

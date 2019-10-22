@@ -1,8 +1,8 @@
-package com.example.DAOImpl;
+package com.example.database.DAOImpl;
 
-import com.example.DAO.OrderDAO;
+import com.example.database.DAO.OrderDAO;
 import com.example.models.Order;
-import com.example.repositories.OrderRepository;
+import com.example.database.repositories.OrderRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

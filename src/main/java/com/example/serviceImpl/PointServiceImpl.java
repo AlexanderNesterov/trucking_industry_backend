@@ -1,6 +1,6 @@
 package com.example.serviceImpl;
 
-import com.example.DAO.PointDAO;
+import com.example.database.DAO.PointDAO;
 import com.example.models.Point;
 import com.example.services.PointService;
 import org.springframework.stereotype.Service;

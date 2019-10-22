@@ -1,8 +1,8 @@
-package com.example.DAOImpl;
+package com.example.database.DAOImpl;
 
-import com.example.DAO.TruckDAO;
+import com.example.database.DAO.TruckDAO;
 import com.example.models.Truck;
-import com.example.repositories.TruckRepository;
+import com.example.database.repositories.TruckRepository;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
