@@ -1,9 +1,8 @@
 package com.example.controllers;
 
-import com.example.models.Truck;
+import com.example.models.TruckDto;
 import com.example.services.TruckService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController()
@@ -17,27 +16,27 @@ public class TruckController {
     }
 
     @GetMapping
-    public List<Truck> findAll() {
+    public List<TruckDto> findAll() {
         return truckService.findAll();
     }
 
-    @GetMapping("/{truckId}")
-    public Truck findById(@PathVariable int truckId) {
-        return truckService.findById(truckId);
+    @GetMapping("/{truckDtoId}")
+    public TruckDto findById(@PathVariable int truckDtoId) {
+        return truckService.findById(truckDtoId);
     }
 
     @PutMapping
-    public Truck updateTruck(@RequestBody Truck truck) {
-        return truckService.updateTruck(truck);
+    public TruckDto updateTruck(@RequestBody TruckDto truckDto) {
+        return truckService.updateTruck(truckDto);
     }
 
     @PostMapping
-    public void addTruck(@RequestBody Truck truck) {
-        truckService.addTruck(truck);
+    public void addTruck(@RequestBody TruckDto truckDto) {
+        truckService.addTruck(truckDto);
     }
 
-    @DeleteMapping("/{truckId}")
-    public void deleteTruck(@PathVariable int truckId) {
-        truckService.deleteTruckById(truckId);
+    @DeleteMapping("/{truckDtoId}")
+    public void deleteTruck(@PathVariable int truckDtoId) {
+        truckService.deleteTruckById(truckDtoId);
     }
 }

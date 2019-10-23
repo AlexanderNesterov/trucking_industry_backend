@@ -1,5 +1,6 @@
-package com.example.models;
+package com.example.database.models;
 
+import com.example.database.models.commons.TruckCondition;
 import javax.persistence.*;
 
 @Entity
@@ -11,8 +12,11 @@ public class Truck {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "reg_num")
+    @Column(name = "registration_number")
     private String registrationNumber;
+
+    @Column(name = "model")
+    private String model;
 
     @Column(name = "shift_size")
     private int shiftSize;
@@ -21,10 +25,7 @@ public class Truck {
     private double capacity;
 
     @Column(name = "condition")
-    private boolean condition;
-
-    @Column(name = "city_id")
-    private int cityId;
+    private TruckCondition condition;
 
     public Truck() {
     }
@@ -61,29 +62,19 @@ public class Truck {
         this.capacity = capacity;
     }
 
-    public boolean isCondition() {
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public TruckCondition getCondition() {
         return condition;
     }
 
-    public void setCondition(boolean condition) {
+    public void setCondition(TruckCondition condition) {
         this.condition = condition;
-    }
-
-    public int getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
-    }
-
-    @Override
-    public String toString() {
-        return "Truck{" +
-                "registrationNumber='" + registrationNumber + '\'' +
-                ", shiftSize=" + shiftSize +
-                ", capacity=" + capacity +
-                ", condition=" + condition +
-                '}';
     }
 }

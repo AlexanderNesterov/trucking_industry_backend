@@ -1,6 +1,6 @@
 package com.example.database.DAO;
 
-import com.example.models.Truck;
+import com.example.database.models.Truck;
 import java.util.List;
 
 public interface TruckDAO {

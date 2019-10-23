@@ -3,7 +3,6 @@ package com.example.models;
 import com.example.database.models.commons.DriverStatus;
 import com.example.models.validation.annotation.IncorrectDriverLicense;
 import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

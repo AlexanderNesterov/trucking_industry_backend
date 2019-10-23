@@ -1,7 +1,6 @@
 package com.example.database.models;
 
 import com.example.database.models.commons.DriverStatus;
-
 import javax.persistence.*;
 
 @Entity

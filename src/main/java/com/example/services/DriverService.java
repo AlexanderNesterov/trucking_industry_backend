@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface DriverService {
     
-    DriverDto findById(int driverId);
+    DriverDto findById(int driverDtoId);
     List<DriverDto> findAll();
     DriverDto updateDriver(@Valid DriverDto driver);
     void addDriver(@Valid DriverDto driver);
-    void deleteDriverById(int driverId);
+    void deleteDriverById(int driverDtoId);
 }

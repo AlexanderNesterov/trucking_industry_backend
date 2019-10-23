@@ -26,4 +26,25 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
         </createTable>
     </changeSet>
 
+    <changeSet id="2" author="nesterov">
+        <createTable tableName="trucks" schemaName="freight">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="registration_number" type="varchar(7)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="model" type="varchar(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shift_size" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="capacity" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="condition" type="int" defaultValue="0"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

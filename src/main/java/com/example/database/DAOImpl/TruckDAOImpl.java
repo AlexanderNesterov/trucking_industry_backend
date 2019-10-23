@@ -1,7 +1,7 @@
 package com.example.database.DAOImpl;
 
 import com.example.database.DAO.TruckDAO;
-import com.example.models.Truck;
+import com.example.database.models.Truck;
 import com.example.database.repositories.TruckRepository;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
@@ -38,7 +38,6 @@ public class TruckDAOImpl implements TruckDAO {
 
     @Override
     public void addTruck(Truck truck) {
-        truck.setId(0);
         truckRepository.save(truck);
     }
 
