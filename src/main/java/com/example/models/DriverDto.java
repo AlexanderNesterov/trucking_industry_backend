@@ -1,5 +1,6 @@
 package com.example.models;
 
+import com.example.database.models.commons.DriverStatus;
 import com.example.models.validation.annotation.IncorrectDriverLicense;
 import org.hibernate.validator.constraints.Length;
 
@@ -26,7 +27,7 @@ public class DriverDto {
     private double hoursPerMonth;
 
     @NotNull
-    private int status;
+    private DriverStatus status;
 
     public DriverDto() {
     }
@@ -71,11 +72,11 @@ public class DriverDto {
         this.driverLicense = driverLicense;
     }
 
-    public int getStatus() {
+    public DriverStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(DriverStatus status) {
         this.status = status;
     }
 }

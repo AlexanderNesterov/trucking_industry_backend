@@ -1,5 +1,7 @@
 package com.example.database.models;
 
+import com.example.database.models.commons.DriverStatus;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,7 +26,7 @@ public class Driver {
     private double hoursPerMonth;
 
     @Column(name = "status")
-    private int status;
+    private DriverStatus status;
 
     public Driver() {
     }
@@ -69,11 +71,11 @@ public class Driver {
         this.driverLicense = driverLicense;
     }
 
-    public int getStatus() {
+    public DriverStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(DriverStatus status) {
         this.status = status;
     }
 }
