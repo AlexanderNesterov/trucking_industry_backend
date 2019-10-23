@@ -2,6 +2,7 @@ package com.example.database.DAOImpl;
 
 import com.example.database.DAO.DriverDAO;
 import com.example.database.models.Driver;
+import com.example.database.models.commons.DriverStatus;
 import com.example.database.repositories.DriverRepository;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class DriverDAOImpl implements DriverDAO {
 
     @Override
     public void addDriver(Driver driver) {
+        driver.setStatus(DriverStatus.REST);
         driverRepository.save(driver);
     }
 

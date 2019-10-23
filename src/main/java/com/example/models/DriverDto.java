@@ -5,7 +5,6 @@ import com.example.models.validation.annotation.IncorrectDriverLicense;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 public class DriverDto {
 
@@ -25,7 +24,6 @@ public class DriverDto {
     @Min(0)
     private double hoursPerMonth;
 
-    @NotNull
     private DriverStatus status;
 
     public DriverDto() {
