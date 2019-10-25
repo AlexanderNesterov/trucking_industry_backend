@@ -8,25 +8,49 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="nesterov">
+
+        <createTable tableName="users" schemaName="freight">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(32)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(11)"/>
+            <column name="email" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
         <createTable tableName="drivers" schemaName="freight">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="first_name" type="varchar(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_name" type="varchar(20)">
-                <constraints nullable="false"/>
-            </column>
             <column name="driver_license" type="varchar(10)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="int" defaultValue="1"/>
-            <column name="hours_per_month" type="numeric" defaultValue="0"/>
+            <column name="status" type="int"/>
         </createTable>
-    </changeSet>
 
-    <changeSet id="2" author="nesterov">
+        <addForeignKeyConstraint referencedTableSchemaName="freight" baseTableSchemaName="freight" baseTableName="drivers" baseColumnNames="user_id" constraintName="fk_driver_user"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+
         <createTable tableName="trucks" schemaName="freight">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -34,16 +58,13 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="registration_number" type="varchar(7)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="model" type="varchar(15)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="shift_size" type="int">
+            <column name="model" type="varchar(32)">
                 <constraints nullable="false"/>
             </column>
             <column name="capacity" type="numeric">
                 <constraints nullable="false"/>
             </column>
-            <column name="condition" type="int" defaultValue="0"/>
+            <column name="condition" type="int"/>
         </createTable>
     </changeSet>
 

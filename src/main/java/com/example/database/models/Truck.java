@@ -18,9 +18,6 @@ public class Truck {
     @Column(name = "model")
     private String model;
 
-    @Column(name = "shift_size")
-    private int shiftSize;
-
     @Column(name = "capacity")
     private double capacity;
 
@@ -44,14 +41,6 @@ public class Truck {
 
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
-    }
-
-    public int getShiftSize() {
-        return shiftSize;
-    }
-
-    public void setShiftSize(int shiftSize) {
-        this.shiftSize = shiftSize;
     }
 
     public double getCapacity() {

@@ -15,9 +15,6 @@ public class TruckDto {
     @NotBlank
     private String model;
 
-    @Min(1)
-    private int shiftSize;
-
     @Min(0)
     private double capacity;
 
@@ -40,14 +37,6 @@ public class TruckDto {
 
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
-    }
-
-    public int getShiftSize() {
-        return shiftSize;
-    }
-
-    public void setShiftSize(int shiftSize) {
-        this.shiftSize = shiftSize;
     }
 
     public double getCapacity() {

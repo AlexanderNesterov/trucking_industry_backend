@@ -12,20 +12,15 @@ public class Driver {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
     @Column(name = "driver_license")
     private String driverLicense;
 
-    @Column(name = "hours_per_month")
-    private double hoursPerMonth;
-
     @Column(name = "status")
     private DriverStatus status;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     public Driver() {
     }
@@ -36,30 +31,6 @@ public class Driver {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public double getHoursPerMonth() {
-        return hoursPerMonth;
-    }
-
-    public void setHoursPerMonth(double hoursPerMonth) {
-        this.hoursPerMonth = hoursPerMonth;
     }
 
     public String getDriverLicense() {
@@ -76,5 +47,13 @@ public class Driver {
 
     public void setStatus(DriverStatus status) {
         this.status = status;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
