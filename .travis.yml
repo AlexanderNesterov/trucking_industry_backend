@@ -1,12 +1,16 @@
 language: java
 
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database trucking_industry;' -U postgres
+
 addons:
   sonarcloud:
     organization: "alexandernesterov"
     token:
-      secure: d108dab4cce1796654ee55b7e6d6229ac6967a5c # encrypted value of your token
+      secure: d108dab4cce1796654ee55b7e6d6229ac6967a5c
 
 script:
-  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=AlexanderNesterov_trucking_industry_backend
-#travis encrypt d108dab4cce1796654ee55b7e6d6229ac6967a5c

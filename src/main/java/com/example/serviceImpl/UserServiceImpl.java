@@ -4,9 +4,14 @@ import com.example.database.DAO.UserDAO;
 import com.example.models.UserDto;
 import com.example.services.UserService;
 import com.example.services.mappers.UserMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 
+@Service
+@Validated
 public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
@@ -28,12 +33,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserDto user) {
+    public UserDto updateUser(@Valid UserDto user) {
         return userMapper.toDto(userDAO.updateUser(userMapper.fromDto(user)));
     }
 
     @Override
-    public UserDto addUser(UserDto user) {
+    public UserDto addUser(@Valid UserDto user) {
         return userMapper.toDto(userDAO.addUser(userMapper.fromDto(user)));
     }
 }

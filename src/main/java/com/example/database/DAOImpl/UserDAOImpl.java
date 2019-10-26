@@ -3,10 +3,11 @@ package com.example.database.DAOImpl;
 import com.example.database.DAO.UserDAO;
 import com.example.database.models.User;
 import com.example.database.repositories.UserRepository;
-
+import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserDAOImpl implements UserDAO {
 
     private final UserRepository userRepository;
