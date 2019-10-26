@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @Constraint(validatedBy = DriverLicenseIncorrectValidator.class)
-public @interface IncorrectDriverLicense {
+public @interface DriverLicense {
     String message() default "incorrect driver license";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

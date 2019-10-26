@@ -19,7 +19,10 @@ public class DriverDAOImpl implements DriverDAO {
 
     @Override
     public Driver findById(int driverId) {
-        return driverRepository.findById(driverId).get();
+        Driver driver = driverRepository.findById(driverId).get();
+        System.out.println(driver);
+
+        return driver;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class DriverDAOImpl implements DriverDAO {
 
     @Override
     public void addDriver(Driver driver) {
+        System.out.println(driver);
         driver.setStatus(DriverStatus.REST);
         driverRepository.save(driver);
     }

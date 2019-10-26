@@ -47,7 +47,8 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="status" type="int"/>
         </createTable>
 
-        <addForeignKeyConstraint referencedTableSchemaName="freight" baseTableSchemaName="freight" baseTableName="drivers" baseColumnNames="user_id" constraintName="fk_driver_user"
+        <addForeignKeyConstraint referencedTableSchemaName="freight" baseTableSchemaName="freight"
+                                 baseTableName="drivers" baseColumnNames="user_id" constraintName="fk_driver_user"
                                  referencedTableName="users"
                                  referencedColumnNames="id"/>
 

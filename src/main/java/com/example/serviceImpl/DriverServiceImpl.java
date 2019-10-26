@@ -37,8 +37,8 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public void addDriver(@Valid DriverDto driverDto) {
-        driverDAO.addDriver(driverMapper.fromDto(driverDto));
+    public void addDriver(@Valid DriverDto driverFullInfo) {
+        driverDAO.addDriver(driverMapper.fromDto(driverFullInfo));
     }
 
     @Override
