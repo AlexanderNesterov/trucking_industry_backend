@@ -1,12 +1,13 @@
 package com.example.controllers;
 
-import com.example.models.Cargo;
+import com.example.models.CargoDto;
 import com.example.services.CargoService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/cargo")
 public class CargoController {
 
@@ -17,27 +18,22 @@ public class CargoController {
     }
 
     @GetMapping
-    public List<Cargo> findAll() {
+    public List<CargoDto> findAll() {
         return cargoService.findAll();
     }
 
     @GetMapping("/{cargoId}")
-    public Cargo findById(@PathVariable int cargoId) {
+    public CargoDto findById(@PathVariable int cargoId) {
         return cargoService.findById(cargoId);
     }
 
     @PutMapping
-    public Cargo updateCargo(@RequestBody Cargo cargo) {
-        return cargoService.updateCargo(cargo);
+    public CargoDto updateCargo(@RequestBody CargoDto cargoDto) {
+        return cargoService.updateCargo(cargoDto);
     }
 
     @PostMapping
-    public void addCargo(@RequestBody Cargo cargo) {
-        cargoService.addCargo(cargo);
-    }
-
-    @DeleteMapping("/{cargoId}")
-    public void deleteCargo(@PathVariable int cargoId) {
-        cargoService.deleteCargoById(cargoId);
+    public void addCargo(@RequestBody CargoDto cargoDto) {
+        cargoService.addCargo(cargoDto);
     }
 }

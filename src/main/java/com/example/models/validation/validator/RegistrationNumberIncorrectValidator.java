@@ -17,6 +17,6 @@ public class RegistrationNumberIncorrectValidator implements ConstraintValidator
         Pattern pattern = Pattern.compile("[A-Z]{2}\\d{5}");
         Matcher matcher = pattern.matcher(s);
 
-        return matcher.find();
+        return matcher.matches();
     }
 }

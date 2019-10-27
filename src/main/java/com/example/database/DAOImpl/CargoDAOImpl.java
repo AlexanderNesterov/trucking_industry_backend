@@ -1,7 +1,8 @@
 package com.example.database.DAOImpl;
 
 import com.example.database.DAO.CargoDAO;
-import com.example.models.Cargo;
+import com.example.database.models.Cargo;
+import com.example.database.models.commons.CargoStatus;
 import com.example.database.repositories.CargoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -37,11 +38,7 @@ public class CargoDAOImpl implements CargoDAO {
 
     @Override
     public void addCargo(Cargo cargo) {
+        cargo.setStatus(CargoStatus.CREATED);
         cargoRepository.save(cargo);
-    }
-
-    @Override
-    public void deleteCargoById(int cargoId) {
-        cargoRepository.deleteById(cargoId);
     }
 }

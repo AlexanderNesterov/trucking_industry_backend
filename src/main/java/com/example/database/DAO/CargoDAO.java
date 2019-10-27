@@ -1,6 +1,6 @@
 package com.example.database.DAO;
 
-import com.example.models.Cargo;
+import com.example.database.models.Cargo;
 import java.util.List;
 
 public interface CargoDAO {
@@ -9,5 +9,4 @@ public interface CargoDAO {
     List<Cargo> findAll();
     Cargo updateCargo(Cargo cargo);
     void addCargo(Cargo cargo);
-    void deleteCargoById(int cargoId);
 }

@@ -33,7 +33,6 @@ public class UserDto {
     @Length(max = 32, message = EMAIL + TOO_LONG)
     private String email;
 
-    @NotNull(message = ROLE + NULL)
     private Role role;
 
     public UserDto() {
