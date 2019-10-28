@@ -1,7 +1,6 @@
 package com.example.serviceImpl;
 
 import com.example.database.DAO.TruckDAO;
-import com.example.database.models.Truck;
 import com.example.models.TruckDto;
 import com.example.services.TruckService;
 import com.example.services.mappers.TruckMapper;
@@ -29,11 +28,7 @@ public class TruckServiceImpl implements TruckService {
 
     @Override
     public List<TruckDto> findAll() {
-        List<Truck> trucks = truckDAO.findAll();
-
-        System.out.println(trucks);
-
-        return truckMapper.toListDto(trucks);
+        return truckMapper.toListDto(truckDAO.findAll());
     }
 
     @Override
@@ -44,6 +39,12 @@ public class TruckServiceImpl implements TruckService {
     @Override
     public void addTruck(@Valid TruckDto truckDto) {
         truckDAO.addTruck(truckMapper.fromDto(truckDto));
+    }
+
+    @Override
+    public List<TruckDto> getFreeTrucks(double weight) {
+        return truckMapper.toListDto(truckDAO.getFreeTrucks(weight));
+        //return truckDAO.getFreeTrucks();
     }
 
     @Override

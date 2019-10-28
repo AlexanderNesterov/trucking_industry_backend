@@ -21,6 +21,11 @@ public class TruckController {
         return truckService.findAll();
     }
 
+    @GetMapping("free/{weight}")
+    public List<TruckDto> getFreeTrucks(@PathVariable double weight) {
+        return truckService.getFreeTrucks(weight);
+    }
+
     @GetMapping("/{truckDtoId}")
     public TruckDto findById(@PathVariable int truckDtoId) {
         return truckService.findById(truckDtoId);

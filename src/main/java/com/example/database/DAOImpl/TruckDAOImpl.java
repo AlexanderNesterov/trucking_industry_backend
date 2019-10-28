@@ -44,6 +44,11 @@ public class TruckDAOImpl implements TruckDAO {
     }
 
     @Override
+    public List<Truck> getFreeTrucks(double weight) {
+        return truckRepository.getFreeTrucks(weight);
+    }
+
+    @Override
     public void deleteTruckById(int truckId) {
         truckRepository.deleteById(truckId);
     }
