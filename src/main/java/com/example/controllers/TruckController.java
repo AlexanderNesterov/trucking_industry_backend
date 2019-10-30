@@ -1,12 +1,12 @@
 package com.example.controllers;
 
-import com.example.models.Truck;
+import com.example.models.TruckDto;
 import com.example.services.TruckService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController()
+@CrossOrigin
 @RequestMapping("/trucks")
 public class TruckController {
 
@@ -17,32 +17,27 @@ public class TruckController {
     }
 
     @GetMapping
-    public List<Truck> findAll() {
+    public List<TruckDto> findAll() {
         return truckService.findAll();
     }
 
-    @GetMapping("/{truckId}")
-    public Truck findById(@PathVariable int truckId) {
-        return truckService.findById(truckId);
+    @GetMapping("free/{weight}")
+    public List<TruckDto> getFreeTrucks(@PathVariable double weight) {
+        return truckService.getFreeTrucks(weight);
+    }
+
+    @GetMapping("/{truckDtoId}")
+    public TruckDto findById(@PathVariable int truckDtoId) {
+        return truckService.findById(truckDtoId);
     }
 
     @PutMapping
-    public Truck updateTruck(@RequestBody Truck truck) {
-        return truckService.updateTruck(truck);
+    public TruckDto updateTruck(@RequestBody TruckDto truckDto) {
+        return truckService.updateTruck(truckDto);
     }
 
     @PostMapping
-    public void addTruck(@RequestBody Truck truck) {
-        truckService.addTruck(truck);
-    }
-
-    @DeleteMapping("/{truckId}")
-    public void deleteTruck(@PathVariable int truckId) {
-        truckService.deleteTruckById(truckId);
-    }
-
-    @GetMapping("/specs/{truckId}")
-    public List<Object> getSpecs(@PathVariable int truckId) {
-        return truckService.getSpecs(truckId);
+    public void addTruck(@RequestBody TruckDto truckDto) {
+        truckService.addTruck(truckDto);
     }
 }

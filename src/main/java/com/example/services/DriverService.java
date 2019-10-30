@@ -1,14 +1,14 @@
 package com.example.services;
 
-import com.example.models.Driver;
-
+import com.example.models.DriverDto;
+import javax.validation.Valid;
 import java.util.List;
 
 public interface DriverService {
     
-    Driver findById(int driverId);
-    List<Driver> findAll();
-    Driver updateDriver(Driver driver);
-    void addDriver(Driver driver);
-    void deleteDriverById(int driverId);
+    DriverDto findById(int driverDtoId);
+    List<DriverDto> findAll();
+    List<DriverDto> getFreeDrivers();
+    DriverDto updateDriver(@Valid DriverDto driver);
+    void addDriver(@Valid DriverDto driver);
 }

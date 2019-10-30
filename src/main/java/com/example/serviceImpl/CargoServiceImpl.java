@@ -1,43 +1,47 @@
 package com.example.serviceImpl;
 
-import com.example.DAO.CargoDAO;
-import com.example.models.Cargo;
+import com.example.database.repositories.CargoRepository;
+import com.example.models.CargoDto;
 import com.example.services.CargoService;
+import com.example.services.mappers.CargoMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Validated
 public class CargoServiceImpl implements CargoService {
 
-    private final CargoDAO cargoDAO;
+    private final CargoMapper cargoMapper;
+    private final CargoRepository cargoRepository;
 
-    public CargoServiceImpl(CargoDAO cargoDAO) {
-        this.cargoDAO = cargoDAO;
+    public CargoServiceImpl(CargoMapper cargoMapper, CargoRepository cargoRepository) {
+        this.cargoMapper = cargoMapper;
+        this.cargoRepository = cargoRepository;
     }
 
     @Override
-    public Cargo findById(int cargoId) {
-        return cargoDAO.findById(cargoId);
+    public CargoDto findById(int cargoId) {
+        return cargoMapper.toDto(cargoRepository.findById(cargoId).get());
     }
 
     @Override
-    public List<Cargo> findAll() {
-        return cargoDAO.findAll();
+    public List<CargoDto> findAll() {
+        List<CargoDto> cargoDtos = new ArrayList<>();
+        cargoRepository.findAll().forEach(driver -> cargoDtos.add(cargoMapper.toDto(driver)));
+        return cargoDtos;
     }
 
     @Override
-    public Cargo updateCargo(Cargo cargo) {
-        return cargoDAO.updateCargo(cargo);
+    public CargoDto updateCargo(@Valid CargoDto cargoDto) {
+        return cargoMapper.toDto(cargoRepository.save(cargoMapper.fromDto(cargoDto)));
     }
 
     @Override
-    public void addCargo(Cargo cargo) {
-        cargoDAO.addCargo(cargo);
-    }
-
-    @Override
-    public void deleteCargoById(int cargoId) {
-        cargoDAO.deleteCargoById(cargoId);
+    public void addCargo(@Valid CargoDto cargoDto) {
+        cargoRepository.save(cargoMapper.fromDto(cargoDto));
     }
 }

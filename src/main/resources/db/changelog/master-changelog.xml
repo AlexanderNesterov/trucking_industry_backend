@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="nesterov">
+
+        <createTable tableName="users" schemaName="freight">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(32)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(11)"/>
+            <column name="email" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="drivers" schemaName="freight">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="driver_license" type="varchar(10)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="int"/>
+        </createTable>
+
+        <addForeignKeyConstraint referencedTableSchemaName="freight" baseTableSchemaName="freight"
+                                 baseTableName="drivers" baseColumnNames="user_id"
+                                 constraintName="fk_driver_user" referencedTableName="users"
+                                 referencedColumnNames="id"/>
+
+        <createTable tableName="trucks" schemaName="freight">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="registration_number" type="varchar(7)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="model" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="capacity" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="condition" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="nesterov">
+        <createTable tableName="cargo" schemaName="freight">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(256)"/>
+            <column name="weight" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="load_location_id" type="int"/>
+            <column name="discharge_location_id" type="int"/>
+            <column name="truck_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="driver_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_driver_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="int"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableSchemaName="freight" referencedTableSchemaName="freight"
+                                 baseTableName="cargo" baseColumnNames="truck_id"
+                                 constraintName="fk_cargo_truck" referencedTableName="trucks"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableSchemaName="freight" referencedTableSchemaName="freight"
+                                 baseTableName="cargo" baseColumnNames="driver_id"
+                                 constraintName="fk_cargo_driver" referencedTableName="drivers"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableSchemaName="freight" referencedTableSchemaName="freight"
+                                 baseTableName="cargo" baseColumnNames="co_driver_id"
+                                 constraintName="fk_cargo_co_driver" referencedTableName="drivers"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    
+    <changeSet id="3" author="nesterov">
+        <modifyDataType tableName="users" schemaName="freight" columnName="role" newDataType="varchar(32)"/>
+        <modifyDataType tableName="drivers" schemaName="freight" columnName="status" newDataType="varchar(32)"/>
+        <modifyDataType tableName="trucks" schemaName="freight" columnName="condition" newDataType="varchar(32)"/>
+        <modifyDataType tableName="cargo" schemaName="freight" columnName="status" newDataType="varchar(32)"/>
+    </changeSet>
+</databaseChangeLog>

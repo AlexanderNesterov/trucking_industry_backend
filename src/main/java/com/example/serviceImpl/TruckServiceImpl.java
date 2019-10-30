@@ -1,47 +1,51 @@
 package com.example.serviceImpl;
 
-import com.example.DAO.TruckDAO;
-import com.example.models.Truck;
+import com.example.database.repositories.TruckRepository;
+import com.example.models.TruckDto;
 import com.example.services.TruckService;
+import com.example.services.mappers.TruckMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Validated
 public class TruckServiceImpl implements TruckService {
 
-    private final TruckDAO truckDAO;
+    private final TruckRepository truckRepository;
+    private final TruckMapper truckMapper;
 
-    public TruckServiceImpl(TruckDAO truckDAO) {
-        this.truckDAO = truckDAO;
+    public TruckServiceImpl(TruckRepository truckRepository, TruckMapper truckMapper) {
+        this.truckRepository = truckRepository;
+        this.truckMapper = truckMapper;
     }
 
     @Override
-    public Truck findById(int truckId) {
-        return truckDAO.findById(truckId);
+    public TruckDto findById(int truckDtoId) {
+        return truckMapper.toDto(truckRepository.findById(truckDtoId).get());
     }
 
     @Override
-    public List<Truck> findAll() {
-        return truckDAO.findAll();
+    public List<TruckDto> findAll() {
+        List<TruckDto> truckDtos = new ArrayList<>();
+        truckRepository.findAll().forEach(truck -> truckDtos.add(truckMapper.toDto(truck)));
+        return truckDtos;
     }
 
     @Override
-    public Truck updateTruck(Truck truck) {
-        return truckDAO.updateTruck(truck);
+    public TruckDto updateTruck(@Valid TruckDto truckDto) {
+        return truckMapper.toDto(truckRepository.save(truckMapper.fromDto(truckDto)));
     }
 
     @Override
-    public void addTruck(Truck truck) {
-        truckDAO.addTruck(truck);
+    public void addTruck(@Valid TruckDto truckDto) {
+        truckRepository.save(truckMapper.fromDto(truckDto));
     }
 
     @Override
-    public void deleteTruckById(int truckId) {
-        truckDAO.deleteTruckById(truckId);
-    }
-
-    @Override
-    public List<Object> getSpecs(int truckId) {
-        return truckDAO.getSpecs(truckId);
+    public List<TruckDto> getFreeTrucks(double weight) {
+        return truckMapper.toListDto(truckRepository.getFreeTrucks(weight));
     }
 }

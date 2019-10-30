@@ -1,11 +1,12 @@
 package com.example.controllers;
 
-import com.example.models.Driver;
+import com.example.models.DriverDto;
 import com.example.services.DriverService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/drivers")
 public class DriverController {
 
@@ -16,28 +17,27 @@ public class DriverController {
     }
 
     @GetMapping
-    public List<Driver> findAll() {
+    public List<DriverDto> findAll() {
         return driverService.findAll();
     }
 
-    @GetMapping("/{driverId}")
-    public Driver findById(@PathVariable int driverId) {
-        return driverService.findById(driverId);
+    @GetMapping("/{driverDtoId}")
+    public DriverDto findById(@PathVariable int driverDtoId) {
+        return driverService.findById(driverDtoId);
+    }
+
+    @GetMapping("/free")
+    public List<DriverDto> getFreeDrivers() {
+        return driverService.getFreeDrivers();
     }
 
     @PutMapping
-    public Driver updateDriver(@RequestBody Driver driver) {
-        return driverService.updateDriver(driver);
+    public DriverDto updateDriver(@RequestBody DriverDto driverDto) {
+        return driverService.updateDriver(driverDto);
     }
 
     @PostMapping
-    public void addDriver(@RequestBody Driver driver) {
-        driverService.addDriver(driver);
+    public void addDriver(@RequestBody DriverDto driverDto) {
+        driverService.addDriver(driverDto);
     }
-
-    @DeleteMapping("/{driverId}")
-    public void deleteDriver(@PathVariable int driverId) {
-        driverService.deleteDriverById(driverId);
-    }
-
 }

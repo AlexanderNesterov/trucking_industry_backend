@@ -1,43 +1,51 @@
 package com.example.serviceImpl;
 
-import com.example.DAO.DriverDAO;
-import com.example.models.Driver;
+import com.example.database.repositories.DriverRepository;
+import com.example.models.DriverDto;
 import com.example.services.DriverService;
+import com.example.services.mappers.DriverMapper;
 import org.springframework.stereotype.Service;
-
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Validated
 public class DriverServiceImpl implements DriverService {
 
-    private final DriverDAO driverDAO;
+    private final DriverRepository driverRepository;
+    private final DriverMapper driverMapper;
 
-    public DriverServiceImpl(DriverDAO driverDAO) {
-        this.driverDAO = driverDAO;
+    public DriverServiceImpl(DriverRepository driverRepository, DriverMapper driverMapper) {
+        this.driverRepository = driverRepository;
+        this.driverMapper = driverMapper;
     }
 
     @Override
-    public Driver findById(int driverId) {
-        return driverDAO.findById(driverId);
+    public DriverDto findById(int driverDtoId) {
+        return driverMapper.toDto(driverRepository.findById(driverDtoId).get());
     }
 
     @Override
-    public List<Driver> findAll() {
-        return driverDAO.findAll();
+    public List<DriverDto> findAll() {
+        List<DriverDto> driverDtos = new ArrayList<>();
+        driverRepository.findAll().forEach(driver -> driverDtos.add(driverMapper.toDto(driver)));
+        return driverDtos;
     }
 
     @Override
-    public Driver updateDriver(Driver driver) {
-        return driverDAO.updateDriver(driver);
+    public DriverDto updateDriver(@Valid DriverDto driverDto) {
+        return driverMapper.toDto(driverRepository.save(driverMapper.fromDto(driverDto)));
     }
 
     @Override
-    public void addDriver(Driver driver) {
-        driverDAO.addDriver(driver);
+    public void addDriver(@Valid DriverDto driverFullInfo) {
+        driverRepository.save(driverMapper.fromDto(driverFullInfo));
     }
 
     @Override
-    public void deleteDriverById(int driverId) {
-        driverDAO.deleteDriverById(driverId);
+    public List<DriverDto> getFreeDrivers() {
+        return driverMapper.toListDto(driverRepository.getFreeDrivers());
     }
 }
