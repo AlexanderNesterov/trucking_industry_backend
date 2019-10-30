@@ -54,7 +54,13 @@ public class DriverDAOImpl implements DriverDAO {
     }
 
     @Override
-    public void deleteDriverById(int driverId) {
-        driverRepository.deleteById(driverId);
+    public List<Driver> getFreeDrivers() {
+        List<Driver> drivers = driverRepository.getFreeDrivers();
+
+        for (Driver driver : drivers) {
+            driver.getUser().setPassword(null);
+        }
+
+        return drivers;
     }
 }

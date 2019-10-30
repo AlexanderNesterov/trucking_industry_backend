@@ -40,6 +40,7 @@ public class Cargo {
     private double weight;
 
     @Column(name = "status")
+    @Enumerated(value = EnumType.STRING)
     private CargoStatus status;
 
     public Cargo() {

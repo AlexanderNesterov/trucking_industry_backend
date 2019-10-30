@@ -22,6 +22,7 @@ public class Truck {
     private double capacity;
 
     @Column(name = "condition")
+    @Enumerated(value = EnumType.STRING)
     private TruckCondition condition;
 
     public Truck() {

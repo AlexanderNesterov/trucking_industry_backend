@@ -16,6 +16,7 @@ public class Driver {
     private String driverLicense;
 
     @Column(name = "status")
+    @Enumerated(value = EnumType.STRING)
     private DriverStatus status;
 
     @OneToOne(cascade = CascadeType.ALL)

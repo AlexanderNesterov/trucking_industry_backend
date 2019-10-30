@@ -32,6 +32,7 @@ public class User {
     private String email;
 
     @Column(name = "role")
+    @Enumerated(value = EnumType.STRING)
     private Role role;
 
     public User() {

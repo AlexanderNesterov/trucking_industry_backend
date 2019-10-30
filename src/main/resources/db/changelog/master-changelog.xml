@@ -110,4 +110,11 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
                                  constraintName="fk_cargo_co_driver" referencedTableName="drivers"
                                  referencedColumnNames="id"/>
     </changeSet>
+    
+    <changeSet id="3" author="nesterov">
+        <modifyDataType tableName="users" schemaName="freight" columnName="role" newDataType="varchar(32)"/>
+        <modifyDataType tableName="drivers" schemaName="freight" columnName="status" newDataType="varchar(32)"/>
+        <modifyDataType tableName="trucks" schemaName="freight" columnName="condition" newDataType="varchar(32)"/>
+        <modifyDataType tableName="cargo" schemaName="freight" columnName="status" newDataType="varchar(32)"/>
+    </changeSet>
 </databaseChangeLog>

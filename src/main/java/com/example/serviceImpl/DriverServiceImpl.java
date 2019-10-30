@@ -42,7 +42,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public void deleteDriverById(int driverDtoId) {
-        driverDAO.deleteDriverById(driverDtoId);
+    public List<DriverDto> getFreeDrivers() {
+        return driverMapper.toListDto(driverDAO.getFreeDrivers());
     }
 }

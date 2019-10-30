@@ -26,6 +26,11 @@ public class DriverController {
         return driverService.findById(driverDtoId);
     }
 
+    @GetMapping("/free")
+    public List<DriverDto> getFreeDrivers() {
+        return driverService.getFreeDrivers();
+    }
+
     @PutMapping
     public DriverDto updateDriver(@RequestBody DriverDto driverDto) {
         return driverService.updateDriver(driverDto);
@@ -35,10 +40,4 @@ public class DriverController {
     public void addDriver(@RequestBody DriverDto driverDto) {
         driverService.addDriver(driverDto);
     }
-
-    @DeleteMapping("/{driverDtoId}")
-    public void deleteDriver(@PathVariable int driverDtoId) {
-        driverService.deleteDriverById(driverDtoId);
-    }
-
 }

@@ -7,7 +7,7 @@ public interface DriverDAO {
 
     Driver findById(int driverId);
     List<Driver> findAll();
+    List<Driver> getFreeDrivers();
     Driver updateDriver(Driver driver);
     void addDriver(Driver driver);
-    void deleteDriverById(int driverId);
 }
