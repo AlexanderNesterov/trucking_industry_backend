@@ -1,6 +1,6 @@
 package com.example.serviceImpl;
 
-import com.example.database.DAO.UserDAO;
+import com.example.database.repositories.UserRepository;
 import com.example.models.UserDto;
 import com.example.services.UserService;
 import com.example.services.mappers.UserMapper;
@@ -8,37 +8,40 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Validated
 public class UserServiceImpl implements UserService {
 
-    private final UserDAO userDAO;
+    private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserServiceImpl(UserDAO userDAO, UserMapper userMapper) {
-        this.userDAO = userDAO;
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
 
     @Override
     public UserDto findById(int userDtoId) {
-        return userMapper.toDto(userDAO.findById(userDtoId));
+        return userMapper.toDto(userRepository.findById(userDtoId).get());
     }
 
     @Override
     public List<UserDto> findAll() {
-        return userMapper.toListDto(userDAO.findAll());
+        List<UserDto> userDtos = new ArrayList<>();
+        userRepository.findAll().forEach(user -> userDtos.add(userMapper.toDto(user)));
+        return userDtos;
     }
 
     @Override
     public UserDto updateUser(@Valid UserDto user) {
-        return userMapper.toDto(userDAO.updateUser(userMapper.fromDto(user)));
+        return userMapper.toDto(userRepository.save(userMapper.fromDto(user)));
     }
 
     @Override
     public UserDto addUser(@Valid UserDto user) {
-        return userMapper.toDto(userDAO.addUser(userMapper.fromDto(user)));
+        return userMapper.toDto(userRepository.save(userMapper.fromDto(user)));
     }
 }

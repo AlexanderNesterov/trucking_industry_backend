@@ -1,6 +1,6 @@
 package com.example.serviceImpl;
 
-import com.example.database.DAO.CargoDAO;
+import com.example.database.repositories.CargoRepository;
 import com.example.models.CargoDto;
 import com.example.services.CargoService;
 import com.example.services.mappers.CargoMapper;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,30 +16,32 @@ import java.util.List;
 public class CargoServiceImpl implements CargoService {
 
     private final CargoMapper cargoMapper;
-    private final CargoDAO cargoDAO;
+    private final CargoRepository cargoRepository;
 
-    public CargoServiceImpl(CargoMapper cargoMapper, CargoDAO cargoDAO) {
+    public CargoServiceImpl(CargoMapper cargoMapper, CargoRepository cargoRepository) {
         this.cargoMapper = cargoMapper;
-        this.cargoDAO = cargoDAO;
+        this.cargoRepository = cargoRepository;
     }
 
     @Override
     public CargoDto findById(int cargoId) {
-        return cargoMapper.toDto(cargoDAO.findById(cargoId));
+        return cargoMapper.toDto(cargoRepository.findById(cargoId).get());
     }
 
     @Override
     public List<CargoDto> findAll() {
-        return cargoMapper.toListDto(cargoDAO.findAll());
+        List<CargoDto> cargoDtos = new ArrayList<>();
+        cargoRepository.findAll().forEach(driver -> cargoDtos.add(cargoMapper.toDto(driver)));
+        return cargoDtos;
     }
 
     @Override
     public CargoDto updateCargo(@Valid CargoDto cargoDto) {
-        return cargoMapper.toDto(cargoDAO.updateCargo(cargoMapper.fromDto(cargoDto)));
+        return cargoMapper.toDto(cargoRepository.save(cargoMapper.fromDto(cargoDto)));
     }
 
     @Override
     public void addCargo(@Valid CargoDto cargoDto) {
-        cargoDAO.addCargo(cargoMapper.fromDto(cargoDto));
+        cargoRepository.save(cargoMapper.fromDto(cargoDto));
     }
 }

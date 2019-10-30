@@ -40,9 +40,4 @@ public class TruckController {
     public void addTruck(@RequestBody TruckDto truckDto) {
         truckService.addTruck(truckDto);
     }
-
-    @DeleteMapping("/{truckDtoId}")
-    public void deleteTruck(@PathVariable int truckDtoId) {
-        truckService.deleteTruckById(truckDtoId);
-    }
 }

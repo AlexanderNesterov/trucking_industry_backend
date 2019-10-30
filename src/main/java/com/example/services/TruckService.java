@@ -11,5 +11,4 @@ public interface TruckService {
     TruckDto updateTruck(@Valid TruckDto truckDto);
     List<TruckDto> getFreeTrucks(double weight);
     void addTruck(@Valid TruckDto truckDto);
-    void deleteTruckById(int truckDtoId);
 }
