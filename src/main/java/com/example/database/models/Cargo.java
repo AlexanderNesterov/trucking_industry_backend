@@ -1,6 +1,8 @@
 package com.example.database.models;
 
 import com.example.database.models.commons.CargoStatus;
+import com.example.database.models.commons.DriverCargoStatus;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,15 +26,23 @@ public class Cargo {
     @Column(name = "discharge_location_id")
     private int dischargeLocation;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "truck_id")
     private Truck truck;
 
-    @OneToOne
+    @Column(name = "driver_status")
+    @Enumerated(value = EnumType.STRING)
+    private DriverCargoStatus driverStatus;
+
+    @Column(name = "co_driver_status")
+    @Enumerated(value = EnumType.STRING)
+    private DriverCargoStatus coDriverStatus;
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "driver_id")
     private Driver driver;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "co_driver_id")
     private Driver coDriver;
 
@@ -92,6 +102,22 @@ public class Cargo {
 
     public void setTruck(Truck truck) {
         this.truck = truck;
+    }
+
+    public DriverCargoStatus getDriverStatus() {
+        return driverStatus;
+    }
+
+    public void setDriverStatus(DriverCargoStatus driverStatus) {
+        this.driverStatus = driverStatus;
+    }
+
+    public DriverCargoStatus getCoDriverStatus() {
+        return coDriverStatus;
+    }
+
+    public void setCoDriverStatus(DriverCargoStatus coDriverStatus) {
+        this.coDriverStatus = coDriverStatus;
     }
 
     public Driver getDriver() {

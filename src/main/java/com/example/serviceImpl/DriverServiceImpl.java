@@ -1,5 +1,7 @@
 package com.example.serviceImpl;
 
+import com.example.database.models.commons.DriverStatus;
+import com.example.database.models.commons.Role;
 import com.example.database.repositories.DriverRepository;
 import com.example.models.DriverDto;
 import com.example.services.DriverService;
@@ -40,8 +42,10 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public void addDriver(@Valid DriverDto driverFullInfo) {
-        driverRepository.save(driverMapper.fromDto(driverFullInfo));
+    public void addDriver(@Valid DriverDto driverDto) {
+        driverDto.getUserDto().setRole(Role.DRIVER);
+        driverDto.setStatus(DriverStatus.REST);
+        driverRepository.save(driverMapper.fromDto(driverDto));
     }
 
     @Override

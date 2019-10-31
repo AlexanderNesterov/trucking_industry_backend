@@ -1,5 +1,6 @@
 package com.example.serviceImpl;
 
+import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.TruckRepository;
 import com.example.models.TruckDto;
 import com.example.services.TruckService;
@@ -41,6 +42,7 @@ public class TruckServiceImpl implements TruckService {
 
     @Override
     public void addTruck(@Valid TruckDto truckDto) {
+        truckDto.setCondition(TruckCondition.SERVICEABLE);
         truckRepository.save(truckMapper.fromDto(truckDto));
     }
 
