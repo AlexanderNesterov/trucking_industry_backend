@@ -41,9 +41,9 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public void addTruck(@Valid TruckDto truckDto) {
+    public TruckDto addTruck(@Valid TruckDto truckDto) {
         truckDto.setCondition(TruckCondition.SERVICEABLE);
-        truckRepository.save(truckMapper.fromDto(truckDto));
+        return truckMapper.toDto(truckRepository.save(truckMapper.fromDto(truckDto)));
     }
 
     @Override

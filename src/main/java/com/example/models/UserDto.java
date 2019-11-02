@@ -2,12 +2,13 @@ package com.example.models;
 
 import com.example.database.models.commons.Role;
 import com.example.models.validation.annotation.TextField;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import static com.example.models.validation.MessageCode.*;
 
+@JsonIgnoreProperties(value = "password", allowSetters = true)
 public class UserDto {
 
     private int id;

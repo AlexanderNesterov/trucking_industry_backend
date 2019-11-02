@@ -10,5 +10,5 @@ public interface TruckService {
     List<TruckDto> findAll();
     TruckDto updateTruck(@Valid TruckDto truckDto);
     List<TruckDto> getFreeTrucks(double weight);
-    void addTruck(@Valid TruckDto truckDto);
+    TruckDto addTruck(@Valid TruckDto truckDto);
 }

@@ -34,7 +34,13 @@ public class CargoServiceImpl implements CargoService {
     @Override
     public List<CargoDto> findAll() {
         List<CargoDto> cargoDtos = new ArrayList<>();
-        cargoRepository.findAll().forEach(driver -> cargoDtos.add(cargoMapper.toDto(driver)));
+        cargoRepository.findAll().forEach(cargo -> cargoDtos.add(cargoMapper.toDto(cargo)));
+
+        for (CargoDto cargoDto : cargoDtos) {
+            cargoDto.getDriverDto().getUserDto().setPassword(null);
+            cargoDto.getCoDriverDto().getUserDto().setPassword(null);
+        }
+
         return cargoDtos;
     }
 
@@ -53,16 +59,20 @@ public class CargoServiceImpl implements CargoService {
 
     @Override
     public CargoDto getCargoByDriverId(int driverId) {
-        return cargoMapper.toDto(cargoRepository.getCargoByDriverId(driverId));
+        CargoDto foundCargo = cargoMapper.toDto(cargoRepository.getCargoByDriverId(driverId));
+        foundCargo.getDriverDto().getUserDto().setPassword(null);
+        foundCargo.getCoDriverDto().getUserDto().setPassword(null);
+
+        return foundCargo;
     }
 
     @Override
     public void setAcceptStatus(int cargoId, int driverId) {
         CargoDto cargoDto = findById(cargoId);
 
-        if (cargoDto.getDriver().getId() == driverId) {
+        if (cargoDto.getDriverDto().getId() == driverId) {
             cargoDto.setDriverStatus(DriverCargoStatus.ACCEPT);
-        } else if (cargoDto.getCoDriver().getId() == driverId) {
+        } else if (cargoDto.getCoDriverDto().getId() == driverId) {
             cargoDto.setCoDriverStatus(DriverCargoStatus.ACCEPT);
         }
 
@@ -73,9 +83,9 @@ public class CargoServiceImpl implements CargoService {
     public void setRefuseStatus(int cargoId, int driverId) {
         CargoDto cargoDto = findById(cargoId);
 
-        if (cargoDto.getDriver().getId() == driverId) {
+        if (cargoDto.getDriverDto().getId() == driverId) {
             cargoDto.setDriverStatus(DriverCargoStatus.REFUSE);
-        } else if (cargoDto.getCoDriver().getId() == driverId) {
+        } else if (cargoDto.getCoDriverDto().getId() == driverId) {
             cargoDto.setCoDriverStatus(DriverCargoStatus.REFUSE);
         }
 
@@ -90,8 +100,8 @@ public class CargoServiceImpl implements CargoService {
             if (cargoDto.getDriverStatus() == DriverCargoStatus.ACCEPT &&
                     cargoDto.getCoDriverStatus() == DriverCargoStatus.ACCEPT) {
                 cargoDto.setStatus(CargoStatus.IN_PROGRESS);
-                cargoDto.getDriver().setStatus(DriverStatus.ACTIVE);
-                cargoDto.getCoDriver().setStatus(DriverStatus.ACTIVE);
+                cargoDto.getDriverDto().setStatus(DriverStatus.ACTIVE);
+                cargoDto.getCoDriverDto().setStatus(DriverStatus.ACTIVE);
             } else if (cargoDto.getDriverStatus() == DriverCargoStatus.REFUSE ||
                     cargoDto.getCoDriverStatus() == DriverCargoStatus.REFUSE) {
                 cargoDto.setStatus(CargoStatus.REFUSED_BY_DRIVER);

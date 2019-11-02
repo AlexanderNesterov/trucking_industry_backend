@@ -1,8 +1,6 @@
 package com.example.models;
 
 import com.example.database.models.commons.CargoStatus;
-import com.example.database.models.Driver;
-import com.example.database.models.Truck;
 import com.example.database.models.commons.DriverCargoStatus;
 import org.hibernate.validator.constraints.Length;
 
@@ -26,17 +24,17 @@ public class CargoDto {
     private int dischargeLocation;
 
     @NotNull
-    private Truck truck;
+    private TruckDto truckDto;
 
     private DriverCargoStatus driverStatus;
 
     private DriverCargoStatus coDriverStatus;
 
     @NotNull
-    private Driver driver;
+    private DriverDto driverDto;
 
     @NotNull
-    private Driver coDriver;
+    private DriverDto coDriverDto;
 
     @Min(1)
     private double weight;
@@ -86,14 +84,29 @@ public class CargoDto {
         this.dischargeLocation = dischargeLocation;
     }
 
-    public Truck getTruck() {
-        return truck;
+    public TruckDto getTruckDto() {
+        return truckDto;
     }
 
-    public void setTruck(Truck truck) {
-        this.truck = truck;
+    public void setTruckDto(TruckDto truckDto) {
+        this.truckDto = truckDto;
     }
 
+    public DriverDto getDriverDto() {
+        return driverDto;
+    }
+
+    public void setDriverDto(DriverDto driverDto) {
+        this.driverDto = driverDto;
+    }
+
+    public DriverDto getCoDriverDto() {
+        return coDriverDto;
+    }
+
+    public void setCoDriverDto(DriverDto coDriverDto) {
+        this.coDriverDto = coDriverDto;
+    }
 
     public DriverCargoStatus getDriverStatus() {
         return driverStatus;
@@ -109,22 +122,6 @@ public class CargoDto {
 
     public void setCoDriverStatus(DriverCargoStatus coDriverStatus) {
         this.coDriverStatus = coDriverStatus;
-    }
-
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
-
-    public Driver getCoDriver() {
-        return coDriver;
-    }
-
-    public void setCoDriver(Driver coDriver) {
-        this.coDriver = coDriver;
     }
 
     public double getWeight() {

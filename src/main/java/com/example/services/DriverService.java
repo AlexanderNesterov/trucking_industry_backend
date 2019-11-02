@@ -10,5 +10,5 @@ public interface DriverService {
     List<DriverDto> findAll();
     List<DriverDto> getFreeDrivers();
     DriverDto updateDriver(@Valid DriverDto driver);
-    void addDriver(@Valid DriverDto driver);
+    DriverDto addDriver(@Valid DriverDto driver);
 }

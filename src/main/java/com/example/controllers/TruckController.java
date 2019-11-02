@@ -37,7 +37,7 @@ public class TruckController {
     }
 
     @PostMapping
-    public void addTruck(@RequestBody TruckDto truckDto) {
-        truckService.addTruck(truckDto);
+    public TruckDto addTruck(@RequestBody TruckDto truckDto) {
+        return truckService.addTruck(truckDto);
     }
 }
