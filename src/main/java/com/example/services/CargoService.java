@@ -12,6 +12,7 @@ public interface CargoService {
     CargoDto getCargoByDriverId(int driverId);
     void setAcceptStatus(int cargoId, int driverId);
     void setRefuseStatus(int cargoId, int driverId);
+    void setDeliverStatus(int cargoId, int driverId);
     void addCargo(@Valid CargoDto cargoDto);
     void autoChangeCargoStatus();
 }

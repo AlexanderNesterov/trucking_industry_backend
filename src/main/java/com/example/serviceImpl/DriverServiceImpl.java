@@ -56,7 +56,6 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<DriverDto> getFreeDrivers() {
-
         return driverMapper.toListDto(driverRepository.getFreeDrivers());
     }
 }

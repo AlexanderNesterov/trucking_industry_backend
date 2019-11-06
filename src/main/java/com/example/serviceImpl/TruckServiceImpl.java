@@ -15,8 +15,11 @@ import java.util.List;
 @Validated
 public class TruckServiceImpl implements TruckService {
 
-    private final TruckRepository truckRepository;
-    private final TruckMapper truckMapper;
+    private TruckRepository truckRepository;
+    private TruckMapper truckMapper;
+
+    public TruckServiceImpl() {
+    }
 
     public TruckServiceImpl(TruckRepository truckRepository, TruckMapper truckMapper) {
         this.truckRepository = truckRepository;

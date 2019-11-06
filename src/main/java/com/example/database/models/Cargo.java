@@ -26,7 +26,7 @@ public class Cargo {
     @Column(name = "discharge_location_id")
     private int dischargeLocation;
 
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "truck_id")
     private Truck truck;
 
@@ -38,11 +38,11 @@ public class Cargo {
     @Enumerated(value = EnumType.STRING)
     private DriverCargoStatus coDriverStatus;
 
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "driver_id")
     private Driver driver;
 
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "co_driver_id")
     private Driver coDriver;
 

@@ -42,6 +42,11 @@ public class CargoController {
         cargoService.setRefuseStatus(cargoId, driverId);
     }
 
+    @PutMapping("/set_deliver_status/{cargoId}/{driverId}")
+    public void setDeliverStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+        cargoService.setDeliverStatus(cargoId, driverId);
+    }
+
     @PutMapping
     public CargoDto updateCargo(@RequestBody CargoDto cargoDto) {
         return cargoService.updateCargo(cargoDto);
