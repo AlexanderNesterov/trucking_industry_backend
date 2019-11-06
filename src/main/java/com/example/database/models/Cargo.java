@@ -1,12 +1,11 @@
 package com.example.database.models;
 
 import com.example.database.models.commons.CargoStatus;
-import com.example.database.models.commons.DriverCargoStatus;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "cargo", schema = "freight")
+@Table(name = "cargo")
 public class Cargo {
 
     @Id
@@ -29,14 +28,6 @@ public class Cargo {
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "truck_id")
     private Truck truck;
-
-    @Column(name = "driver_status")
-    @Enumerated(value = EnumType.STRING)
-    private DriverCargoStatus driverStatus;
-
-    @Column(name = "co_driver_status")
-    @Enumerated(value = EnumType.STRING)
-    private DriverCargoStatus coDriverStatus;
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "driver_id")
@@ -102,22 +93,6 @@ public class Cargo {
 
     public void setTruck(Truck truck) {
         this.truck = truck;
-    }
-
-    public DriverCargoStatus getDriverStatus() {
-        return driverStatus;
-    }
-
-    public void setDriverStatus(DriverCargoStatus driverStatus) {
-        this.driverStatus = driverStatus;
-    }
-
-    public DriverCargoStatus getCoDriverStatus() {
-        return coDriverStatus;
-    }
-
-    public void setCoDriverStatus(DriverCargoStatus coDriverStatus) {
-        this.coDriverStatus = coDriverStatus;
     }
 
     public Driver getDriver() {

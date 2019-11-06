@@ -1,7 +1,6 @@
 package com.example.models;
 
 import com.example.database.models.commons.CargoStatus;
-import com.example.database.models.commons.DriverCargoStatus;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
@@ -25,10 +24,6 @@ public class CargoDto {
 
     @NotNull
     private TruckDto truckDto;
-
-    private DriverCargoStatus driverStatus;
-
-    private DriverCargoStatus coDriverStatus;
 
     @NotNull
     private DriverDto driverDto;
@@ -106,22 +101,6 @@ public class CargoDto {
 
     public void setCoDriverDto(DriverDto coDriverDto) {
         this.coDriverDto = coDriverDto;
-    }
-
-    public DriverCargoStatus getDriverStatus() {
-        return driverStatus;
-    }
-
-    public void setDriverStatus(DriverCargoStatus driverStatus) {
-        this.driverStatus = driverStatus;
-    }
-
-    public DriverCargoStatus getCoDriverStatus() {
-        return coDriverStatus;
-    }
-
-    public void setCoDriverStatus(DriverCargoStatus coDriverStatus) {
-        this.coDriverStatus = coDriverStatus;
     }
 
     public double getWeight() {

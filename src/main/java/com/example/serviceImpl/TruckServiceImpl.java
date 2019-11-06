@@ -15,11 +15,9 @@ import java.util.List;
 @Validated
 public class TruckServiceImpl implements TruckService {
 
-    private TruckRepository truckRepository;
-    private TruckMapper truckMapper;
+    private final TruckRepository truckRepository;
+    private final TruckMapper truckMapper;
 
-    public TruckServiceImpl() {
-    }
 
     public TruckServiceImpl(TruckRepository truckRepository, TruckMapper truckMapper) {
         this.truckRepository = truckRepository;
@@ -34,7 +32,8 @@ public class TruckServiceImpl implements TruckService {
     @Override
     public List<TruckDto> findAll() {
         List<TruckDto> truckDtos = new ArrayList<>();
-        truckRepository.findAll().forEach(truck -> truckDtos.add(truckMapper.toDto(truck)));
+        truckRepository.findAll().forEach(truck ->
+                truckDtos.add(truckMapper.toDto(truck)));
         return truckDtos;
     }
 

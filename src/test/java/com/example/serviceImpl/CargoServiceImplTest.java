@@ -40,8 +40,6 @@ class CargoServiceImplTest {
 
         cargoService.addCargo(cargoDto);
 
-        assertEquals("NOT_SELECTED", cargoDto.getDriverStatus().name());
-        assertEquals("NOT_SELECTED", cargoDto.getCoDriverStatus().name());
         assertEquals("CREATED", cargoDto.getStatus().name());
     }
 
