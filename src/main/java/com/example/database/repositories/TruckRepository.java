@@ -15,4 +15,6 @@ public interface TruckRepository extends JpaRepository<Truck, Integer> {
             "or c.status = 'INPROGRESS' " +
             "or c.status = 'REFUSED_BY_DRIVER')")
     List<Truck> getFreeTrucks(@Param("weight") double weight);
+
+    Truck getTruckByRegistrationNumber(String registrationNumber);
 }

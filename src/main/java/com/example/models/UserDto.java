@@ -17,8 +17,9 @@ public class UserDto {
     @Length(max = 32, message = LOGIN + TOO_LONG)
     private String login;
 
-    @NotBlank(message = PWD + BLANK)
-    @Length(min = 8, message = PWD + TOO_SHORT)
+    //Вернуть валидацию
+/*    @NotBlank(message = PWD + BLANK)
+    @Length(min = 8, message = PWD + TOO_SHORT)*/
     private String password;
 
     @TextField
