@@ -54,10 +54,10 @@ public class DriverServiceImpl implements DriverService {
                 driverRepository.getDriversByLoginAndDriverLicense(
                         driverDto.getUserDto().getLogin(), driverDto.getDriverLicense()));
         
-        StringBuilder sb = checkDrivers(existsDrivers, driverDto, true);
+        StringBuilder exception = checkSavingDriver(existsDrivers, driverDto, true);
 
-        if (sb != null && sb.length() != 0) {
-            throw new DriverExistsException(sb.toString());
+        if (exception != null && exception.length() != 0) {
+            throw new DriverExistsException(exception.toString());
         }
 
         driverDto.getUserDto().setRole(existsDrivers.get(0).getUserDto().getRole());
@@ -73,10 +73,10 @@ public class DriverServiceImpl implements DriverService {
                 driverRepository.getDriversByLoginAndDriverLicense(
                         driverDto.getUserDto().getLogin(), driverDto.getDriverLicense()));
 
-        StringBuilder sb = checkDrivers(existsDrivers, driverDto, false);
+        StringBuilder exception = checkSavingDriver(existsDrivers, driverDto, false);
 
-        if (sb != null && sb.length() != 0) {
-            throw new DriverExistsException(sb.toString());
+        if (exception != null && exception.length() != 0) {
+            throw new DriverExistsException(exception.toString());
         }
 
         driverDto.setId(0);
@@ -93,36 +93,36 @@ public class DriverServiceImpl implements DriverService {
         return driverMapper.toListDto(driverRepository.getFreeDrivers());
     }
     
-    private StringBuilder checkDrivers(List<DriverDto> existsDrivers, DriverDto savedDriver, boolean isUpdate) {
+    private StringBuilder checkSavingDriver(List<DriverDto> existsDrivers, DriverDto savingDriver, boolean isUpdate) {
         if (existsDrivers.size() == 0) {
             return null;
         }
         
-        StringBuilder sb = new StringBuilder();
+        StringBuilder exception = new StringBuilder();
 
         for (DriverDto existDriver : existsDrivers) {
-            if (isUpdate && savedDriver.getId() == existDriver.getId() &&
-                    savedDriver.getUserDto().getId() == existDriver.getUserDto().getId()) {
+            if (isUpdate && savingDriver.getId() == existDriver.getId() &&
+                    savingDriver.getUserDto().getId() == existDriver.getUserDto().getId()) {
                 continue;
             }
 
-            if (existDriver.getUserDto().getLogin().equals(savedDriver.getUserDto().getLogin())) {
-                sb.append("Driver with login: ");
-                sb.append(savedDriver.getUserDto().getLogin());
-                sb.append(" already exist, ");
+            if (existDriver.getUserDto().getLogin().equals(savingDriver.getUserDto().getLogin())) {
+                exception.append("Driver with login: ");
+                exception.append(savingDriver.getUserDto().getLogin());
+                exception.append(" already exist, ");
             }
 
-            if (existDriver.getDriverLicense().equals(savedDriver.getDriverLicense())) {
-                sb.append("Driver with driver license: ");
-                sb.append(savedDriver.getDriverLicense());
-                sb.append(" already exist, ");
+            if (existDriver.getDriverLicense().equals(savingDriver.getDriverLicense())) {
+                exception.append("Driver with driver license: ");
+                exception.append(savingDriver.getDriverLicense());
+                exception.append(" already exist, ");
             }
         }
 
-        if (sb.length() != 0) {
-            sb.delete(sb.length() - 2, sb.length());
+        if (exception.length() != 0) {
+            exception.delete(exception.length() - 2, exception.length());
         }
 
-        return sb;
+        return exception;
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface TruckRepository extends JpaRepository<Truck, Integer> {
 
+    //поменять на in
     @Query("from Truck t where t.capacity >= :weight and t.condition = 'SERVICEABLE' and t.id not in " +
             "(select t.id from Cargo c join c.truck t where " +
             "c.status = 'CREATED' " +

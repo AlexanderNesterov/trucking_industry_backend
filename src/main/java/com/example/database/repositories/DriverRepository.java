@@ -10,6 +10,7 @@ import java.util.List;
 public interface DriverRepository extends JpaRepository<Driver, Integer> {
 
     //????
+    //поменять на in
     @Query("from Driver d where d.status = 'REST' and d.id not in " +
             "(select d.id from Cargo c join c.driver d where c.status = 'CREATED' or c.status = 'INPROGRESS' " +
             "or c.status = 'REFUSED_BY_DRIVER')" +

@@ -35,7 +35,7 @@ public class TruckServiceImpl implements TruckService {
         if (optional.isPresent()) {
             return truckMapper.toDto(optional.get());
         } else {
-            throw new TruckNotFoundException("Truck with id= " + truckDtoId + " not found");
+            throw new TruckNotFoundException("Truck with id: " + truckDtoId + " not found");
         }
     }
 
