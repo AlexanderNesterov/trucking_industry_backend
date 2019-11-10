@@ -9,6 +9,7 @@ import com.example.database.repositories.DriverRepository;
 import com.example.models.DriverDto;
 import com.example.services.DriverService;
 import com.example.services.mappers.DriverMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -21,9 +22,14 @@ import java.util.Optional;
 @Validated
 public class DriverServiceImpl implements DriverService {
 
-    private final DriverRepository driverRepository;
-    private final DriverMapper driverMapper;
+    private DriverRepository driverRepository;
+    private DriverMapper driverMapper;
 
+    public DriverServiceImpl(DriverMapper driverMapper) {
+        this.driverMapper = driverMapper;
+    }
+
+    @Autowired
     public DriverServiceImpl(DriverRepository driverRepository, DriverMapper driverMapper) {
         this.driverRepository = driverRepository;
         this.driverMapper = driverMapper;
@@ -50,34 +56,22 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public boolean updateDriver(@Valid DriverDto driverDto) {
-        List<DriverDto> existsDrivers = driverMapper.toListDto(
-                driverRepository.getDriversByLoginAndDriverLicense(
-                        driverDto.getUserDto().getLogin(), driverDto.getDriverLicense()));
-        
-        StringBuilder exception = checkSavingDriver(existsDrivers, driverDto, true);
+        DriverDto sameDriverDto = findById(driverDto.getId());
+        driverDto.getUserDto().setLogin(sameDriverDto.getUserDto().getLogin());
 
-        if (exception != null && exception.length() != 0) {
-            throw new DriverExistsException(exception.toString());
-        }
+        checkSavingDriver(driverDto, true);
 
-        driverDto.getUserDto().setRole(existsDrivers.get(0).getUserDto().getRole());
-        driverDto.getUserDto().setPassword(existsDrivers.get(0).getUserDto().getPassword());
-        driverDto.setStatus(existsDrivers.get(0).getStatus());
+        driverDto.getUserDto().setRole(sameDriverDto.getUserDto().getRole());
+        driverDto.getUserDto().setPassword(sameDriverDto.getUserDto().getPassword());
+        driverDto.setStatus(sameDriverDto.getStatus());
         driverRepository.save(driverMapper.fromDto(driverDto));
+
         return true;
     }
 
     @Override
     public boolean addDriver(@Valid DriverDto driverDto) {
-        List<DriverDto> existsDrivers = driverMapper.toListDto(
-                driverRepository.getDriversByLoginAndDriverLicense(
-                        driverDto.getUserDto().getLogin(), driverDto.getDriverLicense()));
-
-        StringBuilder exception = checkSavingDriver(existsDrivers, driverDto, false);
-
-        if (exception != null && exception.length() != 0) {
-            throw new DriverExistsException(exception.toString());
-        }
+        checkSavingDriver(driverDto, false);
 
         driverDto.setId(0);
         driverDto.getUserDto().setId(0);
@@ -92,37 +86,36 @@ public class DriverServiceImpl implements DriverService {
     public List<DriverDto> getFreeDrivers() {
         return driverMapper.toListDto(driverRepository.getFreeDrivers());
     }
-    
-    private StringBuilder checkSavingDriver(List<DriverDto> existsDrivers, DriverDto savingDriver, boolean isUpdate) {
-        if (existsDrivers.size() == 0) {
-            return null;
-        }
-        
+
+    private DriverDto getDriverByLogin(String driverLogin) {
+        return driverMapper.toDto(driverRepository.getDriverByLogin(driverLogin));
+    }
+
+    private DriverDto getDriverByDriverLicense(String driverLicense) {
+        return driverMapper.toDto(driverRepository.getDriverByDriverLicense(driverLicense));
+    }
+
+    private void checkSavingDriver(DriverDto savingDriver, boolean isUpdate) {
         StringBuilder exception = new StringBuilder();
 
-        for (DriverDto existDriver : existsDrivers) {
-            if (isUpdate && savingDriver.getId() == existDriver.getId() &&
-                    savingDriver.getUserDto().getId() == existDriver.getUserDto().getId()) {
-                continue;
-            }
-
-            if (existDriver.getUserDto().getLogin().equals(savingDriver.getUserDto().getLogin())) {
+        if (!isUpdate) {
+            DriverDto existDriverLogin = getDriverByLogin(savingDriver.getUserDto().getLogin());
+            if (existDriverLogin != null) {
                 exception.append("Driver with login: ");
                 exception.append(savingDriver.getUserDto().getLogin());
-                exception.append(" already exist, ");
-            }
-
-            if (existDriver.getDriverLicense().equals(savingDriver.getDriverLicense())) {
-                exception.append("Driver with driver license: ");
-                exception.append(savingDriver.getDriverLicense());
-                exception.append(" already exist, ");
+                exception.append(" already exist");
+                throw new DriverExistsException(exception.toString());
             }
         }
 
-        if (exception.length() != 0) {
-            exception.delete(exception.length() - 2, exception.length());
+        DriverDto existDriverDriverLicense = getDriverByDriverLicense(savingDriver.getDriverLicense());
+        if (existDriverDriverLicense == null || (isUpdate && existDriverDriverLicense.getId() == savingDriver.getId())) {
+            return;
         }
 
-        return exception;
+        exception.append("Driver with driver license: ");
+        exception.append(savingDriver.getDriverLicense());
+        exception.append(" already exist");
+        throw new DriverExistsException(exception.toString());
     }
 }

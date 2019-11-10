@@ -19,7 +19,12 @@ public interface DriverRepository extends JpaRepository<Driver, Integer> {
             "or c.status = 'REFUSED_BY_DRIVER')")
     List<Driver> getFreeDrivers();
 
-    @Query("from Driver d where d.user.login = :driverLogin or d.driverLicense = :driverLicense")
+/*    @Query("from Driver d where d.user.login = :driverLogin or d.driverLicense = :driverLicense")
     List<Driver> getDriversByLoginAndDriverLicense(@Param("driverLogin") String driverLogin,
-                                                   @Param("driverLicense") String driverLicense);
+                                                   @Param("driverLicense") String driverLicense);*/
+
+    Driver getDriverByDriverLicense(String driverLicense);
+
+    @Query("from Driver d where d.user.login = :driverLogin")
+    Driver getDriverByLogin(@Param("driverLogin") String driverLogin);
 }
