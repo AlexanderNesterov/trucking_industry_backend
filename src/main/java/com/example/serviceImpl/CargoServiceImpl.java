@@ -15,6 +15,7 @@ import com.example.services.CargoService;
 import com.example.services.DriverService;
 import com.example.services.TruckService;
 import com.example.services.mappers.CargoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -27,11 +28,16 @@ import java.util.Optional;
 @Validated
 public class CargoServiceImpl implements CargoService {
 
-    private final CargoMapper cargoMapper;
-    private final CargoRepository cargoRepository;
-    private final DriverService driverService;
-    private final TruckService truckService;
+    private CargoMapper cargoMapper;
+    private CargoRepository cargoRepository;
+    private DriverService driverService;
+    private TruckService truckService;
 
+    public CargoServiceImpl(CargoMapper cargoMapper) {
+        this.cargoMapper = cargoMapper;
+    }
+
+    @Autowired
     public CargoServiceImpl(CargoMapper cargoMapper, CargoRepository cargoRepository,
                             DriverService driverService, TruckService truckService) {
         this.cargoMapper = cargoMapper;
@@ -62,7 +68,7 @@ public class CargoServiceImpl implements CargoService {
     @Override
     public boolean updateCargo(@Valid CargoDto cargoDto) {
         checkSavingCargo(cargoDto, true);
-        //cargoRepository.save(cargoMapper.fromDto(cargoDto));
+        cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
     }
@@ -74,7 +80,7 @@ public class CargoServiceImpl implements CargoService {
         cargoDto.setStatus(CargoStatus.CREATED);
         cargoDto.getDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
         cargoDto.getCoDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
-        //cargoRepository.save(cargoMapper.fromDto(cargoDto));
+        cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
     }
@@ -166,7 +172,7 @@ public class CargoServiceImpl implements CargoService {
 
         checkDriversIds(savingCargo);
         checkDrivers(savingCargo);
-        checkTruck(savingCargo);
+        checkTruck(savingCargo, isUpdate);
     }
 
     private void checkCargo(CargoDto savingCargo) {
@@ -186,7 +192,7 @@ public class CargoServiceImpl implements CargoService {
         if (savingCargo.getCoDriverDto().getId() == savingCargo.getDriverDto().getId()) {
             exception.append("Driver id and co-driver id cannot be equals. Driver id: ");
             exception.append(savingCargo.getDriverDto().getId());
-            exception.append(" , co-driver id: ");
+            exception.append(", co-driver id: ");
             exception.append(savingCargo.getCoDriverDto().getId());
             throw new SavingCargoException(exception.toString());
         }
@@ -213,15 +219,8 @@ public class CargoServiceImpl implements CargoService {
         savingCargo.setCoDriverDto(coDriverDto);
     }
 
-    private void checkTruck(CargoDto savingCargo) {
+    private void checkTruck(CargoDto savingCargo, boolean isUpdate) {
         StringBuilder exception = new StringBuilder();
-        CargoDto cargoDto = getCargoByTruckId(savingCargo.getTruckDto().getId());
-
-        if (cargoDto != null) {
-            exception.append("Truck cannot be include in other cargo. Truck is using by cargo with id: ");
-            exception.append(cargoDto.getId());
-            throw new SavingCargoException(exception.toString());
-        }
 
         TruckDto truckDto = truckService.findById(savingCargo.getTruckDto().getId());
         if (!truckDto.getCondition().equals(TruckCondition.SERVICEABLE)) {
@@ -234,6 +233,14 @@ public class CargoServiceImpl implements CargoService {
             throw new SavingCargoException(exception.toString());
         }
 
-        savingCargo.setTruckDto(truckDto);
+        CargoDto cargoDto = getCargoByTruckId(savingCargo.getTruckDto().getId());
+        if (cargoDto == null || (isUpdate && cargoDto.getId() == savingCargo.getId())) {
+            savingCargo.setTruckDto(truckDto);
+            return;
+        }
+
+        exception.append("Truck cannot be include in other cargo. Truck is using by cargo with id: ");
+        exception.append(cargoDto.getId());
+        throw new SavingCargoException(exception.toString());
     }
 }

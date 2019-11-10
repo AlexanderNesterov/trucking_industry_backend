@@ -1,49 +1,137 @@
 package com.example.serviceImpl;
 
+import com.example.controllers.exceptions.CargoNotFoundException;
+import com.example.controllers.exceptions.SavingCargoException;
+import com.example.database.models.commons.CargoStatus;
+import com.example.database.models.commons.DriverStatus;
+import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.CargoRepository;
 import com.example.models.CargoDto;
 import com.example.models.DriverDto;
 import com.example.models.TruckDto;
 import com.example.services.CargoService;
-import org.junit.jupiter.api.Test;
+import com.example.services.DriverService;
+import com.example.services.TruckService;
+import com.example.services.mappers.CargoMapper;
+import com.example.services.mappers.CargoMapperImpl;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
-class CargoServiceImplTest {
+@RunWith(MockitoJUnitRunner.class)
+public class CargoServiceImplTest {
 
-    @Autowired
-    private CargoService cargoService;
+    private CargoMapper cargoMapper = new CargoMapperImpl();
 
-    @MockBean
+    @InjectMocks
+    private CargoService cargoService = new CargoServiceImpl(cargoMapper);
+
+    @Mock
     private CargoRepository cargoRepository;
 
+    @Mock
+    private DriverService driverService;
+
+    @Mock
+    private TruckService truckService;
+
     @Test
-    void addCargo() {
-        CargoDto cargoDto = new CargoDto();
-        cargoDto.setTitle("Water");
-        cargoDto.setWeight(200);
+    public void findByIdSuccessfully() {
+        CargoDto existCargo = new CargoDto();
+        existCargo.setId(45);
+        existCargo.setStatus(CargoStatus.CREATED);
 
-        DriverDto petr = new DriverDto();
-        cargoDto.setDriverDto(petr);
+        Mockito.when(cargoRepository.findById(45)).thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
+        CargoDto foundCargo = cargoService.findById(45);
 
-        DriverDto anton = new DriverDto();
-        cargoDto.setCoDriverDto(anton);
+        assertEquals(existCargo.getStatus(), foundCargo.getStatus());
+    }
 
-        TruckDto truckDto = new TruckDto();
-        cargoDto.setTruckDto(truckDto);
+    @Test(expected = CargoNotFoundException.class)
+    public void failedFindCargoById() {
+        Mockito.when(cargoRepository.findById(90)).thenReturn(Optional.empty());
+        cargoService.findById(90);
+    }
 
-        cargoService.addCargo(cargoDto);
 
-        assertEquals("CREATED", cargoDto.getStatus().name());
+    @Test
+    public void addCargoSuccessfully() {
+        CargoDto savingCargo = new CargoDto();
+        savingCargo.setWeight(300);
+        DriverDto firstDriver = new DriverDto();
+        firstDriver.setId(3);
+        DriverDto coDriver = new DriverDto();
+        coDriver.setId(7);
+        TruckDto truck = new TruckDto();
+        truck.setId(2);
+        savingCargo.setDriverDto(firstDriver);
+        savingCargo.setCoDriverDto(coDriver);
+        savingCargo.setTruckDto(truck);
+
+        DriverDto existFirstDriver = new DriverDto();
+        existFirstDriver.setId(firstDriver.getId());
+        existFirstDriver.setStatus(DriverStatus.REST);
+
+        DriverDto existCoDriver = new DriverDto();
+        existCoDriver.setId(coDriver.getId());
+        existCoDriver.setStatus(DriverStatus.REST);
+
+        TruckDto existTruck = new TruckDto();
+        existTruck.setId(truck.getId());
+        existTruck.setCondition(TruckCondition.SERVICEABLE);
+        existTruck.setCapacity(700);
+
+        Mockito
+                .when(driverService.findById(savingCargo.getDriverDto().getId()))
+                .thenReturn(existFirstDriver);
+        Mockito
+                .when(driverService.findById(savingCargo.getCoDriverDto().getId()))
+                .thenReturn(existCoDriver);
+        Mockito
+                .when(truckService.findById(savingCargo.getTruckDto().getId()))
+                .thenReturn(existTruck);
+        Mockito
+                .when(cargoRepository.getCargoByTruckId(savingCargo.getTruckDto().getId()))
+                .thenReturn(null);
+
+        boolean result = cargoService.addCargo(savingCargo);
+
+        assertEquals(existFirstDriver, savingCargo.getDriverDto());
+        assertEquals(existCoDriver, savingCargo.getCoDriverDto());
+        assertEquals(existTruck, savingCargo.getTruckDto());
+        assertEquals(0, savingCargo.getId());
+        assertEquals(CargoStatus.CREATED, savingCargo.getStatus());
+        assertEquals(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION, savingCargo.getDriverDto().getStatus());
+        assertEquals(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION, savingCargo.getCoDriverDto().getStatus());
+        assertTrue(result);
     }
 
     @Test
-    void setRefuseStatus() {
+    public void getCargoByDriverIdSuccessfully() {
+        CargoDto existCargo = new CargoDto();
+        existCargo.setId(5);
+        existCargo.setWeight(220);
+        existCargo.setStatus(CargoStatus.IN_PROGRESS);
+
+        Mockito.when(cargoRepository.findById(5)).thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
+        CargoDto foundCargo = cargoService.findById(5);
+
+        assertEquals(existCargo.getWeight(), foundCargo.getWeight());
+        assertEquals(existCargo.getStatus(), foundCargo.getStatus());
+    }
+
+    @Test
+    public void failedGetCargoByDriverId() {
+        CargoNotFoundException thrown = assertThrows(CargoNotFoundException.class,
+                () -> cargoService.getCargoByDriverId(12));
+
+        assertTrue(thrown.getMessage().contains("not found"));
     }
 }
