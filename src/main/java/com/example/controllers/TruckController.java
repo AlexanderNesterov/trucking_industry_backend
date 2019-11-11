@@ -42,6 +42,7 @@ public class TruckController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public boolean addTruck(@RequestBody TruckDto truckDto) {
         return truckService.addTruck(truckDto);
     }

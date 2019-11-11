@@ -13,7 +13,7 @@ public interface TruckRepository extends JpaRepository<Truck, Integer> {
     @Query("from Truck t where t.capacity >= :weight and t.condition = 'SERVICEABLE' and t.id not in " +
             "(select t.id from Cargo c join c.truck t where " +
             "c.status = 'CREATED' " +
-            "or c.status = 'INPROGRESS' " +
+            "or c.status = 'IN_PROGRESS' " +
             "or c.status = 'REFUSED_BY_DRIVER')")
     List<Truck> getFreeTrucks(@Param("weight") double weight);
 
