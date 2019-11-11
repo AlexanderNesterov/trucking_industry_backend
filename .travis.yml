@@ -13,4 +13,4 @@ addons:
       secure: d108dab4cce1796654ee55b7e6d6229ac6967a5c
 
 script:
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=AlexanderNesterov_trucking_industry_backend
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
