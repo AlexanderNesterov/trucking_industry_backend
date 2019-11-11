@@ -42,6 +42,7 @@ public class DriverController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public boolean addDriver(@RequestBody DriverDto driverDto) {
         return driverService.addDriver(driverDto);
     }

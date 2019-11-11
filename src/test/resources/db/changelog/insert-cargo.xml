@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="insert_cargo" author="nesterov">
+        <insert tableName="cargo">
+            <column name="title">Water</column>
+            <column name="description">pure water</column>
+            <column name="weight">500</column>
+            <column name="load_location_id">0</column>
+            <column name="discharge_location_id">0</column>
+            <column name="truck_id">1</column>
+            <column name="driver_id">3</column>
+            <column name="co_driver_id">5</column>
+            <column name="status">IN_PROGRESS</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

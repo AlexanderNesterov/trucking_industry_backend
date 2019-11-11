@@ -8,7 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import static com.example.models.validation.MessageCode.*;
 
-@JsonIgnoreProperties(value = "password", allowSetters = true)
+//@JsonIgnoreProperties(value = "password", allowSetters = true)
 public class UserDto {
 
     private int id;

@@ -98,6 +98,13 @@ public class DriverServiceImpl implements DriverService {
     private void checkSavingDriver(DriverDto savingDriver, boolean isUpdate) {
         StringBuilder exception = new StringBuilder();
 
+        //Добавить тест
+        if (isUpdate && savingDriver.getUserDto().getId() == 0) {
+            exception.append("User id cannot be equals or less than 0: ");
+            exception.append(savingDriver.getUserDto().getId());
+            throw new DriverExistsException(exception.toString());
+        }
+
         if (!isUpdate) {
             DriverDto existDriverLogin = getDriverByLogin(savingDriver.getUserDto().getLogin());
             if (existDriverLogin != null) {

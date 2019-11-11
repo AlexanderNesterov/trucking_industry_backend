@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="insert_trucks" author="nesterov">
+        <insert tableName="trucks">
+            <column name="registration_number">BB90029</column>
+            <column name="model">Renault R-800</column>
+            <column name="capacity">800</column>
+        </insert>
+        <insert tableName="trucks">
+            <column name="registration_number">BV87524</column>
+            <column name="model">Mercedes C-1000</column>
+            <column name="capacity">1000</column>
+        </insert>
+        <insert tableName="trucks">
+            <column name="registration_number">JK65243</column>
+            <column name="model">GAZ 2108</column>
+            <column name="capacity">500</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
