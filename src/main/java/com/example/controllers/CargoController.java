@@ -1,7 +1,13 @@
 package com.example.controllers;
 
+import com.example.controllers.exceptions.CargoNotFoundException;
+import com.example.controllers.exceptions.ChangeCargoStatusException;
+import com.example.controllers.exceptions.SavingCargoException;
+import com.example.controllers.response.ErrorResponse;
 import com.example.models.CargoDto;
 import com.example.services.CargoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,13 +33,55 @@ public class CargoController {
         return cargoService.findById(cargoId);
     }
 
+    @GetMapping("/for_driver/{driverId}")
+    public CargoDto getCargoByDriverId(@PathVariable int driverId) {
+        return cargoService.getCargoByDriverId(driverId);
+    }
+
+    @PutMapping("/set_accept_status/{cargoId}/{driverId}")
+    public void setAcceptStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+        cargoService.setAcceptStatus(cargoId, driverId);
+    }
+
+    @PutMapping("/set_refuse_status/{cargoId}/{driverId}")
+    public void setRefuseStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+        cargoService.setRefuseStatus(cargoId, driverId);
+    }
+
+    @PutMapping("/set_deliver_status/{cargoId}/{driverId}")
+    public void setDeliverStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+        cargoService.setDeliverStatus(cargoId, driverId);
+    }
+
     @PutMapping
-    public CargoDto updateCargo(@RequestBody CargoDto cargoDto) {
+    public boolean updateCargo(@RequestBody CargoDto cargoDto) {
         return cargoService.updateCargo(cargoDto);
     }
 
     @PostMapping
-    public void addCargo(@RequestBody CargoDto cargoDto) {
-        cargoService.addCargo(cargoDto);
+    public boolean addCargo(@RequestBody CargoDto cargoDto) {
+        return cargoService.addCargo(cargoDto);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handleException(CargoNotFoundException exc) {
+        ErrorResponse error = new ErrorResponse();
+
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setMessage(exc.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({SavingCargoException.class, ChangeCargoStatusException.class})
+    public ResponseEntity handleException(RuntimeException exc) {
+        ErrorResponse error = new ErrorResponse();
+
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(exc.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

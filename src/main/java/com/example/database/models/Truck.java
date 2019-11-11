@@ -4,7 +4,7 @@ import com.example.database.models.commons.TruckCondition;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "trucks", schema = "freight")
+@Table(name = "trucks")
 public class Truck {
 
     @Id

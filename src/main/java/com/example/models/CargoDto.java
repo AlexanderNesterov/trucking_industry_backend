@@ -1,8 +1,6 @@
 package com.example.models;
 
 import com.example.database.models.commons.CargoStatus;
-import com.example.database.models.Driver;
-import com.example.database.models.Truck;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
@@ -25,13 +23,13 @@ public class CargoDto {
     private int dischargeLocation;
 
     @NotNull
-    private Truck truck;
+    private TruckDto truckDto;
 
     @NotNull
-    private Driver driver;
+    private DriverDto driverDto;
 
     @NotNull
-    private Driver coDriver;
+    private DriverDto coDriverDto;
 
     @Min(1)
     private double weight;
@@ -81,28 +79,28 @@ public class CargoDto {
         this.dischargeLocation = dischargeLocation;
     }
 
-    public Truck getTruck() {
-        return truck;
+    public TruckDto getTruckDto() {
+        return truckDto;
     }
 
-    public void setTruck(Truck truck) {
-        this.truck = truck;
+    public void setTruckDto(TruckDto truckDto) {
+        this.truckDto = truckDto;
     }
 
-    public Driver getDriver() {
-        return driver;
+    public DriverDto getDriverDto() {
+        return driverDto;
     }
 
-    public void setDriver(Driver driver) {
-        this.driver = driver;
+    public void setDriverDto(DriverDto driverDto) {
+        this.driverDto = driverDto;
     }
 
-    public Driver getCoDriver() {
-        return coDriver;
+    public DriverDto getCoDriverDto() {
+        return coDriverDto;
     }
 
-    public void setCoDriver(Driver coDriver) {
-        this.coDriver = coDriver;
+    public void setCoDriverDto(DriverDto coDriverDto) {
+        this.coDriverDto = coDriverDto;
     }
 
     public double getWeight() {

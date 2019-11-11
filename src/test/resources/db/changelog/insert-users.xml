@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="insert_users" author="nesterov">
+        <insert tableName="users">
+            <column name="login">driver_1</column>
+            <column name="password">password</column>
+            <column name="first_name">Kieran</column>
+            <column name="last_name">Tierney</column>
+            <column name="email">tierney@mail.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_2</column>
+            <column name="password">password</column>
+            <column name="first_name">Alex</column>
+            <column name="last_name">Iwobi</column>
+            <column name="email">iwobi@yandex.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_3</column>
+            <column name="password">password</column>
+            <column name="first_name">Hector</column>
+            <column name="last_name">Bellerin</column>
+            <column name="email">bellerin@gmail.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_4</column>
+            <column name="password">password</column>
+            <column name="first_name">Bernd</column>
+            <column name="last_name">Leno</column>
+            <column name="email">leno@gmail.com</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_5</column>
+            <column name="password">password</column>
+            <column name="first_name">Rob</column>
+            <column name="last_name">Holding</column>
+            <column name="email">holding@mail.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -9,7 +9,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
 
     <changeSet id="1" author="nesterov">
 
-        <createTable tableName="users" schemaName="freight">
+        <createTable tableName="users">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
@@ -34,7 +34,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             </column>
         </createTable>
 
-        <createTable tableName="drivers" schemaName="freight">
+        <createTable tableName="drivers">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -47,12 +47,11 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="status" type="int"/>
         </createTable>
 
-        <addForeignKeyConstraint referencedTableSchemaName="freight" baseTableSchemaName="freight"
-                                 baseTableName="drivers" baseColumnNames="user_id"
+        <addForeignKeyConstraint baseTableName="drivers" baseColumnNames="user_id"
                                  constraintName="fk_driver_user" referencedTableName="users"
                                  referencedColumnNames="id"/>
 
-        <createTable tableName="trucks" schemaName="freight">
+        <createTable tableName="trucks">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
@@ -70,7 +69,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
     </changeSet>
 
     <changeSet id="2" author="nesterov">
-        <createTable tableName="cargo" schemaName="freight">
+        <createTable tableName="cargo">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
@@ -95,26 +94,23 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="status" type="int"/>
         </createTable>
 
-        <addForeignKeyConstraint baseTableSchemaName="freight" referencedTableSchemaName="freight"
-                                 baseTableName="cargo" baseColumnNames="truck_id"
+        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="truck_id"
                                  constraintName="fk_cargo_truck" referencedTableName="trucks"
                                  referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableSchemaName="freight" referencedTableSchemaName="freight"
-                                 baseTableName="cargo" baseColumnNames="driver_id"
+        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="driver_id"
                                  constraintName="fk_cargo_driver" referencedTableName="drivers"
                                  referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableSchemaName="freight" referencedTableSchemaName="freight"
-                                 baseTableName="cargo" baseColumnNames="co_driver_id"
+        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="co_driver_id"
                                  constraintName="fk_cargo_co_driver" referencedTableName="drivers"
                                  referencedColumnNames="id"/>
     </changeSet>
-    
+
     <changeSet id="3" author="nesterov">
-        <modifyDataType tableName="users" schemaName="freight" columnName="role" newDataType="varchar(32)"/>
-        <modifyDataType tableName="drivers" schemaName="freight" columnName="status" newDataType="varchar(32)"/>
-        <modifyDataType tableName="trucks" schemaName="freight" columnName="condition" newDataType="varchar(32)"/>
-        <modifyDataType tableName="cargo" schemaName="freight" columnName="status" newDataType="varchar(32)"/>
+        <modifyDataType tableName="users" columnName="role" newDataType="varchar(32)"/>
+        <modifyDataType tableName="drivers" columnName="status" newDataType="varchar(32)"/>
+        <modifyDataType tableName="trucks" columnName="condition" newDataType="varchar(32)"/>
+        <modifyDataType tableName="cargo" columnName="status" newDataType="varchar(32)"/>
     </changeSet>
 </databaseChangeLog>

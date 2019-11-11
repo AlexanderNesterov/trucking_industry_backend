@@ -5,7 +5,7 @@ import com.example.database.models.commons.Role;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users", schema = "freight")
+@Table(name = "users")
 public class User {
 
     @Id

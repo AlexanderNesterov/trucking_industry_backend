@@ -8,6 +8,11 @@ public interface CargoService {
 
     CargoDto findById(int cargoId);
     List<CargoDto> findAll();
-    CargoDto updateCargo(@Valid CargoDto cargoDto);
-    void addCargo(@Valid CargoDto cargoDto);
+    CargoDto getCargoByDriverId(int driverId);
+    CargoDto getCargoByTruckId(int truckId);
+    boolean addCargo(@Valid CargoDto cargoDto);
+    boolean updateCargo(@Valid CargoDto cargoDto);
+    boolean setAcceptStatus(int cargoId, int driverId);
+    boolean setRefuseStatus(int cargoId, int driverId);
+    boolean setDeliverStatus(int cargoId, int driverId);
 }

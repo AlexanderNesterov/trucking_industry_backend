@@ -1,10 +1,11 @@
 package com.example.database.models;
 
 import com.example.database.models.commons.CargoStatus;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "cargo", schema = "freight")
+@Table(name = "cargo")
 public class Cargo {
 
     @Id
@@ -24,15 +25,15 @@ public class Cargo {
     @Column(name = "discharge_location_id")
     private int dischargeLocation;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "truck_id")
     private Truck truck;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "driver_id")
     private Driver driver;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "co_driver_id")
     private Driver coDriver;
 

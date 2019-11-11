@@ -4,7 +4,7 @@ import com.example.database.models.commons.DriverStatus;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "drivers", schema = "freight")
+@Table(name = "drivers")
 public class Driver {
 
     @Id
