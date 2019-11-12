@@ -57,17 +57,17 @@ public class TruckControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].registrationNumber").value("BB90029"))
                 .andExpect(jsonPath("$[1].registrationNumber").value("BV87524"))
-                .andExpect(jsonPath("$[2].registrationNumber").value("JK65243"))
-                .andExpect(jsonPath("$.length()").value(3));
+                .andExpect(jsonPath("$[4].registrationNumber").value("KO89029"))
+                .andExpect(jsonPath("$.length()").value(6));
     }
 
     @Test
     public void getFreeTrucks() throws Exception {
-        mockMvc.perform(get("/trucks/free/700").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/trucks/free/450").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].registrationNumber").value("BV87524"))
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].registrationNumber").value("JK65243"));
     }
 
     @Test

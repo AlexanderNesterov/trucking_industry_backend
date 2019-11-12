@@ -19,5 +19,47 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="co_driver_id">5</column>
             <column name="status">IN_PROGRESS</column>
         </insert>
+        <insert tableName="cargo">
+            <column name="title">Chocolate</column>
+            <column name="description">Alpien gold</column>
+            <column name="weight">400</column>
+            <column name="load_location_id">0</column>
+            <column name="discharge_location_id">0</column>
+            <column name="truck_id">4</column>
+            <column name="driver_id">6</column>
+            <column name="co_driver_id">7</column>
+            <column name="status">CREATED</column>
+        </insert>
+        <insert tableName="cargo">
+            <column name="title">Soup</column>
+            <column name="description">Ichiraku Ramen</column>
+            <column name="weight">900</column>
+            <column name="load_location_id">0</column>
+            <column name="discharge_location_id">0</column>
+            <column name="truck_id">2</column>
+            <column name="driver_id">8</column>
+            <column name="co_driver_id">9</column>
+            <column name="status">CREATED</column>
+        </insert>
+        <insert tableName="cargo">
+            <column name="title">Weapon</column>
+            <column name="weight">300</column>
+            <column name="load_location_id">0</column>
+            <column name="discharge_location_id">0</column>
+            <column name="truck_id">5</column>
+            <column name="driver_id">10</column>
+            <column name="co_driver_id">11</column>
+            <column name="status">IN_PROGRESS</column>
+        </insert>
+        <insert tableName="cargo">
+            <column name="title">Cotton</column>
+            <column name="weight">450</column>
+            <column name="load_location_id">0</column>
+            <column name="discharge_location_id">0</column>
+            <column name="truck_id">6</column>
+            <column name="driver_id">12</column>
+            <column name="co_driver_id">13</column>
+            <column name="status">REFUSED_BY_DRIVER</column>
+        </insert>
     </changeSet>
 </databaseChangeLog>

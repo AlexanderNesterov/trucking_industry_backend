@@ -26,5 +26,23 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="capacity">500</column>
             <column name="condition">SERVICEABLE</column>
         </insert>
+        <insert tableName="trucks">
+            <column name="registration_number">LK98076</column>
+            <column name="model">MAN K-400</column>
+            <column name="capacity">800</column>
+            <column name="condition">SERVICEABLE</column>
+        </insert>
+        <insert tableName="trucks">
+            <column name="registration_number">KO89029</column>
+            <column name="model">ZIL 9090</column>
+            <column name="capacity">900</column>
+            <column name="condition">SERVICEABLE</column>
+        </insert>
+        <insert tableName="trucks">
+            <column name="registration_number">PM87652</column>
+            <column name="model">Mercedes V-500</column>
+            <column name="capacity">600</column>
+            <column name="condition">SERVICEABLE</column>
+        </insert>
     </changeSet>
 </databaseChangeLog>

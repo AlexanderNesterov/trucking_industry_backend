@@ -5,8 +5,10 @@ import com.example.models.DriverDto;
 import com.example.models.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {"/application-test.properties"})
 @ActiveProfiles("test")
+@FixMethodOrder(MethodSorters.JVM)
 public class DriverControllerTest {
 
     @Autowired
@@ -59,10 +62,11 @@ public class DriverControllerTest {
     public void findAll() throws Exception {
         mockMvc.perform(get("/drivers").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(13))
                 .andExpect(jsonPath("$[0].userDto.login").value("driver_1"))
                 .andExpect(jsonPath("$[1].userDto.login").value("driver_2"))
-                .andExpect(jsonPath("$[2].userDto.login").value("driver_3"))
-                .andExpect(jsonPath("$[3].userDto.login").value("driver_4"));
+                .andExpect(jsonPath("$[10].userDto.login").value("driver_11"))
+                .andExpect(jsonPath("$[12].userDto.login").value("driver_13"));
     }
 
     @Test
@@ -124,6 +128,7 @@ public class DriverControllerTest {
     @Test
     public void failedUpdateDriverUserIdZero() throws Exception {
         updatingDriver.setId(2);
+        updatingDriver.getUserDto().setId(0);
         updatingDriver.setDriverLicense("0102030405");
         updatingDriver.getUserDto().setLogin("driver_2");
 
@@ -131,13 +136,14 @@ public class DriverControllerTest {
 
         mockMvc.perform(put("/drivers").contentType(MediaType.APPLICATION_JSON).content(str))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("User id cannot be equals or less than 0: 0"));
+                .andExpect(jsonPath("$.message")
+                        .value("User id cannot be equals or less than 0: 0"));
     }
 
     @Test
     public void addDriverSuccessfully() throws Exception {
         addingDriver.setDriverLicense("0102030409");
-        addingDriver.getUserDto().setLogin("driver_10");
+        addingDriver.getUserDto().setLogin("driver_90");
 
         String str = new ObjectMapper().writeValueAsString(addingDriver);
 
@@ -164,7 +170,7 @@ public class DriverControllerTest {
     @Test
     public void failedAddDriverDriverLicenseExists() throws Exception {
         addingDriver.setDriverLicense("1020304050");
-        addingDriver.getUserDto().setLogin("driver_7");
+        addingDriver.getUserDto().setLogin("driver_99");
 
         String str = new ObjectMapper().writeValueAsString(addingDriver);
 

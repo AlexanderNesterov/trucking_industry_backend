@@ -68,6 +68,9 @@ public class CargoServiceImpl implements CargoService {
     @Override
     public boolean updateCargo(@Valid CargoDto cargoDto) {
         checkSavingCargo(cargoDto, true);
+        cargoDto.getDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
+        cargoDto.getCoDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
+        cargoDto.setStatus(CargoStatus.CREATED);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
@@ -107,7 +110,7 @@ public class CargoServiceImpl implements CargoService {
         cargoDto.setStatus(CargoStatus.IN_PROGRESS);
         cargoDto.getDriverDto().setStatus(DriverStatus.ACTIVE);
         cargoDto.getCoDriverDto().setStatus(DriverStatus.ACTIVE);
-        updateCargo(cargoDto);
+        cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
     }
@@ -123,7 +126,7 @@ public class CargoServiceImpl implements CargoService {
         cargoDto.setStatus(CargoStatus.REFUSED_BY_DRIVER);
         cargoDto.getDriverDto().setStatus(DriverStatus.REST);
         cargoDto.getCoDriverDto().setStatus(DriverStatus.REST);
-        updateCargo(cargoDto);
+        cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
     }
@@ -139,7 +142,7 @@ public class CargoServiceImpl implements CargoService {
         cargoDto.setStatus(CargoStatus.DELIVERED);
         cargoDto.getDriverDto().setStatus(DriverStatus.REST);
         cargoDto.getCoDriverDto().setStatus(DriverStatus.REST);
-        updateCargo(cargoDto);
+        cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
     }

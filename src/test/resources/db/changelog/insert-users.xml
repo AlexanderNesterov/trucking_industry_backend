@@ -48,5 +48,69 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="email">holding@mail.ru</column>
             <column name="role">DRIVER</column>
         </insert>
+        <insert tableName="users">
+            <column name="login">driver_6</column>
+            <column name="password">password</column>
+            <column name="first_name">Gabriel</column>
+            <column name="last_name">Martinelli</column>
+            <column name="email">martinelli@mail.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_7</column>
+            <column name="password">password</column>
+            <column name="first_name">Patrick</column>
+            <column name="last_name">Viera</column>
+            <column name="email">viera@mail.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_8</column>
+            <column name="password">password</column>
+            <column name="first_name">Naruto</column>
+            <column name="last_name">Uzumaki</column>
+            <column name="email">uzumaki@konoha.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_9</column>
+            <column name="password">password</column>
+            <column name="first_name">Sasuke</column>
+            <column name="last_name">Uchiha</column>
+            <column name="email">uchiha@konoha.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_10</column>
+            <column name="password">password</column>
+            <column name="first_name">Kakashi</column>
+            <column name="last_name">Sakumo</column>
+            <column name="email">kakashi@konoha.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_11</column>
+            <column name="password">password</column>
+            <column name="first_name">Gai</column>
+            <column name="last_name">Maito</column>
+            <column name="email">maito@konoha.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_12</column>
+            <column name="password">password</column>
+            <column name="first_name">Hashirama</column>
+            <column name="last_name">Sendju</column>
+            <column name="email">hashirama@konoha.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_13</column>
+            <column name="password">password</column>
+            <column name="first_name">Madara</column>
+            <column name="last_name">Uchiha</column>
+            <column name="email">uchiha@konoha.ru</column>
+            <column name="role">DRIVER</column>
+        </insert>
     </changeSet>
 </databaseChangeLog>

@@ -39,18 +39,18 @@ public class CargoController {
     }
 
     @PutMapping("/set_accept_status/{cargoId}/{driverId}")
-    public void setAcceptStatus(@PathVariable int cargoId, @PathVariable int driverId) {
-        cargoService.setAcceptStatus(cargoId, driverId);
+    public boolean setAcceptStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+        return cargoService.setAcceptStatus(cargoId, driverId);
     }
 
     @PutMapping("/set_refuse_status/{cargoId}/{driverId}")
-    public void setRefuseStatus(@PathVariable int cargoId, @PathVariable int driverId) {
-        cargoService.setRefuseStatus(cargoId, driverId);
+    public boolean setRefuseStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+        return cargoService.setRefuseStatus(cargoId, driverId);
     }
 
     @PutMapping("/set_deliver_status/{cargoId}/{driverId}")
-    public void setDeliverStatus(@PathVariable int cargoId, @PathVariable int driverId) {
-        cargoService.setDeliverStatus(cargoId, driverId);
+    public boolean setDeliverStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+        return cargoService.setDeliverStatus(cargoId, driverId);
     }
 
     @PutMapping
