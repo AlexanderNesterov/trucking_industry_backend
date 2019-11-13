@@ -1,24 +1,15 @@
 package com.example.models;
 
 import com.example.database.models.commons.TruckCondition;
-import com.example.models.validation.annotation.IncorrectRegistrationNumber;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 
 public class TruckDto {
 
     private int id;
 
-    @IncorrectRegistrationNumber
     private String registrationNumber;
 
-    @NotBlank
-    @Length(max = 32)
     private String model;
 
-    @Min(0)
     private double capacity;
 
     private TruckCondition condition;

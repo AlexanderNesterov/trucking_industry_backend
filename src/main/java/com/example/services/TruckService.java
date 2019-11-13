@@ -8,7 +8,7 @@ public interface TruckService {
 
     TruckDto findById(int truckDtoId);
     List<TruckDto> findAll();
-    boolean updateTruck(@Valid TruckDto truckDto);
+    boolean updateTruck(TruckDto truckDto);
     List<TruckDto> getFreeTrucks(double weight);
-    boolean addTruck(@Valid TruckDto truckDto);
+    boolean addTruck(TruckDto truckDto);
 }

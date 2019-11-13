@@ -6,19 +6,17 @@ import com.example.database.models.Truck;
 import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.TruckRepository;
 import com.example.models.TruckDto;
+import com.example.serviceImpl.validation.TruckValidator;
 import com.example.services.TruckService;
 import com.example.services.mappers.TruckMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Validated
 public class TruckServiceImpl implements TruckService {
 
     private TruckRepository truckRepository;
@@ -54,7 +52,8 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public boolean updateTruck(@Valid TruckDto truckDto) {
+    public boolean updateTruck(TruckDto truckDto) {
+        TruckValidator.validate(truckDto);
         TruckDto existTruck = truckMapper.toDto(
                 truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber()));
         TruckDto sameTruck = findById(truckDto.getId());
@@ -70,7 +69,8 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public boolean addTruck(@Valid TruckDto truckDto) {
+    public boolean addTruck(TruckDto truckDto) {
+        TruckValidator.validate(truckDto);
         TruckDto existTruck = truckMapper.toDto(
                 truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber()));
 

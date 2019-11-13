@@ -4,6 +4,7 @@ import com.example.controllers.exceptions.RegistrationNumberExistsException;
 import com.example.controllers.exceptions.TruckNotFoundException;
 import com.example.controllers.response.ErrorResponse;
 import com.example.models.TruckDto;
+import com.example.serviceImpl.validation.exception.TruckValidationException;
 import com.example.services.TruckService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,8 +48,8 @@ public class TruckController {
         return truckService.addTruck(truckDto);
     }
 
-    @ExceptionHandler
-    public ResponseEntity handleException(RegistrationNumberExistsException exc) {
+    @ExceptionHandler({RegistrationNumberExistsException.class, TruckValidationException.class})
+    public ResponseEntity handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());
