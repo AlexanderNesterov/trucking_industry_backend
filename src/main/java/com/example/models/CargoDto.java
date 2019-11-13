@@ -1,37 +1,25 @@
 package com.example.models;
 
 import com.example.database.models.commons.CargoStatus;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 public class CargoDto {
 
     private int id;
 
-    @NotBlank
-    @Length(max = 32)
     private String title;
 
-    @Length(max = 256)
     private String description;
 
     private int loadLocation;
 
     private int dischargeLocation;
 
-    @NotNull
     private TruckDto truckDto;
 
-    @NotNull
     private DriverDto driverDto;
 
-    @NotNull
     private DriverDto coDriverDto;
 
-    @Min(1)
     private double weight;
 
     private CargoStatus status;

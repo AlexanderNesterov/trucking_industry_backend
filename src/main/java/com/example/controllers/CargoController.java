@@ -5,6 +5,7 @@ import com.example.controllers.exceptions.ChangeCargoStatusException;
 import com.example.controllers.exceptions.SavingCargoException;
 import com.example.controllers.response.ErrorResponse;
 import com.example.models.CargoDto;
+import com.example.serviceImpl.validation.exception.CargoValidationException;
 import com.example.services.CargoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +75,8 @@ public class CargoController {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({SavingCargoException.class, ChangeCargoStatusException.class})
+    @ExceptionHandler({SavingCargoException.class, ChangeCargoStatusException.class,
+            CargoValidationException.class})
     public ResponseEntity handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 

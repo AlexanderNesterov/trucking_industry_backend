@@ -11,21 +11,19 @@ import com.example.database.repositories.CargoRepository;
 import com.example.models.CargoDto;
 import com.example.models.DriverDto;
 import com.example.models.TruckDto;
+import com.example.serviceImpl.validation.CargoValidator;
 import com.example.services.CargoService;
 import com.example.services.DriverService;
 import com.example.services.TruckService;
 import com.example.services.mappers.CargoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Validated
 public class CargoServiceImpl implements CargoService {
 
     private CargoMapper cargoMapper;
@@ -66,8 +64,10 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public boolean updateCargo(@Valid CargoDto cargoDto) {
+    public boolean updateCargo(CargoDto cargoDto) {
+        CargoValidator.validate(cargoDto);
         checkSavingCargo(cargoDto, true);
+
         cargoDto.getDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
         cargoDto.getCoDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
         cargoDto.setStatus(CargoStatus.CREATED);
@@ -77,8 +77,10 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public boolean addCargo(@Valid CargoDto cargoDto) {
+    public boolean addCargo(CargoDto cargoDto) {
+        CargoValidator.validate(cargoDto);
         checkSavingCargo(cargoDto, false);
+
         cargoDto.setId(0);
         cargoDto.setStatus(CargoStatus.CREATED);
         cargoDto.getDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
