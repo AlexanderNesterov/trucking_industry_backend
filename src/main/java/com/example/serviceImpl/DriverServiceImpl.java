@@ -7,19 +7,17 @@ import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.DriverRepository;
 import com.example.models.DriverDto;
+import com.example.serviceImpl.validation.DriverValidator;
 import com.example.services.DriverService;
 import com.example.services.mappers.DriverMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Validated
 public class DriverServiceImpl implements DriverService {
 
     private DriverRepository driverRepository;
@@ -55,7 +53,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public boolean updateDriver(@Valid DriverDto driverDto) {
+    public boolean updateDriver(DriverDto driverDto) {
         DriverDto sameDriverDto = findById(driverDto.getId());
         driverDto.getUserDto().setLogin(sameDriverDto.getUserDto().getLogin());
 
@@ -70,14 +68,15 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public boolean addDriver(@Valid DriverDto driverDto) {
+    public boolean addDriver(DriverDto driverDto) {
+        DriverValidator.validate(driverDto, false);
         checkSavingDriver(driverDto, false);
 
         driverDto.setId(0);
         driverDto.getUserDto().setId(0);
         driverDto.getUserDto().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
-        driverRepository.save(driverMapper.fromDto(driverDto));
+        //driverRepository.save(driverMapper.fromDto(driverDto));
 
         return true;
     }

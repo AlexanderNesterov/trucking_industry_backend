@@ -4,6 +4,7 @@ import com.example.controllers.exceptions.DriverExistsException;
 import com.example.controllers.exceptions.DriverNotFoundException;
 import com.example.controllers.response.ErrorResponse;
 import com.example.models.DriverDto;
+import com.example.serviceImpl.validation.exception.UserValidationException;
 import com.example.services.DriverService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,8 +48,8 @@ public class DriverController {
         return driverService.addDriver(driverDto);
     }
 
-    @ExceptionHandler
-    public ResponseEntity handleException(DriverExistsException exc) {
+    @ExceptionHandler({DriverExistsException.class, UserValidationException.class})
+    public ResponseEntity handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());

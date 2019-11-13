@@ -1,7 +1,6 @@
 package com.example.services;
 
 import com.example.models.DriverDto;
-import javax.validation.Valid;
 import java.util.List;
 
 public interface DriverService {
@@ -9,6 +8,6 @@ public interface DriverService {
     DriverDto findById(int driverDtoId);
     List<DriverDto> findAll();
     List<DriverDto> getFreeDrivers();
-    boolean updateDriver(@Valid DriverDto driver);
-    boolean addDriver(@Valid DriverDto driver);
+    boolean updateDriver(DriverDto driver);
+    boolean addDriver(DriverDto driver);
 }

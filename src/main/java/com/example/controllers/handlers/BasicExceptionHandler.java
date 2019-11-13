@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class BasicExceptionHandler {
 
-    @ExceptionHandler
+/*    @ExceptionHandler
     public ResponseEntity handleException(Exception exc) {
         ErrorResponse error = new ErrorResponse();
 
@@ -18,5 +18,5 @@ public class BasicExceptionHandler {
         error.setTimestamp(System.currentTimeMillis());
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
+    }*/
 }

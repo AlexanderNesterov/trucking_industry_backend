@@ -5,14 +5,11 @@ import com.example.models.UserDto;
 import com.example.services.UserService;
 import com.example.services.mappers.UserMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Validated
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -36,12 +33,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(@Valid UserDto user) {
+    public UserDto updateUser(UserDto user) {
         return userMapper.toDto(userRepository.save(userMapper.fromDto(user)));
     }
 
     @Override
-    public UserDto addUser(@Valid UserDto user) {
+    public UserDto addUser(UserDto user) {
         return userMapper.toDto(userRepository.save(userMapper.fromDto(user)));
     }
 }

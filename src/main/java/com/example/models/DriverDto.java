@@ -1,22 +1,15 @@
 package com.example.models;
 
 import com.example.database.models.commons.DriverStatus;
-import com.example.models.validation.annotation.DriverLicense;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 public class DriverDto {
 
     private int id;
 
-    @DriverLicense
     private String driverLicense;
 
     private DriverStatus status;
 
-    @NotNull
-    @Valid
     private UserDto userDto;
 
     public DriverDto() {
