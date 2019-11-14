@@ -68,8 +68,8 @@ public class CargoServiceImpl implements CargoService {
         CargoValidator.validate(cargoDto);
         checkSavingCargo(cargoDto, true);
 
-        cargoDto.getDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
-        cargoDto.getCoDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
+        cargoDto.getDriver().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
+        cargoDto.getCoDriver().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
         cargoDto.setStatus(CargoStatus.CREATED);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
@@ -83,8 +83,8 @@ public class CargoServiceImpl implements CargoService {
 
         cargoDto.setId(0);
         cargoDto.setStatus(CargoStatus.CREATED);
-        cargoDto.getDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
-        cargoDto.getCoDriverDto().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
+        cargoDto.getDriver().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
+        cargoDto.getCoDriver().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
@@ -110,8 +110,8 @@ public class CargoServiceImpl implements CargoService {
         }
 
         cargoDto.setStatus(CargoStatus.IN_PROGRESS);
-        cargoDto.getDriverDto().setStatus(DriverStatus.ACTIVE);
-        cargoDto.getCoDriverDto().setStatus(DriverStatus.ACTIVE);
+        cargoDto.getDriver().setStatus(DriverStatus.ACTIVE);
+        cargoDto.getCoDriver().setStatus(DriverStatus.ACTIVE);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
@@ -126,8 +126,8 @@ public class CargoServiceImpl implements CargoService {
         }
 
         cargoDto.setStatus(CargoStatus.REFUSED_BY_DRIVER);
-        cargoDto.getDriverDto().setStatus(DriverStatus.REST);
-        cargoDto.getCoDriverDto().setStatus(DriverStatus.REST);
+        cargoDto.getDriver().setStatus(DriverStatus.REST);
+        cargoDto.getCoDriver().setStatus(DriverStatus.REST);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
@@ -142,8 +142,8 @@ public class CargoServiceImpl implements CargoService {
         }
 
         cargoDto.setStatus(CargoStatus.DELIVERED);
-        cargoDto.getDriverDto().setStatus(DriverStatus.REST);
-        cargoDto.getCoDriverDto().setStatus(DriverStatus.REST);
+        cargoDto.getDriver().setStatus(DriverStatus.REST);
+        cargoDto.getCoDriver().setStatus(DriverStatus.REST);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
         return true;
@@ -157,11 +157,11 @@ public class CargoServiceImpl implements CargoService {
     private CargoDto getCheckedCargoToChangeStatus(int cargoId, int driverId) {
         CargoDto cargoDto = findById(cargoId);
 
-        if (cargoDto.getDriverDto().getId() == driverId) {
+        if (cargoDto.getDriver().getId() == driverId) {
             return cargoDto;
         }
 
-        if (cargoDto.getCoDriverDto().getId() == driverId) {
+        if (cargoDto.getCoDriver().getId() == driverId) {
             throw new ChangeCargoStatusException("Driver with id: " +
                     driverId + " is not main driver for cargo with id: " + cargoId);
         } else {
@@ -194,11 +194,11 @@ public class CargoServiceImpl implements CargoService {
     private void checkDriversIds(CargoDto savingCargo) {
         StringBuilder exception = new StringBuilder();
 
-        if (savingCargo.getCoDriverDto().getId() == savingCargo.getDriverDto().getId()) {
+        if (savingCargo.getCoDriver().getId() == savingCargo.getDriver().getId()) {
             exception.append("Driver id and co-driver id cannot be equals. Driver id: ");
-            exception.append(savingCargo.getDriverDto().getId());
+            exception.append(savingCargo.getDriver().getId());
             exception.append(", co-driver id: ");
-            exception.append(savingCargo.getCoDriverDto().getId());
+            exception.append(savingCargo.getCoDriver().getId());
             throw new SavingCargoException(exception.toString());
         }
     }
@@ -206,28 +206,28 @@ public class CargoServiceImpl implements CargoService {
     private void checkDrivers(CargoDto savingCargo) {
         StringBuilder exception = new StringBuilder();
 
-        DriverDto driverDto = driverService.findById(savingCargo.getDriverDto().getId());
+        DriverDto driverDto = driverService.findById(savingCargo.getDriver().getId());
         if (!driverDto.getStatus().equals(DriverStatus.REST)) {
             exception.append("Driver status must be equals REST. Current status is: ");
             exception.append(driverDto.getStatus().name());
             throw new SavingCargoException(exception.toString());
         }
 
-        DriverDto coDriverDto = driverService.findById(savingCargo.getCoDriverDto().getId());
+        DriverDto coDriverDto = driverService.findById(savingCargo.getCoDriver().getId());
         if (!coDriverDto.getStatus().equals(DriverStatus.REST)) {
             exception.append("Co-Driver status must be equals REST. Current status is: ");
             exception.append(coDriverDto.getStatus().name());
             throw new SavingCargoException(exception.toString());
         }
 
-        savingCargo.setDriverDto(driverDto);
-        savingCargo.setCoDriverDto(coDriverDto);
+        savingCargo.setDriver(driverDto);
+        savingCargo.setCoDriver(coDriverDto);
     }
 
     private void checkTruck(CargoDto savingCargo, boolean isUpdate) {
         StringBuilder exception = new StringBuilder();
 
-        TruckDto truckDto = truckService.findById(savingCargo.getTruckDto().getId());
+        TruckDto truckDto = truckService.findById(savingCargo.getTruck().getId());
         if (!truckDto.getCondition().equals(TruckCondition.SERVICEABLE)) {
             exception.append("Truck condition must be equals SERVICEABLE");
             throw new SavingCargoException(exception.toString());
@@ -238,9 +238,9 @@ public class CargoServiceImpl implements CargoService {
             throw new SavingCargoException(exception.toString());
         }
 
-        CargoDto cargoDto = getCargoByTruckId(savingCargo.getTruckDto().getId());
+        CargoDto cargoDto = getCargoByTruckId(savingCargo.getTruck().getId());
         if (cargoDto == null || (isUpdate && cargoDto.getId() == savingCargo.getId())) {
-            savingCargo.setTruckDto(truckDto);
+            savingCargo.setTruck(truckDto);
             return;
         }
 

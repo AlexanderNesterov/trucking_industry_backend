@@ -1,7 +1,6 @@
 package com.example.serviceImpl;
 
 import com.example.controllers.exceptions.CargoNotFoundException;
-import com.example.controllers.exceptions.SavingCargoException;
 import com.example.database.models.commons.CargoStatus;
 import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.TruckCondition;
@@ -76,9 +75,9 @@ public class CargoServiceImplTest {
         coDriver.setId(7);
         TruckDto truck = new TruckDto();
         truck.setId(2);
-        savingCargo.setDriverDto(firstDriver);
-        savingCargo.setCoDriverDto(coDriver);
-        savingCargo.setTruckDto(truck);
+        savingCargo.setDriver(firstDriver);
+        savingCargo.setCoDriver(coDriver);
+        savingCargo.setTruck(truck);
 
         DriverDto existFirstDriver = new DriverDto();
         existFirstDriver.setId(firstDriver.getId());
@@ -94,27 +93,27 @@ public class CargoServiceImplTest {
         existTruck.setCapacity(700);
 
         Mockito
-                .when(driverService.findById(savingCargo.getDriverDto().getId()))
+                .when(driverService.findById(savingCargo.getDriver().getId()))
                 .thenReturn(existFirstDriver);
         Mockito
-                .when(driverService.findById(savingCargo.getCoDriverDto().getId()))
+                .when(driverService.findById(savingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
-                .when(truckService.findById(savingCargo.getTruckDto().getId()))
+                .when(truckService.findById(savingCargo.getTruck().getId()))
                 .thenReturn(existTruck);
         Mockito
-                .when(cargoRepository.getCargoByTruckId(savingCargo.getTruckDto().getId()))
+                .when(cargoRepository.getCargoByTruckId(savingCargo.getTruck().getId()))
                 .thenReturn(null);
 
         boolean result = cargoService.addCargo(savingCargo);
 
-        assertEquals(existFirstDriver, savingCargo.getDriverDto());
-        assertEquals(existCoDriver, savingCargo.getCoDriverDto());
-        assertEquals(existTruck, savingCargo.getTruckDto());
+        assertEquals(existFirstDriver, savingCargo.getDriver());
+        assertEquals(existCoDriver, savingCargo.getCoDriver());
+        assertEquals(existTruck, savingCargo.getTruck());
         assertEquals(0, savingCargo.getId());
         assertEquals(CargoStatus.CREATED, savingCargo.getStatus());
-        assertEquals(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION, savingCargo.getDriverDto().getStatus());
-        assertEquals(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION, savingCargo.getCoDriverDto().getStatus());
+        assertEquals(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION, savingCargo.getDriver().getStatus());
+        assertEquals(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION, savingCargo.getCoDriver().getStatus());
         assertTrue(result);
     }
 

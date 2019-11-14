@@ -58,7 +58,7 @@ public class CargoValidator {
     }
 
     private static void checkTruck() {
-        TruckDto truck = checkingCargo.getTruckDto();
+        TruckDto truck = checkingCargo.getTruck();
 
         if (truck == null) {
             throw new CargoValidationException("Truck property cannot be null");
@@ -70,7 +70,7 @@ public class CargoValidator {
     }
 
     private static void checkDriver() {
-        DriverDto driver = checkingCargo.getDriverDto();
+        DriverDto driver = checkingCargo.getDriver();
 
         if (driver == null) {
             throw new CargoValidationException("Driver property cannot be null");
@@ -82,7 +82,7 @@ public class CargoValidator {
     }
 
     private static void checkCoDriver() {
-        DriverDto coDriver = checkingCargo.getCoDriverDto();
+        DriverDto coDriver = checkingCargo.getCoDriver();
 
         if (coDriver == null) {
             throw new CargoValidationException("Co-Driver property cannot be null");

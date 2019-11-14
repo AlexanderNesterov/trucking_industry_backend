@@ -58,9 +58,9 @@ public class CargoServiceImplUpdateTest {
         driver.setId(4);
         DriverDto coDriver = new DriverDto();
         coDriver.setId(5);
-        updatingCargo.setTruckDto(truck);
-        updatingCargo.setDriverDto(driver);
-        updatingCargo.setCoDriverDto(coDriver);
+        updatingCargo.setTruck(truck);
+        updatingCargo.setDriver(driver);
+        updatingCargo.setCoDriver(coDriver);
     }
 
     @Test
@@ -70,15 +70,15 @@ public class CargoServiceImplUpdateTest {
         existCargo.setStatus(CargoStatus.REFUSED_BY_DRIVER);
 
         DriverDto existFirstDriver = new DriverDto();
-        existFirstDriver.setId(updatingCargo.getDriverDto().getId());
+        existFirstDriver.setId(updatingCargo.getDriver().getId());
         existFirstDriver.setStatus(DriverStatus.REST);
 
         DriverDto existCoDriver = new DriverDto();
-        existCoDriver.setId(updatingCargo.getCoDriverDto().getId());
+        existCoDriver.setId(updatingCargo.getCoDriver().getId());
         existCoDriver.setStatus(DriverStatus.REST);
 
         TruckDto existTruck = new TruckDto();
-        existTruck.setId(updatingCargo.getTruckDto().getId());
+        existTruck.setId(updatingCargo.getTruck().getId());
         existTruck.setCondition(TruckCondition.SERVICEABLE);
         existTruck.setCapacity(700);
 
@@ -86,20 +86,20 @@ public class CargoServiceImplUpdateTest {
                 .when(cargoRepository.findById(updatingCargo.getId()))
                 .thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
         Mockito
-                .when(driverService.findById(updatingCargo.getDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getDriver().getId()))
                 .thenReturn(existFirstDriver);
         Mockito
-                .when(driverService.findById(updatingCargo.getCoDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
-                .when(truckService.findById(updatingCargo.getTruckDto().getId()))
+                .when(truckService.findById(updatingCargo.getTruck().getId()))
                 .thenReturn(existTruck);
 
         boolean result = cargoService.updateCargo(updatingCargo);
 
-        assertEquals(updatingCargo.getDriverDto(), existFirstDriver);
-        assertEquals(updatingCargo.getCoDriverDto(), existCoDriver);
-        assertEquals(updatingCargo.getTruckDto(), existTruck);
+        assertEquals(updatingCargo.getDriver(), existFirstDriver);
+        assertEquals(updatingCargo.getCoDriver(), existCoDriver);
+        assertEquals(updatingCargo.getTruck(), existTruck);
         assertTrue(result);
     }
 
@@ -121,7 +121,7 @@ public class CargoServiceImplUpdateTest {
 
     @Test
     public void failedUpdateEqualsDriverIds() {
-        updatingCargo.getDriverDto().setId(updatingCargo.getCoDriverDto().getId());
+        updatingCargo.getDriver().setId(updatingCargo.getCoDriver().getId());
 
         CargoDto existCargo = new CargoDto();
         existCargo.setId(updatingCargo.getId());
@@ -139,21 +139,21 @@ public class CargoServiceImplUpdateTest {
 
     @Test
     public void failedUpdateWrongFirstDriverStatus() {
-        updatingCargo.getDriverDto().setId(4);
+        updatingCargo.getDriver().setId(4);
 
         CargoDto existCargo = new CargoDto();
         existCargo.setId(updatingCargo.getId());
         existCargo.setStatus(CargoStatus.REFUSED_BY_DRIVER);
 
         DriverDto existFirstDriver = new DriverDto();
-        existFirstDriver.setId(updatingCargo.getDriverDto().getId());
+        existFirstDriver.setId(updatingCargo.getDriver().getId());
         existFirstDriver.setStatus(DriverStatus.ACTIVE);
 
         Mockito
                 .when(cargoRepository.findById(updatingCargo.getId()))
                 .thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
         Mockito
-                .when(driverService.findById(updatingCargo.getDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getDriver().getId()))
                 .thenReturn(existFirstDriver);
 
         SavingCargoException thrown = assertThrows(SavingCargoException.class,
@@ -164,28 +164,28 @@ public class CargoServiceImplUpdateTest {
 
     @Test
     public void failedUpdateWrongCoDriverStatus() {
-        updatingCargo.getDriverDto().setId(4);
+        updatingCargo.getDriver().setId(4);
 
         CargoDto existCargo = new CargoDto();
         existCargo.setId(updatingCargo.getId());
         existCargo.setStatus(CargoStatus.REFUSED_BY_DRIVER);
 
         DriverDto existFirstDriver = new DriverDto();
-        existFirstDriver.setId(updatingCargo.getDriverDto().getId());
+        existFirstDriver.setId(updatingCargo.getDriver().getId());
         existFirstDriver.setStatus(DriverStatus.REST);
 
         DriverDto existCoDriver = new DriverDto();
-        existCoDriver.setId(updatingCargo.getCoDriverDto().getId());
+        existCoDriver.setId(updatingCargo.getCoDriver().getId());
         existCoDriver.setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
 
         Mockito
                 .when(cargoRepository.findById(updatingCargo.getId()))
                 .thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
         Mockito
-                .when(driverService.findById(updatingCargo.getDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getDriver().getId()))
                 .thenReturn(existFirstDriver);
         Mockito
-                .when(driverService.findById(updatingCargo.getCoDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
 
         SavingCargoException thrown = assertThrows(SavingCargoException.class,
@@ -201,15 +201,15 @@ public class CargoServiceImplUpdateTest {
         existCargo.setStatus(CargoStatus.REFUSED_BY_DRIVER);
 
         DriverDto existFirstDriver = new DriverDto();
-        existFirstDriver.setId(updatingCargo.getDriverDto().getId());
+        existFirstDriver.setId(updatingCargo.getDriver().getId());
         existFirstDriver.setStatus(DriverStatus.REST);
 
         DriverDto existCoDriver = new DriverDto();
-        existCoDriver.setId(updatingCargo.getCoDriverDto().getId());
+        existCoDriver.setId(updatingCargo.getCoDriver().getId());
         existCoDriver.setStatus(DriverStatus.REST);
 
         TruckDto existTruck = new TruckDto();
-        existTruck.setId(updatingCargo.getTruckDto().getId());
+        existTruck.setId(updatingCargo.getTruck().getId());
         existTruck.setCondition(TruckCondition.FAULTY);
         existTruck.setCapacity(700);
 
@@ -217,13 +217,13 @@ public class CargoServiceImplUpdateTest {
                 .when(cargoRepository.findById(updatingCargo.getId()))
                 .thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
         Mockito
-                .when(driverService.findById(updatingCargo.getDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getDriver().getId()))
                 .thenReturn(existFirstDriver);
         Mockito
-                .when(driverService.findById(updatingCargo.getCoDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
-                .when(truckService.findById(updatingCargo.getTruckDto().getId()))
+                .when(truckService.findById(updatingCargo.getTruck().getId()))
                 .thenReturn(existTruck);
 
         SavingCargoException thrown = assertThrows(SavingCargoException.class,
@@ -241,15 +241,15 @@ public class CargoServiceImplUpdateTest {
         existCargo.setStatus(CargoStatus.REFUSED_BY_DRIVER);
 
         DriverDto existFirstDriver = new DriverDto();
-        existFirstDriver.setId(updatingCargo.getDriverDto().getId());
+        existFirstDriver.setId(updatingCargo.getDriver().getId());
         existFirstDriver.setStatus(DriverStatus.REST);
 
         DriverDto existCoDriver = new DriverDto();
-        existCoDriver.setId(updatingCargo.getCoDriverDto().getId());
+        existCoDriver.setId(updatingCargo.getCoDriver().getId());
         existCoDriver.setStatus(DriverStatus.REST);
 
         TruckDto existTruck = new TruckDto();
-        existTruck.setId(updatingCargo.getTruckDto().getId());
+        existTruck.setId(updatingCargo.getTruck().getId());
         existTruck.setCondition(TruckCondition.SERVICEABLE);
         existTruck.setCapacity(400);
 
@@ -257,13 +257,13 @@ public class CargoServiceImplUpdateTest {
                 .when(cargoRepository.findById(updatingCargo.getId()))
                 .thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
         Mockito
-                .when(driverService.findById(updatingCargo.getDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getDriver().getId()))
                 .thenReturn(existFirstDriver);
         Mockito
-                .when(driverService.findById(updatingCargo.getCoDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
-                .when(truckService.findById(updatingCargo.getTruckDto().getId()))
+                .when(truckService.findById(updatingCargo.getTruck().getId()))
                 .thenReturn(existTruck);
 
         SavingCargoException thrown = assertThrows(SavingCargoException.class,
@@ -279,36 +279,36 @@ public class CargoServiceImplUpdateTest {
         existCargo.setStatus(CargoStatus.REFUSED_BY_DRIVER);
 
         DriverDto existFirstDriver = new DriverDto();
-        existFirstDriver.setId(updatingCargo.getDriverDto().getId());
+        existFirstDriver.setId(updatingCargo.getDriver().getId());
         existFirstDriver.setStatus(DriverStatus.REST);
 
         DriverDto existCoDriver = new DriverDto();
-        existCoDriver.setId(updatingCargo.getCoDriverDto().getId());
+        existCoDriver.setId(updatingCargo.getCoDriver().getId());
         existCoDriver.setStatus(DriverStatus.REST);
 
         TruckDto existTruck = new TruckDto();
-        existTruck.setId(updatingCargo.getTruckDto().getId());
+        existTruck.setId(updatingCargo.getTruck().getId());
         existTruck.setCondition(TruckCondition.SERVICEABLE);
         existTruck.setCapacity(1200);
 
         CargoDto anotherCargo = new CargoDto();
         anotherCargo.setId(8);
-        anotherCargo.setTruckDto(existTruck);
+        anotherCargo.setTruck(existTruck);
 
         Mockito
                 .when(cargoRepository.findById(updatingCargo.getId()))
                 .thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
         Mockito
-                .when(driverService.findById(updatingCargo.getDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getDriver().getId()))
                 .thenReturn(existFirstDriver);
         Mockito
-                .when(driverService.findById(updatingCargo.getCoDriverDto().getId()))
+                .when(driverService.findById(updatingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
-                .when(truckService.findById(updatingCargo.getTruckDto().getId()))
+                .when(truckService.findById(updatingCargo.getTruck().getId()))
                 .thenReturn(existTruck);
         Mockito
-                .when(cargoRepository.getCargoByTruckId(updatingCargo.getTruckDto().getId()))
+                .when(cargoRepository.getCargoByTruckId(updatingCargo.getTruck().getId()))
                 .thenReturn(cargoMapper.fromDto(anotherCargo));
 
         SavingCargoException thrown = assertThrows(SavingCargoException.class,

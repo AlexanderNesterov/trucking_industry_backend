@@ -55,12 +55,12 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public boolean updateDriver(DriverDto driverDto) {
         DriverDto sameDriverDto = findById(driverDto.getId());
-        driverDto.getUserDto().setLogin(sameDriverDto.getUserDto().getLogin());
+        driverDto.getUser().setLogin(sameDriverDto.getUser().getLogin());
 
         checkSavingDriver(driverDto, true);
 
-        driverDto.getUserDto().setRole(sameDriverDto.getUserDto().getRole());
-        driverDto.getUserDto().setPassword(sameDriverDto.getUserDto().getPassword());
+        driverDto.getUser().setRole(sameDriverDto.getUser().getRole());
+        driverDto.getUser().setPassword(sameDriverDto.getUser().getPassword());
         driverDto.setStatus(sameDriverDto.getStatus());
         driverRepository.save(driverMapper.fromDto(driverDto));
 
@@ -73,8 +73,8 @@ public class DriverServiceImpl implements DriverService {
         checkSavingDriver(driverDto, false);
 
         driverDto.setId(0);
-        driverDto.getUserDto().setId(0);
-        driverDto.getUserDto().setRole(Role.DRIVER);
+        driverDto.getUser().setId(0);
+        driverDto.getUser().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
         driverRepository.save(driverMapper.fromDto(driverDto));
 
@@ -98,17 +98,17 @@ public class DriverServiceImpl implements DriverService {
         StringBuilder exception = new StringBuilder();
 
         //Добавить тест
-        if (isUpdate && savingDriver.getUserDto().getId() == 0) {
+        if (isUpdate && savingDriver.getUser().getId() == 0) {
             exception.append("User id cannot be equals or less than 0: ");
-            exception.append(savingDriver.getUserDto().getId());
+            exception.append(savingDriver.getUser().getId());
             throw new DriverExistsException(exception.toString());
         }
 
         if (!isUpdate) {
-            DriverDto existDriverLogin = getDriverByLogin(savingDriver.getUserDto().getLogin());
+            DriverDto existDriverLogin = getDriverByLogin(savingDriver.getUser().getLogin());
             if (existDriverLogin != null) {
                 exception.append("Driver with login: ");
-                exception.append(savingDriver.getUserDto().getLogin());
+                exception.append(savingDriver.getUser().getLogin());
                 exception.append(" already exist");
                 throw new DriverExistsException(exception.toString());
             }

@@ -10,7 +10,7 @@ public class DriverDto {
 
     private DriverStatus status;
 
-    private UserDto userDto;
+    private UserDto user;
 
     public DriverDto() {
     }
@@ -39,11 +39,11 @@ public class DriverDto {
         this.status = status;
     }
 
-    public UserDto getUserDto() {
-        return userDto;
+    public UserDto getUser() {
+        return user;
     }
 
-    public void setUserDto(UserDto userDto) {
-        this.userDto = userDto;
+    public void setUser(UserDto user) {
+        this.user = user;
     }
 }

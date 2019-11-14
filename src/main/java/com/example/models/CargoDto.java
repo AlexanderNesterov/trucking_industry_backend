@@ -14,11 +14,11 @@ public class CargoDto {
 
     private int dischargeLocation;
 
-    private TruckDto truckDto;
+    private TruckDto truck;
 
-    private DriverDto driverDto;
+    private DriverDto driver;
 
-    private DriverDto coDriverDto;
+    private DriverDto coDriver;
 
     private double weight;
 
@@ -67,28 +67,28 @@ public class CargoDto {
         this.dischargeLocation = dischargeLocation;
     }
 
-    public TruckDto getTruckDto() {
-        return truckDto;
+    public TruckDto getTruck() {
+        return truck;
     }
 
-    public void setTruckDto(TruckDto truckDto) {
-        this.truckDto = truckDto;
+    public void setTruck(TruckDto truck) {
+        this.truck = truck;
     }
 
-    public DriverDto getDriverDto() {
-        return driverDto;
+    public DriverDto getDriver() {
+        return driver;
     }
 
-    public void setDriverDto(DriverDto driverDto) {
-        this.driverDto = driverDto;
+    public void setDriver(DriverDto driver) {
+        this.driver = driver;
     }
 
-    public DriverDto getCoDriverDto() {
-        return coDriverDto;
+    public DriverDto getCoDriver() {
+        return coDriver;
     }
 
-    public void setCoDriverDto(DriverDto coDriverDto) {
-        this.coDriverDto = coDriverDto;
+    public void setCoDriver(DriverDto coDriver) {
+        this.coDriver = coDriver;
     }
 
     public double getWeight() {

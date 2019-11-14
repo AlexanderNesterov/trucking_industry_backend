@@ -35,7 +35,7 @@ public class DriverValidator {
     }
 
     private static void checkUser(boolean isUpdate) {
-        UserDto user = checkingDriver.getUserDto();
+        UserDto user = checkingDriver.getUser();
 
         if (user == null) {
             throw new UserValidationException("UserDto property cannot be null");

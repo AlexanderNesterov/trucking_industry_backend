@@ -47,7 +47,7 @@ public class DriverControllerTest {
         userDto.setFirstName("Shkodran");
         userDto.setLastName("Mustafi");
         userDto.setEmail("mustafi@mail.ru");
-        addingDriver.setUserDto(userDto);
+        addingDriver.setUser(userDto);
 
         updatingDriver = new DriverDto();
         UserDto userDto1 = new UserDto();
@@ -55,7 +55,7 @@ public class DriverControllerTest {
         userDto1.setFirstName("Therry");
         userDto1.setLastName("Henry");
         userDto1.setEmail("henry@gmail.ru");
-        updatingDriver.setUserDto(userDto1);
+        updatingDriver.setUser(userDto1);
     }
 
     @Test
@@ -63,17 +63,17 @@ public class DriverControllerTest {
         mockMvc.perform(get("/drivers").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(13))
-                .andExpect(jsonPath("$[0].userDto.login").value("driver_1"))
-                .andExpect(jsonPath("$[1].userDto.login").value("driver_2"))
-                .andExpect(jsonPath("$[10].userDto.login").value("driver_11"))
-                .andExpect(jsonPath("$[12].userDto.login").value("driver_13"));
+                .andExpect(jsonPath("$[0].user.login").value("driver_1"))
+                .andExpect(jsonPath("$[1].user.login").value("driver_2"))
+                .andExpect(jsonPath("$[10].user.login").value("driver_11"))
+                .andExpect(jsonPath("$[12].user.login").value("driver_13"));
     }
 
     @Test
     public void findByIdSuccessfully() throws Exception {
         mockMvc.perform(get("/drivers/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userDto.login").value("driver_4"));
+                .andExpect(jsonPath("$.user.login").value("driver_4"));
     }
 
     @Test
@@ -88,9 +88,9 @@ public class DriverControllerTest {
         mockMvc.perform(get("/drivers/free").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].userDto.login").value("driver_1"))
-                .andExpect(jsonPath("$[1].userDto.login").value("driver_2"))
-                .andExpect(jsonPath("$[2].userDto.login").value("driver_4"))
+                .andExpect(jsonPath("$[0].user.login").value("driver_1"))
+                .andExpect(jsonPath("$[1].user.login").value("driver_2"))
+                .andExpect(jsonPath("$[2].user.login").value("driver_4"))
                 .andExpect(jsonPath("$[0].status").value("REST"))
                 .andExpect(jsonPath("$[1].status").value("REST"))
                 .andExpect(jsonPath("$[2].status").value("REST"))
@@ -101,8 +101,8 @@ public class DriverControllerTest {
     public void updateDriverSuccessfully() throws Exception {
         updatingDriver.setId(2);
         updatingDriver.setDriverLicense("1020304050");
-        updatingDriver.getUserDto().setLogin("driver_2");
-        updatingDriver.getUserDto().setId(2);
+        updatingDriver.getUser().setLogin("driver_2");
+        updatingDriver.getUser().setId(2);
 
         String str = new ObjectMapper().writeValueAsString(updatingDriver);
 
@@ -115,8 +115,8 @@ public class DriverControllerTest {
     public void failedUpdateDriverDriverLicenseExists() throws Exception {
         updatingDriver.setId(2);
         updatingDriver.setDriverLicense("0102030405");
-        updatingDriver.getUserDto().setLogin("driver_2");
-        updatingDriver.getUserDto().setId(2);
+        updatingDriver.getUser().setLogin("driver_2");
+        updatingDriver.getUser().setId(2);
 
         String str = new ObjectMapper().writeValueAsString(updatingDriver);
 
@@ -128,9 +128,9 @@ public class DriverControllerTest {
     @Test
     public void failedUpdateDriverUserIdZero() throws Exception {
         updatingDriver.setId(2);
-        updatingDriver.getUserDto().setId(0);
+        updatingDriver.getUser().setId(0);
         updatingDriver.setDriverLicense("0102030405");
-        updatingDriver.getUserDto().setLogin("driver_2");
+        updatingDriver.getUser().setLogin("driver_2");
 
         String str = new ObjectMapper().writeValueAsString(updatingDriver);
 
@@ -143,7 +143,7 @@ public class DriverControllerTest {
     @Test
     public void addDriverSuccessfully() throws Exception {
         addingDriver.setDriverLicense("0102030409");
-        addingDriver.getUserDto().setLogin("driver_90");
+        addingDriver.getUser().setLogin("driver_90");
 
         String str = new ObjectMapper().writeValueAsString(addingDriver);
 
@@ -156,7 +156,7 @@ public class DriverControllerTest {
     @Test
     public void failedAddDriverLoginExists() throws Exception {
         addingDriver.setDriverLicense("0102030409");
-        addingDriver.getUserDto().setLogin("driver_2");
+        addingDriver.getUser().setLogin("driver_2");
 
         String str = new ObjectMapper().writeValueAsString(addingDriver);
 
@@ -170,7 +170,7 @@ public class DriverControllerTest {
     @Test
     public void failedAddDriverDriverLicenseExists() throws Exception {
         addingDriver.setDriverLicense("1020304050");
-        addingDriver.getUserDto().setLogin("driver_99");
+        addingDriver.getUser().setLogin("driver_99");
 
         String str = new ObjectMapper().writeValueAsString(addingDriver);
 

@@ -47,9 +47,9 @@ public class CargoControllerTest {
         updatingCargo = new CargoDto();
         updatingCargo.setId(5);
         updatingCargo.setTitle("Steel");
-        updatingCargo.setTruckDto(new TruckDto());
-        updatingCargo.setDriverDto(new DriverDto());
-        updatingCargo.setCoDriverDto(new DriverDto());
+        updatingCargo.setTruck(new TruckDto());
+        updatingCargo.setDriver(new DriverDto());
+        updatingCargo.setCoDriver(new DriverDto());
     }
 
     @Test
@@ -65,8 +65,8 @@ public class CargoControllerTest {
         mockMvc.perform(get("/cargo/2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Chocolate"))
-                .andExpect(jsonPath("$.driverDto.id").value(6))
-                .andExpect(jsonPath("$.coDriverDto.id").value(7));
+                .andExpect(jsonPath("$.driver.id").value(6))
+                .andExpect(jsonPath("$.coDriver.id").value(7));
     }
 
     @Test
@@ -143,9 +143,9 @@ public class CargoControllerTest {
     @Test
     public void updateCargoSuccessfully() throws Exception {
         updatingCargo.setWeight(300);
-        updatingCargo.getTruckDto().setId(6);
-        updatingCargo.getDriverDto().setId(1);
-        updatingCargo.getCoDriverDto().setId(2);
+        updatingCargo.getTruck().setId(6);
+        updatingCargo.getDriver().setId(1);
+        updatingCargo.getCoDriver().setId(2);
 
         String str = new ObjectMapper().writeValueAsString(updatingCargo);
 
