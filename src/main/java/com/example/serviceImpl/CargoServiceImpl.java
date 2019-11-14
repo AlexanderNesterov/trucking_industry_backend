@@ -68,8 +68,6 @@ public class CargoServiceImpl implements CargoService {
         CargoValidator.validate(cargoDto);
         checkSavingCargo(cargoDto, true);
 
-        cargoDto.getDriver().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
-        cargoDto.getCoDriver().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
         cargoDto.setStatus(CargoStatus.CREATED);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
 
@@ -83,10 +81,7 @@ public class CargoServiceImpl implements CargoService {
 
         cargoDto.setId(0);
         cargoDto.setStatus(CargoStatus.CREATED);
-        cargoDto.getDriver().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
-        cargoDto.getCoDriver().setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
-
         return true;
     }
 

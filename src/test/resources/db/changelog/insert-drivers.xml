@@ -36,22 +36,22 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
         <insert tableName="drivers">
             <column name="driver_license">1122334455</column>
             <column name="user_id">6</column>
-            <column name="status">WAITING_FOR_MAIN_DRIVER_DECISION</column>
+            <column name="status">REST</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">2233445566</column>
             <column name="user_id">7</column>
-            <column name="status">WAITING_FOR_MAIN_DRIVER_DECISION</column>
+            <column name="status">REST</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">3344556677</column>
             <column name="user_id">8</column>
-            <column name="status">WAITING_FOR_MAIN_DRIVER_DECISION</column>
+            <column name="status">REST</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">0022998877</column>
             <column name="user_id">9</column>
-            <column name="status">WAITING_FOR_MAIN_DRIVER_DECISION</column>
+            <column name="status">REST</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">7777777777</column>

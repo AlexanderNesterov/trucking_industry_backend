@@ -112,8 +112,6 @@ public class CargoServiceImplTest {
         assertEquals(existTruck, savingCargo.getTruck());
         assertEquals(0, savingCargo.getId());
         assertEquals(CargoStatus.CREATED, savingCargo.getStatus());
-        assertEquals(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION, savingCargo.getDriver().getStatus());
-        assertEquals(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION, savingCargo.getCoDriver().getStatus());
         assertTrue(result);
     }
 

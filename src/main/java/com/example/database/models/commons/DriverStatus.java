@@ -4,6 +4,5 @@ public enum DriverStatus {
 
     ACTIVE,
     REST,
-    WAITING_FOR_MAIN_DRIVER_DECISION,
     FIRED;
 }

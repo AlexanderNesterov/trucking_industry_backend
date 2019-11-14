@@ -176,7 +176,7 @@ public class CargoServiceImplUpdateTest {
 
         DriverDto existCoDriver = new DriverDto();
         existCoDriver.setId(updatingCargo.getCoDriver().getId());
-        existCoDriver.setStatus(DriverStatus.WAITING_FOR_MAIN_DRIVER_DECISION);
+        existCoDriver.setStatus(DriverStatus.ACTIVE);
 
         Mockito
                 .when(cargoRepository.findById(updatingCargo.getId()))
