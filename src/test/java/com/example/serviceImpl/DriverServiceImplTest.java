@@ -10,6 +10,7 @@ import com.example.models.UserDto;
 import com.example.services.DriverService;
 import com.example.services.mappers.DriverMapper;
 import com.example.services.mappers.DriverMapperImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,12 +26,32 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DriverServiceImplTest {
 
     private DriverMapper driverMapper = new DriverMapperImpl();
+    private DriverDto addingDriver, updatingDriver;
 
     @InjectMocks
     private DriverService driverService = new DriverServiceImpl(driverMapper);
 
     @Mock
     private DriverRepository driverRepository;
+
+    @Before
+    public void setUp() {
+        addingDriver = new DriverDto();
+        UserDto user = new UserDto();
+        user.setFirstName("Ivan");
+        user.setLastName("Ivanov");
+        user.setPassword("password");
+        user.setEmail("ivanov@yandex.ru");
+        addingDriver.setUserDto(user);
+
+        updatingDriver = new DriverDto();
+        UserDto user1 = new UserDto();
+        user1.setFirstName("Petr");
+        user1.setLastName("Petrov");
+        user1.setPassword("password");
+        user1.setEmail("petrov@yandex.ru");
+        updatingDriver.setUserDto(user1);
+    }
 
     @Test
     public void findByIdSuccessfully() {
@@ -50,43 +71,40 @@ public class DriverServiceImplTest {
         assertEquals(existDriver.getUserDto().getFirstName(), foundDriver.getUserDto().getFirstName());
     }
 
-    @Test(expected = DriverNotFoundException.class)
+    @Test
     public void failedFindById() {
         Mockito.when(driverRepository.findById(9)).thenReturn(Optional.empty());
-        driverService.findById(9);
+        DriverNotFoundException thrown = assertThrows(DriverNotFoundException.class,
+                () -> driverService.findById(9));
+
+        assertTrue(thrown.getMessage().contains("Driver with id: " + 9 + " not found"));
     }
 
     @Test
     public void addDriverSuccessfully() {
-        DriverDto savingDriver = new DriverDto();
-        savingDriver.setDriverLicense("0102030405");
-        UserDto userDto1 = new UserDto();
-        userDto1.setLogin("driver_1");
-        savingDriver.setUserDto(userDto1);
+        addingDriver.setDriverLicense("0102030405");
+        addingDriver.getUserDto().setLogin("driver_1");
 
         Mockito
-                .when(driverRepository.getDriverByLogin(savingDriver.getUserDto().getLogin()))
+                .when(driverRepository.getDriverByLogin(addingDriver.getUserDto().getLogin()))
                 .thenReturn(null);
         Mockito
-                .when(driverRepository.getDriverByDriverLicense(savingDriver.getDriverLicense()))
+                .when(driverRepository.getDriverByDriverLicense(addingDriver.getDriverLicense()))
                 .thenReturn(null);
 
-        boolean result = driverService.addDriver(savingDriver);
+        boolean result = driverService.addDriver(addingDriver);
 
-        assertEquals(0, savingDriver.getId());
-        assertEquals(0, savingDriver.getUserDto().getId());
-        assertEquals(Role.DRIVER, savingDriver.getUserDto().getRole());
-        assertEquals(DriverStatus.REST, savingDriver.getStatus());
+        assertEquals(0, addingDriver.getId());
+        assertEquals(0, addingDriver.getUserDto().getId());
+        assertEquals(Role.DRIVER, addingDriver.getUserDto().getRole());
+        assertEquals(DriverStatus.REST, addingDriver.getStatus());
         assertTrue(result);
     }
 
-    @Test(expected = DriverExistsException.class)
+    @Test
     public void failedAddDriverLoginExists() {
-        DriverDto savingDriver = new DriverDto();
-        savingDriver.setDriverLicense("0102030405");
-        UserDto userDto1 = new UserDto();
-        userDto1.setLogin("driver_1");
-        savingDriver.setUserDto(userDto1);
+        addingDriver.setDriverLicense("0102030405");
+        addingDriver.getUserDto().setLogin("driver_1");
 
         DriverDto existDriver = new DriverDto();
         existDriver.setDriverLicense("1020304050");
@@ -95,19 +113,20 @@ public class DriverServiceImplTest {
         existDriver.setUserDto(userDto2);
 
         Mockito
-                .when(driverRepository.getDriverByLogin(savingDriver.getUserDto().getLogin()))
+                .when(driverRepository.getDriverByLogin(addingDriver.getUserDto().getLogin()))
                 .thenReturn(driverMapper.fromDto(existDriver));
 
-        driverService.addDriver(savingDriver);
+        DriverExistsException thrown = assertThrows(DriverExistsException.class,
+                () -> driverService.addDriver(addingDriver));
+
+        assertTrue(thrown.getMessage()
+                .contains("Driver with login: " + addingDriver.getUserDto().getLogin() + " already exist"));
     }
 
-    @Test(expected = DriverExistsException.class)
+    @Test
     public void failedAddDriverDriverLicenseExists() {
-        DriverDto savingDriver = new DriverDto();
-        savingDriver.setDriverLicense("0102030405");
-        UserDto userDto1 = new UserDto();
-        userDto1.setLogin("driver_1");
-        savingDriver.setUserDto(userDto1);
+        addingDriver.setDriverLicense("0102030405");
+        addingDriver.getUserDto().setLogin("driver_1");
 
         DriverDto existDriver = new DriverDto();
         existDriver.setDriverLicense("0102030405");
@@ -116,24 +135,25 @@ public class DriverServiceImplTest {
         existDriver.setUserDto(userDto2);
 
         Mockito
-                .when(driverRepository.getDriverByLogin(savingDriver.getUserDto().getLogin()))
+                .when(driverRepository.getDriverByLogin(addingDriver.getUserDto().getLogin()))
                 .thenReturn(null);
         Mockito
-                .when(driverRepository.getDriverByDriverLicense(savingDriver.getDriverLicense()))
+                .when(driverRepository.getDriverByDriverLicense(addingDriver.getDriverLicense()))
                 .thenReturn(driverMapper.fromDto(existDriver));
 
+        DriverExistsException thrown = assertThrows(DriverExistsException.class,
+                () -> driverService.addDriver(addingDriver));
 
-        driverService.addDriver(savingDriver);
+        assertTrue(thrown.getMessage()
+                .contains("Driver with driver license: " + addingDriver.getDriverLicense() + " already exist"));
     }
 
     @Test
     public void updateDriverSuccessfully() {
-        DriverDto savingDriver = new DriverDto();
-        savingDriver.setId(10);
-        savingDriver.setDriverLicense("1020304050");
-        UserDto userDto1 = new UserDto();
-        userDto1.setLogin("driver_1");
-        savingDriver.setUserDto(userDto1);
+        updatingDriver.setId(10);
+        updatingDriver.setDriverLicense("1020304050");
+        updatingDriver.getUserDto().setId(3);
+        updatingDriver.getUserDto().setLogin("driver_1");
 
         DriverDto sameDriver = new DriverDto();
         sameDriver.setId(10);
@@ -146,29 +166,29 @@ public class DriverServiceImplTest {
         sameDriver.setUserDto(userDto2);
 
         Mockito
-                .when(driverRepository.findById(savingDriver.getId()))
+                .when(driverRepository.findById(updatingDriver.getId()))
                 .thenReturn(Optional.of(driverMapper.fromDto(sameDriver)));
         Mockito
-                .when(driverRepository.getDriverByDriverLicense(savingDriver.getDriverLicense()))
+                .when(driverRepository.getDriverByDriverLicense(updatingDriver.getDriverLicense()))
                 .thenReturn(null);
 
-        boolean result = driverService.updateDriver(savingDriver);
+        boolean result = driverService.updateDriver(updatingDriver);
 
-        assertEquals(sameDriver.getStatus(), savingDriver.getStatus());
-        assertEquals(sameDriver.getUserDto().getRole(), savingDriver.getUserDto().getRole());
-        assertEquals(sameDriver.getUserDto().getPassword(), savingDriver.getUserDto().getPassword());
-        assertEquals(sameDriver.getUserDto().getLogin(), savingDriver.getUserDto().getLogin());
+        assertEquals(sameDriver.getStatus(), updatingDriver.getStatus());
+        assertEquals(sameDriver.getUserDto().getRole(), updatingDriver.getUserDto().getRole());
+        assertEquals(sameDriver.getUserDto().getPassword(), updatingDriver.getUserDto().getPassword());
+        assertEquals(sameDriver.getUserDto().getLogin(), updatingDriver.getUserDto().getLogin());
         assertTrue(result);
     }
 
     @Test
     public void updateDriverSameDriverLicenseSuccessfully() {
-        DriverDto savingDriver = new DriverDto();
-        savingDriver.setId(10);
-        savingDriver.setDriverLicense("1020304050");
-        UserDto userDto1 = new UserDto();
-        userDto1.setLogin("driver_1");
-        savingDriver.setUserDto(userDto1);
+        updatingDriver.setId(10);
+        updatingDriver.setDriverLicense("1020304050");
+        updatingDriver.getUserDto().setId(3);
+        updatingDriver.getUserDto().setLogin("driver_1");
+        updatingDriver.getUserDto().setFirstName("Ivan");
+        updatingDriver.getUserDto().setLastName("Ivanov");
 
         DriverDto sameDriver = new DriverDto();
         sameDriver.setId(10);
@@ -181,29 +201,27 @@ public class DriverServiceImplTest {
         sameDriver.setUserDto(userDto2);
 
         Mockito
-                .when(driverRepository.findById(savingDriver.getId()))
+                .when(driverRepository.findById(updatingDriver.getId()))
                 .thenReturn(Optional.of(driverMapper.fromDto(sameDriver)));
         Mockito
-                .when(driverRepository.getDriverByDriverLicense(savingDriver.getDriverLicense()))
+                .when(driverRepository.getDriverByDriverLicense(updatingDriver.getDriverLicense()))
                 .thenReturn(driverMapper.fromDto(sameDriver));
 
-        boolean result = driverService.updateDriver(savingDriver);
+        boolean result = driverService.updateDriver(updatingDriver);
 
-        assertEquals(sameDriver.getStatus(), savingDriver.getStatus());
-        assertEquals(sameDriver.getUserDto().getRole(), savingDriver.getUserDto().getRole());
-        assertEquals(sameDriver.getUserDto().getPassword(), savingDriver.getUserDto().getPassword());
-        assertEquals(sameDriver.getUserDto().getLogin(), savingDriver.getUserDto().getLogin());
+        assertEquals(sameDriver.getStatus(), updatingDriver.getStatus());
+        assertEquals(sameDriver.getUserDto().getRole(), updatingDriver.getUserDto().getRole());
+        assertEquals(sameDriver.getUserDto().getPassword(), updatingDriver.getUserDto().getPassword());
+        assertEquals(sameDriver.getUserDto().getLogin(), updatingDriver.getUserDto().getLogin());
         assertTrue(result);
     }
 
-    @Test(expected = DriverExistsException.class)
+    @Test
     public void failedUpdateDriverDriverLicenseExists() {
-        DriverDto savingDriver = new DriverDto();
-        savingDriver.setId(10);
-        savingDriver.setDriverLicense("1020304050");
-        UserDto userDto1 = new UserDto();
-        userDto1.setLogin("driver_1");
-        savingDriver.setUserDto(userDto1);
+        updatingDriver.setId(10);
+        updatingDriver.setDriverLicense("1020304050");
+        updatingDriver.getUserDto().setLogin("driver_1");
+        updatingDriver.getUserDto().setId(3);
 
         DriverDto sameDriver = new DriverDto();
         sameDriver.setId(10);
@@ -220,12 +238,16 @@ public class DriverServiceImplTest {
         existDriver.setUserDto(userDto2);
 
         Mockito
-                .when(driverRepository.findById(savingDriver.getId()))
+                .when(driverRepository.findById(updatingDriver.getId()))
                 .thenReturn(Optional.of(driverMapper.fromDto(sameDriver)));
         Mockito
-                .when(driverRepository.getDriverByDriverLicense(savingDriver.getDriverLicense()))
+                .when(driverRepository.getDriverByDriverLicense(updatingDriver.getDriverLicense()))
                 .thenReturn(driverMapper.fromDto(existDriver));
 
-        driverService.updateDriver(savingDriver);
+        DriverExistsException thrown = assertThrows(DriverExistsException.class,
+                () -> driverService.updateDriver(updatingDriver));
+
+        assertTrue(thrown.getMessage()
+                .contains("Driver with driver license: " + updatingDriver.getDriverLicense() + " already exist"));
     }
 }

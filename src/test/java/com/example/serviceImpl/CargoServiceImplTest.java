@@ -54,16 +54,21 @@ public class CargoServiceImplTest {
         assertEquals(existCargo.getStatus(), foundCargo.getStatus());
     }
 
-    @Test(expected = CargoNotFoundException.class)
+    @Test
     public void failedFindCargoById() {
         Mockito.when(cargoRepository.findById(90)).thenReturn(Optional.empty());
-        cargoService.findById(90);
+
+        CargoNotFoundException thrown = assertThrows(CargoNotFoundException.class,
+                () -> cargoService.findById(90));
+
+        assertTrue(thrown.getMessage().contains("not found"));
     }
 
 
     @Test
     public void addCargoSuccessfully() {
         CargoDto savingCargo = new CargoDto();
+        savingCargo.setTitle("Water");
         savingCargo.setWeight(300);
         DriverDto firstDriver = new DriverDto();
         firstDriver.setId(3);

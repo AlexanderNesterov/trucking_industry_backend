@@ -117,7 +117,7 @@ public class UserValidator {
             throw new UserValidationException("Email field length cannot be greater than 32");
         }
 
-        Pattern pattern = Pattern.compile("[\\w+]@[\\w+]");
+        Pattern pattern = Pattern.compile("[.|\\w]+@[.|\\w]+");
         Matcher matcher = pattern.matcher(email);
 
         if (!matcher.matches()) {
