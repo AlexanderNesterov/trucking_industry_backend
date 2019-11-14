@@ -78,7 +78,7 @@ public class CargoControllerTest {
 
     @Test
     public void getCargoByDriverIdSuccessfully() throws Exception {
-        mockMvc.perform(get("/cargo/for_driver/3"))
+        mockMvc.perform(get("/cargo/for-driver/3"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Water"))
                 .andExpect(jsonPath("$.weight").value(500))
@@ -87,14 +87,14 @@ public class CargoControllerTest {
 
     @Test
     public void failedGetCargoByDriverId() throws Exception {
-        mockMvc.perform(get("/cargo/for_driver/101"))
+        mockMvc.perform(get("/cargo/for-driver/101"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Cargo with driver id: 101 not found"));
     }
 
     @Test
     public void setAcceptStatusSuccessfully() throws Exception {
-        mockMvc.perform(put("/cargo/set_accept_status/2/6"))
+        mockMvc.perform(put("/cargo/set-accept-status/2/6"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
                 .andExpect(jsonPath("$").value("true"));
@@ -102,7 +102,7 @@ public class CargoControllerTest {
 
     @Test
     public void failedSetAcceptStatusCoDriverId() throws Exception {
-        mockMvc.perform(put("/cargo/set_accept_status/2/7"))
+        mockMvc.perform(put("/cargo/set-accept-status/2/7"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("Driver with id: 7 is not main driver for cargo with id: 2"));
@@ -110,7 +110,7 @@ public class CargoControllerTest {
 
     @Test
     public void failedSetAcceptStatusWrongDriver() throws Exception {
-        mockMvc.perform(put("/cargo/set_accept_status/2/12"))
+        mockMvc.perform(put("/cargo/set-accept-status/2/12"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("Driver with id: 12 is not included in cargo with id: 2"));
@@ -118,7 +118,7 @@ public class CargoControllerTest {
 
     @Test
     public void failedSetAcceptStatusWrongCargoStatus() throws Exception {
-        mockMvc.perform(put("/cargo/set_accept_status/1/3"))
+        mockMvc.perform(put("/cargo/set-accept-status/1/3"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("Attempt to set ACCEPT status to wrong cargo"));
@@ -126,7 +126,7 @@ public class CargoControllerTest {
 
     @Test
     public void setRefusedStatusSuccessfully() throws Exception {
-        mockMvc.perform(put("/cargo/set_refuse_status/3/8"))
+        mockMvc.perform(put("/cargo/set-refuse-status/3/8"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
                 .andExpect(jsonPath("$").value("true"));
@@ -134,7 +134,7 @@ public class CargoControllerTest {
 
     @Test
     public void setDeliveredStatusSuccessfully() throws Exception {
-        mockMvc.perform(put("/cargo/set_deliver_status/4/10"))
+        mockMvc.perform(put("/cargo/set-deliver-status/4/10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
                 .andExpect(jsonPath("$").value("true"));

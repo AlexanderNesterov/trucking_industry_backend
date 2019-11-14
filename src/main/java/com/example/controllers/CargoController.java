@@ -34,22 +34,22 @@ public class CargoController {
         return cargoService.findById(cargoId);
     }
 
-    @GetMapping("/for_driver/{driverId}")
+    @GetMapping("/for-driver/{driverId}")
     public CargoDto getCargoByDriverId(@PathVariable int driverId) {
         return cargoService.getCargoByDriverId(driverId);
     }
 
-    @PutMapping("/set_accept_status/{cargoId}/{driverId}")
+    @PutMapping("/set-accept-status/{cargoId}/{driverId}")
     public boolean setAcceptStatus(@PathVariable int cargoId, @PathVariable int driverId) {
         return cargoService.setAcceptStatus(cargoId, driverId);
     }
 
-    @PutMapping("/set_refuse_status/{cargoId}/{driverId}")
+    @PutMapping("/set-refuse-status/{cargoId}/{driverId}")
     public boolean setRefuseStatus(@PathVariable int cargoId, @PathVariable int driverId) {
         return cargoService.setRefuseStatus(cargoId, driverId);
     }
 
-    @PutMapping("/set_deliver_status/{cargoId}/{driverId}")
+    @PutMapping("/set-deliver-status/{cargoId}/{driverId}")
     public boolean setDeliverStatus(@PathVariable int cargoId, @PathVariable int driverId) {
         return cargoService.setDeliverStatus(cargoId, driverId);
     }
