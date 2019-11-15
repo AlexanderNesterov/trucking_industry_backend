@@ -70,9 +70,9 @@ public class CargoServiceImplTest {
         savingCargo.setTitle("Water");
         savingCargo.setWeight(300);
         DriverDto firstDriver = new DriverDto();
-        firstDriver.setId(3);
+        firstDriver.setId(3L);
         DriverDto coDriver = new DriverDto();
-        coDriver.setId(7);
+        coDriver.setId(7L);
         TruckDto truck = new TruckDto();
         truck.setId(2);
         savingCargo.setDriver(firstDriver);
@@ -132,7 +132,7 @@ public class CargoServiceImplTest {
     @Test
     public void failedGetCargoByDriverId() {
         CargoNotFoundException thrown = assertThrows(CargoNotFoundException.class,
-                () -> cargoService.getCargoByDriverId(12));
+                () -> cargoService.getCargoByDriverId(12L));
 
         assertTrue(thrown.getMessage().contains("not found"));
     }

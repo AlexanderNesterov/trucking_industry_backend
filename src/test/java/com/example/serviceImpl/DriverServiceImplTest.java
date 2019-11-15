@@ -56,15 +56,15 @@ public class DriverServiceImplTest {
     @Test
     public void findByIdSuccessfully() {
         DriverDto existDriver = new DriverDto();
-        existDriver.setId(30);
+        existDriver.setId(30L);
         existDriver.setDriverLicense("0102030405");
         UserDto userDto1 = new UserDto();
         userDto1.setFirstName("Vasya");
         userDto1.setLogin("driver_1");
         existDriver.setUser(userDto1);
 
-        Mockito.when(driverRepository.findById(30)).thenReturn(Optional.of(driverMapper.fromDto(existDriver)));
-        DriverDto foundDriver = driverService.findById(30);
+        Mockito.when(driverRepository.findById(30L)).thenReturn(Optional.of(driverMapper.fromDto(existDriver)));
+        DriverDto foundDriver = driverService.findById(30L);
 
         assertEquals(existDriver.getDriverLicense(), foundDriver.getDriverLicense());
         assertEquals(existDriver.getUser().getLogin(), foundDriver.getUser().getLogin());
@@ -73,9 +73,9 @@ public class DriverServiceImplTest {
 
     @Test
     public void failedFindById() {
-        Mockito.when(driverRepository.findById(9)).thenReturn(Optional.empty());
+        Mockito.when(driverRepository.findById(9L)).thenReturn(Optional.empty());
         DriverNotFoundException thrown = assertThrows(DriverNotFoundException.class,
-                () -> driverService.findById(9));
+                () -> driverService.findById(9L));
 
         assertTrue(thrown.getMessage().contains("Driver with id: " + 9 + " not found"));
     }
@@ -150,13 +150,13 @@ public class DriverServiceImplTest {
 
     @Test
     public void updateDriverSuccessfully() {
-        updatingDriver.setId(10);
+        updatingDriver.setId(10L);
         updatingDriver.setDriverLicense("1020304050");
         updatingDriver.getUser().setId(3);
         updatingDriver.getUser().setLogin("driver_1");
 
         DriverDto sameDriver = new DriverDto();
-        sameDriver.setId(10);
+        sameDriver.setId(10L);
         sameDriver.setDriverLicense("0102030405");
         sameDriver.setStatus(DriverStatus.ACTIVE);
         UserDto userDto2 = new UserDto();
@@ -183,7 +183,7 @@ public class DriverServiceImplTest {
 
     @Test
     public void updateDriverSameDriverLicenseSuccessfully() {
-        updatingDriver.setId(10);
+        updatingDriver.setId(10L);
         updatingDriver.setDriverLicense("1020304050");
         updatingDriver.getUser().setId(3);
         updatingDriver.getUser().setLogin("driver_1");
@@ -191,7 +191,7 @@ public class DriverServiceImplTest {
         updatingDriver.getUser().setLastName("Ivanov");
 
         DriverDto sameDriver = new DriverDto();
-        sameDriver.setId(10);
+        sameDriver.setId(10L);
         sameDriver.setDriverLicense("1020304050");
         sameDriver.setStatus(DriverStatus.ACTIVE);
         UserDto userDto2 = new UserDto();
@@ -218,20 +218,20 @@ public class DriverServiceImplTest {
 
     @Test
     public void failedUpdateDriverDriverLicenseExists() {
-        updatingDriver.setId(10);
+        updatingDriver.setId(10L);
         updatingDriver.setDriverLicense("1020304050");
         updatingDriver.getUser().setLogin("driver_1");
         updatingDriver.getUser().setId(3);
 
         DriverDto sameDriver = new DriverDto();
-        sameDriver.setId(10);
+        sameDriver.setId(10L);
         sameDriver.setDriverLicense("2030405060");
         UserDto userDto3 = new UserDto();
         userDto3.setLogin("driver_1");
         sameDriver.setUser(userDto3);
 
         DriverDto existDriver = new DriverDto();
-        existDriver.setId(12);
+        existDriver.setId(12L);
         existDriver.setDriverLicense("1020304050");
         UserDto userDto2 = new UserDto();
         userDto2.setLogin("driver_2");

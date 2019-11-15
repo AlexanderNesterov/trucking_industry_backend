@@ -34,7 +34,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public DriverDto findById(int driverDtoId) {
+    public DriverDto findById(Long driverDtoId) {
         Optional<Driver> driver = driverRepository.findById(driverDtoId);
 
         if (driver.isPresent()) {
@@ -72,7 +72,7 @@ public class DriverServiceImpl implements DriverService {
         DriverValidator.validate(driverDto, false);
         checkSavingDriver(driverDto, false);
 
-        driverDto.setId(0);
+        driverDto.setId(0L);
         driverDto.getUser().setId(0);
         driverDto.getUser().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
@@ -115,7 +115,8 @@ public class DriverServiceImpl implements DriverService {
         }
 
         DriverDto existDriverDriverLicense = getDriverByDriverLicense(savingDriver.getDriverLicense());
-        if (existDriverDriverLicense == null || (isUpdate && existDriverDriverLicense.getId() == savingDriver.getId())) {
+        if (existDriverDriverLicense == null ||
+                (isUpdate && existDriverDriverLicense.getId().equals(savingDriver.getId()))) {
             return;
         }
 

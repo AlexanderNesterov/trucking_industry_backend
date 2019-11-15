@@ -5,23 +5,14 @@ import com.example.database.models.commons.CargoStatus;
 public class CargoDto {
 
     private Long id;
-
     private String title;
-
     private String description;
-
     private int loadLocation;
-
     private int dischargeLocation;
-
     private TruckDto truck;
-
     private DriverDto driver;
-
     private DriverDto coDriver;
-
     private double weight;
-
     private CargoStatus status;
 
     public CargoDto() {

@@ -99,7 +99,7 @@ public class DriverControllerTest {
 
     @Test
     public void updateDriverSuccessfully() throws Exception {
-        updatingDriver.setId(2);
+        updatingDriver.setId(2L);
         updatingDriver.setDriverLicense("1020304050");
         updatingDriver.getUser().setLogin("driver_2");
         updatingDriver.getUser().setId(2);
@@ -113,7 +113,7 @@ public class DriverControllerTest {
 
     @Test
     public void failedUpdateDriverDriverLicenseExists() throws Exception {
-        updatingDriver.setId(2);
+        updatingDriver.setId(2L);
         updatingDriver.setDriverLicense("0102030405");
         updatingDriver.getUser().setLogin("driver_2");
         updatingDriver.getUser().setId(2);
@@ -127,7 +127,7 @@ public class DriverControllerTest {
 
     @Test
     public void failedUpdateDriverUserIdZero() throws Exception {
-        updatingDriver.setId(2);
+        updatingDriver.setId(2L);
         updatingDriver.getUser().setId(0);
         updatingDriver.setDriverLicense("0102030405");
         updatingDriver.getUser().setLogin("driver_2");

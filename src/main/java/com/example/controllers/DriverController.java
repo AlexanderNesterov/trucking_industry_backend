@@ -28,7 +28,7 @@ public class DriverController {
     }
 
     @GetMapping("/{driverDtoId}")
-    public DriverDto findById(@PathVariable int driverDtoId) {
+    public DriverDto findById(@PathVariable Long driverDtoId) {
         return driverService.findById(driverDtoId);
     }
 

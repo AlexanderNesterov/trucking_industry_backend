@@ -144,8 +144,8 @@ public class CargoControllerTest {
     public void updateCargoSuccessfully() throws Exception {
         updatingCargo.setWeight(300);
         updatingCargo.getTruck().setId(6);
-        updatingCargo.getDriver().setId(1);
-        updatingCargo.getCoDriver().setId(2);
+        updatingCargo.getDriver().setId(1L);
+        updatingCargo.getCoDriver().setId(2L);
 
         String str = new ObjectMapper().writeValueAsString(updatingCargo);
 

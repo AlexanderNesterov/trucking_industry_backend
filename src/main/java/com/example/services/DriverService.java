@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface DriverService {
     
-    DriverDto findById(int driverDtoId);
+    DriverDto findById(Long driverDtoId);
     List<DriverDto> findAll();
     List<DriverDto> getFreeDrivers();
     boolean updateDriver(DriverDto driver);

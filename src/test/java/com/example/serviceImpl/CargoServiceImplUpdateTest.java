@@ -55,9 +55,9 @@ public class CargoServiceImplUpdateTest {
         TruckDto truck = new TruckDto();
         truck.setId(2);
         DriverDto driver = new DriverDto();
-        driver.setId(4);
+        driver.setId(4L);
         DriverDto coDriver = new DriverDto();
-        coDriver.setId(5);
+        coDriver.setId(5L);
         updatingCargo.setTruck(truck);
         updatingCargo.setDriver(driver);
         updatingCargo.setCoDriver(coDriver);
@@ -139,7 +139,7 @@ public class CargoServiceImplUpdateTest {
 
     @Test
     public void failedUpdateWrongFirstDriverStatus() {
-        updatingCargo.getDriver().setId(4);
+        updatingCargo.getDriver().setId(4L);
 
         CargoDto existCargo = new CargoDto();
         existCargo.setId(updatingCargo.getId());
@@ -164,7 +164,7 @@ public class CargoServiceImplUpdateTest {
 
     @Test
     public void failedUpdateWrongCoDriverStatus() {
-        updatingCargo.getDriver().setId(4);
+        updatingCargo.getDriver().setId(4L);
 
         CargoDto existCargo = new CargoDto();
         existCargo.setId(updatingCargo.getId());
