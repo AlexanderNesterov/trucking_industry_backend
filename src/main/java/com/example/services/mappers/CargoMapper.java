@@ -3,8 +3,6 @@ package com.example.services.mappers;
 import com.example.database.models.Cargo;
 import com.example.models.CargoDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 import java.util.List;
 

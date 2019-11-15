@@ -30,7 +30,7 @@ public class CargoController {
     }
 
     @GetMapping("/{cargoId}")
-    public CargoDto findById(@PathVariable int cargoId) {
+    public CargoDto findById(@PathVariable Long cargoId) {
         return cargoService.findById(cargoId);
     }
 
@@ -40,17 +40,17 @@ public class CargoController {
     }
 
     @PutMapping("/set-accept-status/{cargoId}/{driverId}")
-    public boolean setAcceptStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+    public boolean setAcceptStatus(@PathVariable Long cargoId, @PathVariable int driverId) {
         return cargoService.setAcceptStatus(cargoId, driverId);
     }
 
     @PutMapping("/set-refuse-status/{cargoId}/{driverId}")
-    public boolean setRefuseStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+    public boolean setRefuseStatus(@PathVariable Long cargoId, @PathVariable int driverId) {
         return cargoService.setRefuseStatus(cargoId, driverId);
     }
 
     @PutMapping("/set-deliver-status/{cargoId}/{driverId}")
-    public boolean setDeliverStatus(@PathVariable int cargoId, @PathVariable int driverId) {
+    public boolean setDeliverStatus(@PathVariable Long cargoId, @PathVariable int driverId) {
         return cargoService.setDeliverStatus(cargoId, driverId);
     }
 

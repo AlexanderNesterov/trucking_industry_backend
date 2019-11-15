@@ -45,7 +45,7 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public CargoDto findById(int cargoId) {
+    public CargoDto findById(Long cargoId) {
         Optional<Cargo> cargo = cargoRepository.findById(cargoId);
 
         if (cargo.isPresent()) {
@@ -79,7 +79,7 @@ public class CargoServiceImpl implements CargoService {
         CargoValidator.validate(cargoDto);
         checkSavingCargo(cargoDto, false);
 
-        cargoDto.setId(0);
+        cargoDto.setId(0L);
         cargoDto.setStatus(CargoStatus.CREATED);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
         return true;
@@ -97,7 +97,7 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public boolean setAcceptStatus(int cargoId, int driverId) {
+    public boolean setAcceptStatus(Long cargoId, int driverId) {
         CargoDto cargoDto = getCheckedCargoToChangeStatus(cargoId, driverId);
 
         if (!cargoDto.getStatus().equals(CargoStatus.CREATED)) {
@@ -113,7 +113,7 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public boolean setRefuseStatus(int cargoId, int driverId) {
+    public boolean setRefuseStatus(Long cargoId, int driverId) {
         CargoDto cargoDto = getCheckedCargoToChangeStatus(cargoId, driverId);
 
         if (!cargoDto.getStatus().equals(CargoStatus.CREATED)) {
@@ -129,7 +129,7 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public boolean setDeliverStatus(int cargoId, int driverId) {
+    public boolean setDeliverStatus(Long cargoId, int driverId) {
         CargoDto cargoDto = getCheckedCargoToChangeStatus(cargoId, driverId);
 
         if (!cargoDto.getStatus().equals(CargoStatus.IN_PROGRESS)) {
@@ -149,7 +149,7 @@ public class CargoServiceImpl implements CargoService {
         return cargoMapper.toDto(cargoRepository.getCargoByTruckId(truckId));
     }
 
-    private CargoDto getCheckedCargoToChangeStatus(int cargoId, int driverId) {
+    private CargoDto getCheckedCargoToChangeStatus(Long cargoId, int driverId) {
         CargoDto cargoDto = findById(cargoId);
 
         if (cargoDto.getDriver().getId() == driverId) {

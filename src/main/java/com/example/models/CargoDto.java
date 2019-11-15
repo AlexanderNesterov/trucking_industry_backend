@@ -4,7 +4,7 @@ import com.example.database.models.commons.CargoStatus;
 
 public class CargoDto {
 
-    private int id;
+    private Long id;
 
     private String title;
 
@@ -27,11 +27,11 @@ public class CargoDto {
     public CargoDto() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -292,7 +292,7 @@ public class CargoServiceImplUpdateTest {
         existTruck.setCapacity(1200);
 
         CargoDto anotherCargo = new CargoDto();
-        anotherCargo.setId(8);
+        anotherCargo.setId(8L);
         anotherCargo.setTruck(existTruck);
 
         Mockito

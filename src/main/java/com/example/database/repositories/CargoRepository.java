@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface CargoRepository extends JpaRepository<Cargo, Integer> {
+public interface CargoRepository extends JpaRepository<Cargo, Long> {
 
     @Query("from Cargo c where c.status in ('CREATED', 'IN_PROGRESS')" +
             " and (c.driver.id = :driverId or c.coDriver.id = :driverId)")

@@ -45,7 +45,7 @@ public class CargoControllerTest {
     @BeforeClass
     public static void setUp() {
         updatingCargo = new CargoDto();
-        updatingCargo.setId(5);
+        updatingCargo.setId(5L);
         updatingCargo.setTitle("Steel");
         updatingCargo.setTruck(new TruckDto());
         updatingCargo.setDriver(new DriverDto());

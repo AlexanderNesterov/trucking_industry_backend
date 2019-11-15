@@ -44,21 +44,21 @@ public class CargoServiceImplTest {
     @Test
     public void findByIdSuccessfully() {
         CargoDto existCargo = new CargoDto();
-        existCargo.setId(45);
+        existCargo.setId(45L);
         existCargo.setStatus(CargoStatus.CREATED);
 
-        Mockito.when(cargoRepository.findById(45)).thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
-        CargoDto foundCargo = cargoService.findById(45);
+        Mockito.when(cargoRepository.findById(45L)).thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
+        CargoDto foundCargo = cargoService.findById(45L);
 
         assertEquals(existCargo.getStatus(), foundCargo.getStatus());
     }
 
     @Test
     public void failedFindCargoById() {
-        Mockito.when(cargoRepository.findById(90)).thenReturn(Optional.empty());
+        Mockito.when(cargoRepository.findById(90L)).thenReturn(Optional.empty());
 
         CargoNotFoundException thrown = assertThrows(CargoNotFoundException.class,
-                () -> cargoService.findById(90));
+                () -> cargoService.findById(90L));
 
         assertTrue(thrown.getMessage().contains("not found"));
     }
@@ -118,12 +118,12 @@ public class CargoServiceImplTest {
     @Test
     public void getCargoByDriverIdSuccessfully() {
         CargoDto existCargo = new CargoDto();
-        existCargo.setId(5);
+        existCargo.setId(5L);
         existCargo.setWeight(220);
         existCargo.setStatus(CargoStatus.IN_PROGRESS);
 
-        Mockito.when(cargoRepository.findById(5)).thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
-        CargoDto foundCargo = cargoService.findById(5);
+        Mockito.when(cargoRepository.findById(5L)).thenReturn(Optional.of(cargoMapper.fromDto(existCargo)));
+        CargoDto foundCargo = cargoService.findById(5L);
 
         assertEquals(existCargo.getWeight(), foundCargo.getWeight());
         assertEquals(existCargo.getStatus(), foundCargo.getStatus());

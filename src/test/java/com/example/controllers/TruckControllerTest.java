@@ -66,7 +66,7 @@ public class TruckControllerTest {
         mockMvc.perform(get("/trucks/free/450").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].registrationNumber").value("JK65243"));
     }
 
