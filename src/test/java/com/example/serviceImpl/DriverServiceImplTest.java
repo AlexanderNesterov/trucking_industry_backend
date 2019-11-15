@@ -152,7 +152,7 @@ public class DriverServiceImplTest {
     public void updateDriverSuccessfully() {
         updatingDriver.setId(10L);
         updatingDriver.setDriverLicense("1020304050");
-        updatingDriver.getUser().setId(3);
+        updatingDriver.getUser().setId(3L);
         updatingDriver.getUser().setLogin("driver_1");
 
         DriverDto sameDriver = new DriverDto();
@@ -185,7 +185,7 @@ public class DriverServiceImplTest {
     public void updateDriverSameDriverLicenseSuccessfully() {
         updatingDriver.setId(10L);
         updatingDriver.setDriverLicense("1020304050");
-        updatingDriver.getUser().setId(3);
+        updatingDriver.getUser().setId(3L);
         updatingDriver.getUser().setLogin("driver_1");
         updatingDriver.getUser().setFirstName("Ivan");
         updatingDriver.getUser().setLastName("Ivanov");
@@ -221,7 +221,7 @@ public class DriverServiceImplTest {
         updatingDriver.setId(10L);
         updatingDriver.setDriverLicense("1020304050");
         updatingDriver.getUser().setLogin("driver_1");
-        updatingDriver.getUser().setId(3);
+        updatingDriver.getUser().setId(3L);
 
         DriverDto sameDriver = new DriverDto();
         sameDriver.setId(10L);

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
     
-    UserDto findById(int userDtoId);
+    UserDto findById(Long userDtoId);
     List<UserDto> findAll();
     UserDto updateUser(UserDto user);
     UserDto addUser(UserDto user);

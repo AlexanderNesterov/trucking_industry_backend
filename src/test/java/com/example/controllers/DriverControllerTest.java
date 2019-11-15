@@ -102,7 +102,7 @@ public class DriverControllerTest {
         updatingDriver.setId(2L);
         updatingDriver.setDriverLicense("1020304050");
         updatingDriver.getUser().setLogin("driver_2");
-        updatingDriver.getUser().setId(2);
+        updatingDriver.getUser().setId(2L);
 
         String str = new ObjectMapper().writeValueAsString(updatingDriver);
 
@@ -116,7 +116,7 @@ public class DriverControllerTest {
         updatingDriver.setId(2L);
         updatingDriver.setDriverLicense("0102030405");
         updatingDriver.getUser().setLogin("driver_2");
-        updatingDriver.getUser().setId(2);
+        updatingDriver.getUser().setId(2L);
 
         String str = new ObjectMapper().writeValueAsString(updatingDriver);
 
@@ -128,7 +128,7 @@ public class DriverControllerTest {
     @Test
     public void failedUpdateDriverUserIdZero() throws Exception {
         updatingDriver.setId(2L);
-        updatingDriver.getUser().setId(0);
+        updatingDriver.getUser().setId(0L);
         updatingDriver.setDriverLicense("0102030405");
         updatingDriver.getUser().setLogin("driver_2");
 

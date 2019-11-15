@@ -4,30 +4,23 @@ import com.example.database.models.commons.Role;
 
 public class UserDto {
 
-    private int id;
-
+    private Long id;
     private String login;
-
     private String password;
-
     private String firstName;
-
     private String lastName;
-
     private String phone;
-
     private String email;
-
     private Role role;
 
     public UserDto() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

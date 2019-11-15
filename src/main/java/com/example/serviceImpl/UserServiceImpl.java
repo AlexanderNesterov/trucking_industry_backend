@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findById(int userDtoId) {
+    public UserDto findById(Long userDtoId) {
         return userMapper.toDto(userRepository.findById(userDtoId).get());
     }
 

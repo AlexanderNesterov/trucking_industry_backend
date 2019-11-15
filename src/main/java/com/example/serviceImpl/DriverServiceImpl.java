@@ -73,7 +73,7 @@ public class DriverServiceImpl implements DriverService {
         checkSavingDriver(driverDto, false);
 
         driverDto.setId(0L);
-        driverDto.getUser().setId(0);
+        driverDto.getUser().setId(0L);
         driverDto.getUser().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
         driverRepository.save(driverMapper.fromDto(driverDto));
