@@ -33,7 +33,7 @@ public class TruckController {
     }
 
     @GetMapping("/{truckDtoId}")
-    public TruckDto findById(@PathVariable int truckDtoId) {
+    public TruckDto findById(@PathVariable Long truckDtoId) {
         return truckService.findById(truckDtoId);
     }
 

@@ -10,7 +10,7 @@ public class Truck {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "registration_number")
     private String registrationNumber;
@@ -28,11 +28,11 @@ public class Truck {
     public Truck() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

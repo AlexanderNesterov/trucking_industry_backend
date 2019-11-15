@@ -143,7 +143,7 @@ public class CargoControllerTest {
     @Test
     public void updateCargoSuccessfully() throws Exception {
         updatingCargo.setWeight(300);
-        updatingCargo.getTruck().setId(6);
+        updatingCargo.getTruck().setId(6L);
         updatingCargo.getDriver().setId(1L);
         updatingCargo.getCoDriver().setId(2L);
 

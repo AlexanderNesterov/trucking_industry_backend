@@ -86,7 +86,7 @@ public class TruckControllerTest {
 
     @Test
     public void updateTruckSuccessfully() throws Exception {
-        updatingTruck.setId(3);
+        updatingTruck.setId(3L);
         updatingTruck.setRegistrationNumber("JK65243");
 
         String str = new ObjectMapper().writeValueAsString(updatingTruck);
@@ -99,7 +99,7 @@ public class TruckControllerTest {
 
     @Test
     public void failedUpdateTruckRegistrationNumberExists() throws Exception {
-        updatingTruck.setId(3);
+        updatingTruck.setId(3L);
         updatingTruck.setRegistrationNumber("BB90029");
 
         String str = new ObjectMapper().writeValueAsString(updatingTruck);

@@ -74,7 +74,7 @@ public class CargoServiceImplTest {
         DriverDto coDriver = new DriverDto();
         coDriver.setId(7L);
         TruckDto truck = new TruckDto();
-        truck.setId(2);
+        truck.setId(2L);
         savingCargo.setDriver(firstDriver);
         savingCargo.setCoDriver(coDriver);
         savingCargo.setTruck(truck);

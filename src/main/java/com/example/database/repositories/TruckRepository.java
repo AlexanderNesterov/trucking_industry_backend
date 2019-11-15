@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface TruckRepository extends JpaRepository<Truck, Integer> {
+public interface TruckRepository extends JpaRepository<Truck, Long> {
     @Query("from Truck t where t.capacity >= :weight and t.condition = 'SERVICEABLE' and t.id not in " +
             "(select t.id from Cargo c join c.truck t where " +
             "c.status in ('CREATED', 'IN_PROGRESS', 'REFUSED_BY_DRIVER'))")

@@ -33,7 +33,7 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public TruckDto findById(int truckDtoId) {
+    public TruckDto findById(Long truckDtoId) {
         Optional<Truck> optional = truckRepository.findById(truckDtoId);
 
         if (optional.isPresent()) {
@@ -58,7 +58,7 @@ public class TruckServiceImpl implements TruckService {
                 truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber()));
         TruckDto sameTruck = findById(truckDto.getId());
 
-        if (existTruck != null && existTruck.getId() != truckDto.getId()) {
+        if (existTruck != null && !existTruck.getId().equals(truckDto.getId())) {
             throw new RegistrationNumberExistsException("Truck with registration number: " +
                     truckDto.getRegistrationNumber() + " already exists");
         }
@@ -79,7 +79,7 @@ public class TruckServiceImpl implements TruckService {
                     truckDto.getRegistrationNumber() + " already exists");
         }
 
-        truckDto.setId(0);
+        truckDto.setId(0L);
         truckDto.setCondition(TruckCondition.SERVICEABLE);
         truckRepository.save(truckMapper.fromDto(truckDto));
         return true;

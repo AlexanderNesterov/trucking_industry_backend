@@ -53,7 +53,7 @@ public class CargoServiceImplUpdateTest {
         updatingCargo.setTitle("Water");
         updatingCargo.setWeight(300);
         TruckDto truck = new TruckDto();
-        truck.setId(2);
+        truck.setId(2L);
         DriverDto driver = new DriverDto();
         driver.setId(4L);
         DriverDto coDriver = new DriverDto();

@@ -4,24 +4,20 @@ import com.example.database.models.commons.TruckCondition;
 
 public class TruckDto {
 
-    private int id;
-
+    private Long id;
     private String registrationNumber;
-
     private String model;
-
     private double capacity;
-
     private TruckCondition condition;
 
     public TruckDto() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

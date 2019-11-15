@@ -5,7 +5,6 @@ import com.example.controllers.exceptions.TruckNotFoundException;
 import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.TruckRepository;
 import com.example.models.TruckDto;
-import com.example.serviceImpl.validation.TruckValidator;
 import com.example.services.TruckService;
 import com.example.services.mappers.TruckMapper;
 import com.example.services.mappers.TruckMapperImpl;
@@ -76,17 +75,17 @@ public class TruckServiceImplTest {
 
     @Test
     public void updateTruckWithNewRegistrationNumberSuccessfully() {
-        updatingTruck.setId(23);
+        updatingTruck.setId(23L);
         updatingTruck.setRegistrationNumber("AA89009");
 
         TruckDto sameTruck = new TruckDto();
-        sameTruck.setId(23);
+        sameTruck.setId(23L);
         sameTruck.setRegistrationNumber("BB89009");
         sameTruck.setCondition(TruckCondition.SERVICEABLE);
 
         Mockito.when(truckRepository.getTruckByRegistrationNumber("AA89009"))
                 .thenReturn(null);
-        Mockito.when(truckRepository.findById(23))
+        Mockito.when(truckRepository.findById(23L))
                 .thenReturn(Optional.of(truckMapper.fromDto(sameTruck)));
         boolean result = truckService.updateTruck(updatingTruck);
 
@@ -96,11 +95,11 @@ public class TruckServiceImplTest {
 
     @Test
     public void successUpdateTruckWithoutRegistrationNumberSuccessfully() {
-        updatingTruck.setId(23);
+        updatingTruck.setId(23L);
         updatingTruck.setRegistrationNumber("AA89009");
 
         TruckDto sameTruck = new TruckDto();
-        sameTruck.setId(23);
+        sameTruck.setId(23L);
         sameTruck.setModel("Renault t-500");
         sameTruck.setRegistrationNumber("AA89009");
         sameTruck.setCapacity(300);
@@ -108,7 +107,7 @@ public class TruckServiceImplTest {
 
         Mockito.when(truckRepository.getTruckByRegistrationNumber("AA89009"))
                 .thenReturn(truckMapper.fromDto(sameTruck));
-        Mockito.when(truckRepository.findById(23))
+        Mockito.when(truckRepository.findById(23L))
                 .thenReturn(Optional.of(truckMapper.fromDto(sameTruck)));
         boolean result = truckService.updateTruck(updatingTruck);
 
@@ -118,17 +117,17 @@ public class TruckServiceImplTest {
 
     @Test
     public void failedUpdateTruckRegistrationNumberExists() {
-        updatingTruck.setId(23);
+        updatingTruck.setId(23L);
         updatingTruck.setRegistrationNumber("AA89009");
 
         TruckDto sameTruck = new TruckDto();
-        sameTruck.setId(90);
+        sameTruck.setId(90L);
         sameTruck.setRegistrationNumber("AA89009");
         sameTruck.setCondition(TruckCondition.FAULTY);
 
         Mockito.when(truckRepository.getTruckByRegistrationNumber("AA89009"))
                 .thenReturn(truckMapper.fromDto(sameTruck));
-        Mockito.when(truckRepository.findById(23))
+        Mockito.when(truckRepository.findById(23L))
                 .thenReturn(Optional.of(truckMapper.fromDto(sameTruck)));
 
         RegistrationNumberExistsException thrown = assertThrows(RegistrationNumberExistsException.class,
@@ -141,14 +140,14 @@ public class TruckServiceImplTest {
     @Test
     public void findByIdSuccessfully() {
         TruckDto truckDto = new TruckDto();
-        truckDto.setId(12);
+        truckDto.setId(12L);
         truckDto.setModel("Renault t-500");
         truckDto.setRegistrationNumber("BB89009");
         truckDto.setCapacity(300);
 
-        Mockito.when(truckRepository.findById(12))
+        Mockito.when(truckRepository.findById(12L))
                 .thenReturn(Optional.of(truckMapper.fromDto(truckDto)));
-        TruckDto foundTruck = truckService.findById(12);
+        TruckDto foundTruck = truckService.findById(12L);
 
         assertEquals("BB89009", foundTruck.getRegistrationNumber());
         assertEquals("Renault t-500", foundTruck.getModel());
@@ -157,11 +156,11 @@ public class TruckServiceImplTest {
 
     @Test
     public void failedFindByIdNotFound() {
-        Mockito.when(truckRepository.findById(10))
+        Mockito.when(truckRepository.findById(10L))
                 .thenReturn(Optional.empty());
 
         TruckNotFoundException thrown = assertThrows(TruckNotFoundException.class,
-                () -> truckService.findById(10));
+                () -> truckService.findById(10L));
 
         assertTrue(thrown.getMessage().contains("Truck with id: " + 10 + " not found"));
     }

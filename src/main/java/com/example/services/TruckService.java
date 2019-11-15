@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TruckService {
 
-    TruckDto findById(int truckDtoId);
+    TruckDto findById(Long truckDtoId);
     List<TruckDto> findAll();
     boolean updateTruck(TruckDto truckDto);
     List<TruckDto> getFreeTrucks(double weight);

@@ -145,7 +145,7 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public CargoDto getCargoByTruckId(int truckId) {
+    public CargoDto getCargoByTruckId(Long truckId) {
         return cargoMapper.toDto(cargoRepository.getCargoByTruckId(truckId));
     }
 
