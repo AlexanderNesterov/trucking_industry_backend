@@ -98,48 +98,48 @@ public class CargoServiceImpl implements CargoService {
 
     @Override
     public boolean setAcceptStatus(Long cargoId, Long driverId) {
-        CargoDto cargoDto = getCheckedCargoToChangeStatus(cargoId, driverId);
+        Cargo cargo = getCheckedCargoToChangeStatus(cargoId, driverId);
 
-        if (!cargoDto.getStatus().equals(CargoStatus.CREATED)) {
+        if (!cargo.getStatus().equals(CargoStatus.CREATED)) {
             throw new ChangeCargoStatusException("Attempt to set ACCEPT status to wrong cargo");
         }
 
-        cargoDto.setStatus(CargoStatus.IN_PROGRESS);
-        cargoDto.getDriver().setStatus(DriverStatus.ACTIVE);
-        cargoDto.getCoDriver().setStatus(DriverStatus.ACTIVE);
-        cargoRepository.save(cargoMapper.fromDto(cargoDto));
+        cargo.setStatus(CargoStatus.IN_PROGRESS);
+        cargo.getDriver().setStatus(DriverStatus.ACTIVE);
+        cargo.getCoDriver().setStatus(DriverStatus.ACTIVE);
+        cargoRepository.save(cargo);
 
         return true;
     }
 
     @Override
     public boolean setRefuseStatus(Long cargoId, Long driverId) {
-        CargoDto cargoDto = getCheckedCargoToChangeStatus(cargoId, driverId);
+        Cargo cargo = getCheckedCargoToChangeStatus(cargoId, driverId);
 
-        if (!cargoDto.getStatus().equals(CargoStatus.CREATED)) {
+        if (!cargo.getStatus().equals(CargoStatus.CREATED)) {
             throw new ChangeCargoStatusException("Attempt to set REFUSED_BY_DRIVER status to wrong cargo");
         }
 
-        cargoDto.setStatus(CargoStatus.REFUSED_BY_DRIVER);
-        cargoDto.getDriver().setStatus(DriverStatus.REST);
-        cargoDto.getCoDriver().setStatus(DriverStatus.REST);
-        cargoRepository.save(cargoMapper.fromDto(cargoDto));
+        cargo.setStatus(CargoStatus.REFUSED_BY_DRIVER);
+        cargo.getDriver().setStatus(DriverStatus.REST);
+        cargo.getCoDriver().setStatus(DriverStatus.REST);
+        cargoRepository.save(cargo);
 
         return true;
     }
 
     @Override
     public boolean setDeliverStatus(Long cargoId, Long driverId) {
-        CargoDto cargoDto = getCheckedCargoToChangeStatus(cargoId, driverId);
+        Cargo cargo = getCheckedCargoToChangeStatus(cargoId, driverId);
 
-        if (!cargoDto.getStatus().equals(CargoStatus.IN_PROGRESS)) {
+        if (!cargo.getStatus().equals(CargoStatus.IN_PROGRESS)) {
             throw new ChangeCargoStatusException("Attempt to set IN_PROGRESS status to wrong cargo");
         }
 
-        cargoDto.setStatus(CargoStatus.DELIVERED);
-        cargoDto.getDriver().setStatus(DriverStatus.REST);
-        cargoDto.getCoDriver().setStatus(DriverStatus.REST);
-        cargoRepository.save(cargoMapper.fromDto(cargoDto));
+        cargo.setStatus(CargoStatus.DELIVERED);
+        cargo.getDriver().setStatus(DriverStatus.REST);
+        cargo.getCoDriver().setStatus(DriverStatus.REST);
+        cargoRepository.save(cargo);
 
         return true;
     }
@@ -149,20 +149,14 @@ public class CargoServiceImpl implements CargoService {
         return cargoMapper.toDto(cargoRepository.getCargoByTruckId(truckId));
     }
 
-    private CargoDto getCheckedCargoToChangeStatus(Long cargoId, Long driverId) {
-        CargoDto cargoDto = findById(cargoId);
+    private Cargo getCheckedCargoToChangeStatus(Long cargoId, Long driverId) {
+        Cargo cargo = cargoRepository.getCargoToChangeStatus(cargoId, driverId);
 
-        if (cargoDto.getDriver().getId().equals(driverId)) {
-            return cargoDto;
+        if (cargo == null) {
+            throw new ChangeCargoStatusException("Wrong cargo id or main driver id");
         }
 
-        if (cargoDto.getCoDriver().getId().equals(driverId)) {
-            throw new ChangeCargoStatusException("Driver with id: " +
-                    driverId + " is not main driver for cargo with id: " + cargoId);
-        } else {
-            throw new ChangeCargoStatusException("Driver with id: " +
-                    driverId + " is not included in cargo with id: " + cargoId);
-        }
+        return cargo;
     }
 
     private void checkSavingCargo(CargoDto savingCargo, boolean isUpdate) {

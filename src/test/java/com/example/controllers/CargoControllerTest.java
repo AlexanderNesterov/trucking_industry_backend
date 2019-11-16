@@ -105,7 +105,7 @@ public class CargoControllerTest {
         mockMvc.perform(put("/cargo/set-accept-status/2/7"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value("Driver with id: 7 is not main driver for cargo with id: 2"));
+                        .value("Wrong cargo id or main driver id"));
     }
 
     @Test
@@ -113,7 +113,7 @@ public class CargoControllerTest {
         mockMvc.perform(put("/cargo/set-accept-status/2/12"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value("Driver with id: 12 is not included in cargo with id: 2"));
+                        .value("Wrong cargo id or main driver id"));
     }
 
     @Test
