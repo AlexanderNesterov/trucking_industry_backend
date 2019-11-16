@@ -8,7 +8,6 @@ public interface CargoService {
     CargoDto findById(Long cargoId);
     List<CargoDto> findAll();
     CargoDto getCargoByDriverId(Long driverId);
-    CargoDto getCargoByTruckId(Long truckId);
     boolean addCargo(CargoDto cargoDto);
     boolean updateCargo(CargoDto cargoDto);
     boolean setAcceptStatus(Long cargoId, Long driverId);

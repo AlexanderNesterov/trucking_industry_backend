@@ -70,7 +70,6 @@ public class CargoServiceImpl implements CargoService {
 
         cargoDto.setStatus(CargoStatus.CREATED);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
-
         return true;
     }
 
@@ -144,9 +143,8 @@ public class CargoServiceImpl implements CargoService {
         return true;
     }
 
-    @Override
-    public CargoDto getCargoByTruckId(Long truckId) {
-        return cargoMapper.toDto(cargoRepository.getCargoByTruckId(truckId));
+    private Cargo getCargoByTruckId(Long truckId) {
+        return cargoRepository.getCargoByTruckId(truckId);
     }
 
     private CargoDto getCheckedCargoToChangeStatus(Long cargoId, Long driverId) {
@@ -233,14 +231,14 @@ public class CargoServiceImpl implements CargoService {
             throw new SavingCargoException(exception.toString());
         }
 
-        CargoDto cargoDto = getCargoByTruckId(savingCargo.getTruck().getId());
-        if (cargoDto == null || (isUpdate && cargoDto.getId().equals(savingCargo.getId()))) {
+        Cargo cargo = getCargoByTruckId(savingCargo.getTruck().getId());
+        if (cargo == null || (isUpdate && cargo.getId().equals(savingCargo.getId()))) {
             savingCargo.setTruck(truckDto);
             return;
         }
 
         exception.append("Truck cannot be include in other cargo. Truck is using by cargo with id: ");
-        exception.append(cargoDto.getId());
+        exception.append(cargo.getId());
         throw new SavingCargoException(exception.toString());
     }
 }

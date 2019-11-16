@@ -63,7 +63,6 @@ public class DriverServiceImpl implements DriverService {
         driverDto.getUser().setPassword(sameDriverDto.getUser().getPassword());
         driverDto.setStatus(sameDriverDto.getStatus());
         driverRepository.save(driverMapper.fromDto(driverDto));
-
         return true;
     }
 
@@ -77,7 +76,6 @@ public class DriverServiceImpl implements DriverService {
         driverDto.getUser().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
         driverRepository.save(driverMapper.fromDto(driverDto));
-
         return true;
     }
 
@@ -86,18 +84,17 @@ public class DriverServiceImpl implements DriverService {
         return driverMapper.toListDto(driverRepository.getFreeDrivers());
     }
 
-    private DriverDto getDriverByLogin(String driverLogin) {
-        return driverMapper.toDto(driverRepository.getDriverByLogin(driverLogin));
+    private Driver getDriverByLogin(String driverLogin) {
+        return driverRepository.getDriverByLogin(driverLogin);
     }
 
-    private DriverDto getDriverByDriverLicense(String driverLicense) {
-        return driverMapper.toDto(driverRepository.getDriverByDriverLicense(driverLicense));
+    private Driver getDriverByDriverLicense(String driverLicense) {
+        return driverRepository.getDriverByDriverLicense(driverLicense);
     }
 
     private void checkSavingDriver(DriverDto savingDriver, boolean isUpdate) {
         StringBuilder exception = new StringBuilder();
 
-        //Добавить тест
         if (isUpdate && savingDriver.getUser().getId() == 0) {
             exception.append("User id cannot be equals or less than 0: ");
             exception.append(savingDriver.getUser().getId());
@@ -105,7 +102,7 @@ public class DriverServiceImpl implements DriverService {
         }
 
         if (!isUpdate) {
-            DriverDto existDriverLogin = getDriverByLogin(savingDriver.getUser().getLogin());
+            Driver existDriverLogin = getDriverByLogin(savingDriver.getUser().getLogin());
             if (existDriverLogin != null) {
                 exception.append("Driver with login: ");
                 exception.append(savingDriver.getUser().getLogin());
@@ -114,7 +111,7 @@ public class DriverServiceImpl implements DriverService {
             }
         }
 
-        DriverDto existDriverDriverLicense = getDriverByDriverLicense(savingDriver.getDriverLicense());
+        Driver existDriverDriverLicense = getDriverByDriverLicense(savingDriver.getDriverLicense());
         if (existDriverDriverLicense == null ||
                 (isUpdate && existDriverDriverLicense.getId().equals(savingDriver.getId()))) {
             return;

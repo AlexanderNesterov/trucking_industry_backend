@@ -54,8 +54,7 @@ public class TruckServiceImpl implements TruckService {
     @Override
     public boolean updateTruck(TruckDto truckDto) {
         TruckValidator.validate(truckDto);
-        TruckDto existTruck = truckMapper.toDto(
-                truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber()));
+        Truck existTruck = truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber());
         TruckDto sameTruck = findById(truckDto.getId());
 
         if (existTruck != null && !existTruck.getId().equals(truckDto.getId())) {
@@ -71,8 +70,7 @@ public class TruckServiceImpl implements TruckService {
     @Override
     public boolean addTruck(TruckDto truckDto) {
         TruckValidator.validate(truckDto);
-        TruckDto existTruck = truckMapper.toDto(
-                truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber()));
+        Truck existTruck = truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber());
 
         if (existTruck != null) {
             throw new RegistrationNumberExistsException("Truck with registration number: " +
