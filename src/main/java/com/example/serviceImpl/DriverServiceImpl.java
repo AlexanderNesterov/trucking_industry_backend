@@ -86,6 +86,11 @@ public class DriverServiceImpl implements DriverService {
         return driverMapper.toListDto(driverRepository.getFreeDrivers());
     }
 
+    @Override
+    public DriverDto getFreeDriver(Long driverId) {
+        return driverMapper.toDto(driverRepository.getFreeDriver(driverId));
+    }
+
     private DriverDto getDriverByLogin(String driverLogin) {
         return driverMapper.toDto(driverRepository.getDriverByLogin(driverLogin));
     }

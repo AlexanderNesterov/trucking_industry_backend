@@ -17,4 +17,9 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
 
     @Query("from Driver d where d.user.login = :driverLogin")
     Driver getDriverByLogin(@Param("driverLogin") String driverLogin);
+
+    @Query("from Driver d where d.status = 'REST' and d.id = :driverId " +
+            "and d.id not in (select c.driver.id from Cargo c where c.status in ('CREATED', 'IN_PROGRESS')) " +
+            "and d.id not in (select c.coDriver.id from Cargo c where c.status in ('CREATED', 'IN_PROGRESS'))")
+    Driver getFreeDriver(@Param("driverId") Long driverId);
 }

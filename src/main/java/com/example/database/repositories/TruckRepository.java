@@ -14,4 +14,7 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
     List<Truck> getFreeTrucks(@Param("weight") double weight);
 
     Truck getTruckByRegistrationNumber(String registrationNumber);
+
+
+    Truck getFreeTruck();
 }

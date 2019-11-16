@@ -93,10 +93,10 @@ public class CargoServiceImplTest {
         existTruck.setCapacity(700);
 
         Mockito
-                .when(driverService.findById(savingCargo.getDriver().getId()))
+                .when(driverService.getFreeDriver(savingCargo.getDriver().getId()))
                 .thenReturn(existFirstDriver);
         Mockito
-                .when(driverService.findById(savingCargo.getCoDriver().getId()))
+                .when(driverService.getFreeDriver(savingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
                 .when(truckService.findById(savingCargo.getTruck().getId()))

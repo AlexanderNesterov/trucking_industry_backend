@@ -4,6 +4,7 @@ import com.example.controllers.exceptions.CargoNotFoundException;
 import com.example.controllers.exceptions.ChangeCargoStatusException;
 import com.example.controllers.exceptions.SavingCargoException;
 import com.example.database.models.Cargo;
+import com.example.database.models.Driver;
 import com.example.database.models.commons.CargoStatus;
 import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.TruckCondition;
@@ -170,19 +171,19 @@ public class CargoServiceImpl implements CargoService {
     }
 
     private void checkCargo(CargoDto savingCargo) {
-        StringBuilder exception = new StringBuilder();
-        CargoDto cargoDto = findById(savingCargo.getId());
+        Cargo cargo = cargoRepository.getCargoToUpdate(savingCargo.getId());
 
-        if (!cargoDto.getStatus().equals(CargoStatus.REFUSED_BY_DRIVER)) {
-            exception.append("Cargo status must be REFUSED_BY_DRIVER. Current status: ");
-            exception.append(cargoDto.getStatus());
-            throw new SavingCargoException(exception.toString());
+        if (cargo == null) {
+            throw new SavingCargoException("Wrong cargo id or cargo status not equals 'REFUSED_BY_DRIVER'");
         }
     }
 
     private void checkDriversIds(CargoDto savingCargo) {
         StringBuilder exception = new StringBuilder();
 
+        if (savingCargo.getDriver().getId() == null || savingCargo.getCoDriver().getId() == null) {
+            throw new SavingCargoException("Driver id and co-driver id cannot equals null");
+        }
         if (savingCargo.getCoDriver().getId().equals(savingCargo.getDriver().getId())) {
             exception.append("Driver id and co-driver id cannot be equals. Driver id: ");
             exception.append(savingCargo.getDriver().getId());
@@ -193,24 +194,18 @@ public class CargoServiceImpl implements CargoService {
     }
 
     private void checkDrivers(CargoDto savingCargo) {
-        StringBuilder exception = new StringBuilder();
-
-        DriverDto driverDto = driverService.findById(savingCargo.getDriver().getId());
-        if (!driverDto.getStatus().equals(DriverStatus.REST)) {
-            exception.append("Driver status must be equals REST. Current status is: ");
-            exception.append(driverDto.getStatus().name());
-            throw new SavingCargoException(exception.toString());
+        DriverDto driver = driverService.getFreeDriver(savingCargo.getDriver().getId());
+        if (driver == null) {
+            throw new SavingCargoException("Wrong driver id or driver status");
         }
 
-        DriverDto coDriverDto = driverService.findById(savingCargo.getCoDriver().getId());
-        if (!coDriverDto.getStatus().equals(DriverStatus.REST)) {
-            exception.append("Co-Driver status must be equals REST. Current status is: ");
-            exception.append(coDriverDto.getStatus().name());
-            throw new SavingCargoException(exception.toString());
+        DriverDto coDriver = driverService.getFreeDriver(savingCargo.getCoDriver().getId());
+        if (coDriver == null) {
+            throw new SavingCargoException("Wrong co-driver id or co-driver status");
         }
 
-        savingCargo.setDriver(driverDto);
-        savingCargo.setCoDriver(coDriverDto);
+        savingCargo.setDriver(driver);
+        savingCargo.setCoDriver(coDriver);
     }
 
     private void checkTruck(CargoDto savingCargo, boolean isUpdate) {
