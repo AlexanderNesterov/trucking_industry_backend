@@ -92,7 +92,7 @@ public class CargoServiceImplUpdateTest {
                 .when(driverService.getFreeDriver(updatingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
-                .when(truckService.findById(updatingCargo.getTruck().getId()))
+                .when(truckService.getFreeTruck(updatingCargo.getTruck().getId(), updatingCargo.getWeight()))
                 .thenReturn(existTruck);
 
         boolean result = cargoService.updateCargo(updatingCargo);
@@ -223,13 +223,13 @@ public class CargoServiceImplUpdateTest {
                 .when(driverService.getFreeDriver(updatingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
-                .when(truckService.findById(updatingCargo.getTruck().getId()))
-                .thenReturn(existTruck);
+                .when(truckService.getFreeTruck(updatingCargo.getTruck().getId(), updatingCargo.getWeight()))
+                .thenReturn(null);
 
         SavingCargoException thrown = assertThrows(SavingCargoException.class,
                 () -> cargoService.updateCargo(updatingCargo));
 
-        assertTrue(thrown.getMessage().contains("Truck condition must be equals SERVICEABLE"));
+        assertTrue(thrown.getMessage().contains("Wrong truck id or truck condition or truck already include in another cargo"));
     }
 
     @Test
@@ -263,13 +263,13 @@ public class CargoServiceImplUpdateTest {
                 .when(driverService.getFreeDriver(updatingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
-                .when(truckService.findById(updatingCargo.getTruck().getId()))
-                .thenReturn(existTruck);
+                .when(truckService.getFreeTruck(updatingCargo.getTruck().getId(), updatingCargo.getWeight()))
+                .thenReturn(null);
 
         SavingCargoException thrown = assertThrows(SavingCargoException.class,
                 () -> cargoService.updateCargo(updatingCargo));
 
-        assertTrue(thrown.getMessage().contains("Cargo weight cannot be less than truck capacity"));
+        assertTrue(thrown.getMessage().contains("Wrong truck id or truck condition or truck already include in another cargo"));
     }
 
     @Test
@@ -305,15 +305,12 @@ public class CargoServiceImplUpdateTest {
                 .when(driverService.getFreeDriver(updatingCargo.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
         Mockito
-                .when(truckService.findById(updatingCargo.getTruck().getId()))
-                .thenReturn(existTruck);
-        Mockito
-                .when(cargoRepository.getCargoByTruckId(updatingCargo.getTruck().getId()))
-                .thenReturn(cargoMapper.fromDto(anotherCargo));
+                .when(truckService.getFreeTruck(updatingCargo.getTruck().getId(), updatingCargo.getWeight()))
+                .thenReturn(null);
 
         SavingCargoException thrown = assertThrows(SavingCargoException.class,
                 () -> cargoService.updateCargo(updatingCargo));
 
-        assertTrue(thrown.getMessage().contains("Truck cannot be include in other cargo"));
+        assertTrue(thrown.getMessage().contains("Wrong truck id or truck condition or truck already include in another cargo"));
     }
 }

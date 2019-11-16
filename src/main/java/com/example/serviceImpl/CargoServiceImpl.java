@@ -167,7 +167,7 @@ public class CargoServiceImpl implements CargoService {
 
         checkDriversIds(savingCargo);
         checkDrivers(savingCargo);
-        checkTruck(savingCargo, isUpdate);
+        checkTruck(savingCargo);
     }
 
     private void checkCargo(CargoDto savingCargo) {
@@ -208,28 +208,14 @@ public class CargoServiceImpl implements CargoService {
         savingCargo.setCoDriver(coDriver);
     }
 
-    private void checkTruck(CargoDto savingCargo, boolean isUpdate) {
-        StringBuilder exception = new StringBuilder();
+    private void checkTruck(CargoDto savingCargo) {
+        TruckDto truckDto = truckService.getFreeTruck(savingCargo.getTruck().getId(), savingCargo.getWeight());
 
-        TruckDto truckDto = truckService.findById(savingCargo.getTruck().getId());
-        if (!truckDto.getCondition().equals(TruckCondition.SERVICEABLE)) {
-            exception.append("Truck condition must be equals SERVICEABLE");
-            throw new SavingCargoException(exception.toString());
+        if (truckDto == null) {
+            throw new SavingCargoException(
+                    "Wrong truck id or truck condition or truck already include in another cargo");
         }
 
-        if (truckDto.getCapacity() < savingCargo.getWeight()) {
-            exception.append("Cargo weight cannot be less than truck capacity");
-            throw new SavingCargoException(exception.toString());
-        }
-
-        CargoDto cargoDto = getCargoByTruckId(savingCargo.getTruck().getId());
-        if (cargoDto == null || (isUpdate && cargoDto.getId().equals(savingCargo.getId()))) {
-            savingCargo.setTruck(truckDto);
-            return;
-        }
-
-        exception.append("Truck cannot be include in other cargo. Truck is using by cargo with id: ");
-        exception.append(cargoDto.getId());
-        throw new SavingCargoException(exception.toString());
+        savingCargo.setTruck(truckDto);
     }
 }

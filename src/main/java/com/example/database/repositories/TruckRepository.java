@@ -15,6 +15,7 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
 
     Truck getTruckByRegistrationNumber(String registrationNumber);
 
-
-    Truck getFreeTruck();
+    @Query("from Truck t where t.id = :truckId and t.capacity >= :cargoWeight and t.condition = 'SERVICEABLE' " +
+            "and t.id not in (select c.truck.id from Cargo c where c.status in ('CREATED', 'IN_PROGRESS'))")
+    Truck getFreeTruck(@Param("truckId") Long truckId, @Param("cargoWeight") double cargoWeight);
 }

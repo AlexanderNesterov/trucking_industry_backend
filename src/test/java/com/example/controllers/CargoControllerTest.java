@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -149,6 +150,8 @@ public class CargoControllerTest {
 
         String str = new ObjectMapper().writeValueAsString(updatingCargo);
 
+        mockMvc.perform(get("/trucks"))
+                .andDo(print());
         mockMvc.perform(put("/cargo").contentType(MediaType.APPLICATION_JSON).content(str))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
