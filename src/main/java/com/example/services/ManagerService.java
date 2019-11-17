@@ -4,10 +4,10 @@ import com.example.models.UserDto;
 
 import java.util.List;
 
-public interface UserService {
+public interface ManagerService {
     
     UserDto findById(Long userDtoId);
     List<UserDto> findAll();
-    UserDto updateUser(UserDto user);
-    UserDto addUser(UserDto user);
+    boolean updateManager(UserDto user);
+    boolean addManager(UserDto user);
 }
