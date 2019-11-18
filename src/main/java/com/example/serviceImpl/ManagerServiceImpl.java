@@ -1,7 +1,7 @@
 package com.example.serviceImpl;
 
-import com.example.controllers.exceptions.UserExistException;
-import com.example.controllers.exceptions.UserNotFoundException;
+import com.example.controllers.exceptions.ManagerExistException;
+import com.example.controllers.exceptions.ManagerNotFoundException;
 import com.example.database.models.User;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.ManagerRepository;
@@ -31,7 +31,7 @@ public class ManagerServiceImpl implements ManagerService {
         if (user != null) {
             return userMapper.toDto(user);
         } else {
-            throw new UserNotFoundException("Manager with id: " + managerId + "not found");
+            throw new ManagerNotFoundException("Manager with id: " + managerId + "not found");
         }
     }
 
@@ -57,7 +57,7 @@ public class ManagerServiceImpl implements ManagerService {
         User userWithSameLogin = managerRepository.getManagerByLogin(manager.getLogin());
 
         if (userWithSameLogin != null) {
-            throw new UserExistException("User with login: " + manager.getLogin() + "already exists");
+            throw new ManagerExistException("Manager with login: " + manager.getLogin() + "already exists");
         }
 
         manager.setId(null);
