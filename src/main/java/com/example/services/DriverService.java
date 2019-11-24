@@ -1,7 +1,6 @@
 package com.example.services;
 
-import com.example.database.models.commons.DriverStatus;
-import com.example.models.DriverDto;
+import com.example.services.models.DriverDto;
 import java.util.List;
 
 public interface DriverService {

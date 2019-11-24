@@ -1,7 +1,7 @@
 package com.example.services;
 
-import com.example.models.TruckDto;
-import javax.validation.Valid;
+import com.example.services.models.TruckDto;
+
 import java.util.List;
 
 public interface TruckService {

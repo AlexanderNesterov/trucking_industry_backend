@@ -113,4 +113,8 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
         <modifyDataType tableName="trucks" columnName="condition" newDataType="varchar(32)"/>
         <modifyDataType tableName="cargo" columnName="status" newDataType="varchar(32)"/>
     </changeSet>
+
+    <changeSet id="4" author="nesterov">
+        <modifyDataType tableName="users" columnName="password" newDataType="varchar(96)"/>
+    </changeSet>
 </databaseChangeLog>

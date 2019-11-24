@@ -1,7 +1,7 @@
 package com.example.services.mappers;
 
 import com.example.database.models.Cargo;
-import com.example.models.CargoDto;
+import com.example.services.models.CargoDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;

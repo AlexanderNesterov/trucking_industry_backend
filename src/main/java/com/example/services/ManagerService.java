@@ -1,6 +1,6 @@
 package com.example.services;
 
-import com.example.models.UserDto;
+import com.example.services.models.UserDto;
 
 import java.util.List;
 
