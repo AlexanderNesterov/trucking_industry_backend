@@ -87,4 +87,9 @@ public class TruckServiceImpl implements TruckService {
     public List<TruckDto> getFreeTrucks(double weight) {
         return truckMapper.toListDto(truckRepository.getFreeTrucks(weight));
     }
+
+    @Override
+    public TruckDto getFreeTruck(Long truckId, double weight) {
+        return truckMapper.toDto(truckRepository.getFreeTruck(truckId, weight));
+    }
 }

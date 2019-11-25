@@ -13,4 +13,10 @@ public interface CargoRepository extends JpaRepository<Cargo, Long> {
 
     @Query("from Cargo c where c.truck.id = :truckId and c.status in ('CREATED', 'IN_PROGRESS', 'REFUSED_BY_DRIVER')")
     Cargo getCargoByTruckId(@Param("truckId") Long truckId);
+
+    @Query("from Cargo c where c.id = :cargoId and c.driver.id = :driverId")
+    Cargo getCargoToChangeStatus(@Param("cargoId") Long cargoId, @Param("driverId") Long driverId);
+
+    @Query("from Cargo c where c.id = :cargoId and c.status = 'REFUSED_BY_DRIVER'")
+    Cargo getCargoToUpdate(@Param("cargoId") Long cargoId);
 }

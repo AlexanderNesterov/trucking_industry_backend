@@ -35,17 +35,6 @@ public class DriverServiceImpl implements DriverService {
         this.driverMapper = driverMapper;
     }
 
-    private IPasswordEncryptor passwordEncryptor;
-
-    @Autowired
-    public void setPasswordEncoder(IPasswordEncryptor passwordEncoder) {
-        this.passwordEncryptor = passwordEncoder;
-    }
-
-    String mapPassword(UserDto dto) {
-        return passwordEncryptor.encrypt(dto.getPassword());
-    }
-
     @Override
     public DriverDto findById(Long driverDtoId) {
         Optional<Driver> driver = driverRepository.findById(driverDtoId);
@@ -84,7 +73,6 @@ public class DriverServiceImpl implements DriverService {
         DriverValidator.validate(driverDto, false);
         checkSavingDriver(driverDto, false);
 
-        String pass = mapPassword(driverDto.getUser());
         driverDto.setId(0L);
         driverDto.getUser().setId(0L);
         driverDto.getUser().setRole(Role.DRIVER);
@@ -96,6 +84,11 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public List<DriverDto> getFreeDrivers() {
         return driverMapper.toListDto(driverRepository.getFreeDrivers());
+    }
+
+    @Override
+    public DriverDto getFreeDriver(Long driverId) {
+        return driverMapper.toDto(driverRepository.getFreeDriver(driverId));
     }
 
     private Driver getDriverByLogin(String driverLogin) {

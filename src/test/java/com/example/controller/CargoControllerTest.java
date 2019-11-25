@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -105,7 +106,7 @@ public class CargoControllerTest {
         mockMvc.perform(put("/cargo/set-accept-status/2/7"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value("Driver with id: 7 is not main driver for cargo with id: 2"));
+                        .value("Wrong cargo id or main driver id"));
     }
 
     @Test
@@ -113,7 +114,7 @@ public class CargoControllerTest {
         mockMvc.perform(put("/cargo/set-accept-status/2/12"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value("Driver with id: 12 is not included in cargo with id: 2"));
+                        .value("Wrong cargo id or main driver id"));
     }
 
     @Test
@@ -149,6 +150,8 @@ public class CargoControllerTest {
 
         String str = new ObjectMapper().writeValueAsString(updatingCargo);
 
+        mockMvc.perform(get("/trucks"))
+                .andDo(print());
         mockMvc.perform(put("/cargo").contentType(MediaType.APPLICATION_JSON).content(str))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
