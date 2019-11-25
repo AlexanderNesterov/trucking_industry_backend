@@ -7,10 +7,8 @@ import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.DriverRepository;
 import com.example.services.models.DriverDto;
-import com.example.services.models.UserDto;
 import com.example.services.serviceImpl.validation.DriverValidator;
 import com.example.services.DriverService;
-import com.example.services.commons.IPasswordEncryptor;
 import com.example.services.mappers.DriverMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,8 +71,8 @@ public class DriverServiceImpl implements DriverService {
         DriverValidator.validate(driverDto, false);
         checkSavingDriver(driverDto, false);
 
-        driverDto.setId(0L);
-        driverDto.getUser().setId(0L);
+        driverDto.setId(null);
+        driverDto.getUser().setId(null);
         driverDto.getUser().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
         driverRepository.save(driverMapper.fromDto(driverDto));

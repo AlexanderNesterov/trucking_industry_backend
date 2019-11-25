@@ -77,7 +77,7 @@ public class TruckServiceImpl implements TruckService {
                     truckDto.getRegistrationNumber() + " already exists");
         }
 
-        truckDto.setId(0L);
+        truckDto.setId(null);
         truckDto.setCondition(TruckCondition.SERVICEABLE);
         truckRepository.save(truckMapper.fromDto(truckDto));
         return true;

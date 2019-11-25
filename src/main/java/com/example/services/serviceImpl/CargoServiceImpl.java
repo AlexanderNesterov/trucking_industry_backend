@@ -79,7 +79,7 @@ public class CargoServiceImpl implements CargoService {
         CargoValidator.validate(cargoDto);
         checkSavingCargo(cargoDto, false);
 
-        cargoDto.setId(0L);
+        cargoDto.setId(null);
         cargoDto.setStatus(CargoStatus.CREATED);
         cargoRepository.save(cargoMapper.fromDto(cargoDto));
         return true;
@@ -142,10 +142,6 @@ public class CargoServiceImpl implements CargoService {
         cargoRepository.save(cargo);
 
         return true;
-    }
-
-    private Cargo getCargoByTruckId(Long truckId) {
-        return cargoRepository.getCargoByTruckId(truckId);
     }
 
     private Cargo getCheckedCargoToChangeStatus(Long cargoId, String driverLogin) {
