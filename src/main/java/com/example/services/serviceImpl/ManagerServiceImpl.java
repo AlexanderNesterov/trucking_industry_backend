@@ -45,6 +45,7 @@ public class ManagerServiceImpl implements ManagerService {
         UserValidator.validate(manager, false);
         UserDto sameUser = findById(manager.getId());
 
+        manager.setPassword(sameUser.getPassword());
         manager.setLogin(sameUser.getLogin());
         manager.setRole(Role.ADMIN);
         managerRepository.save(userMapper.fromDto(manager));
