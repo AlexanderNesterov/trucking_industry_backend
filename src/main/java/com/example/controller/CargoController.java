@@ -39,30 +39,31 @@ public class CargoController {
     }
 
     @GetMapping("/for-driver/{driverId}")
+    @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
     public CargoDto getCargoByDriverId(@PathVariable Long driverId) {
         return cargoService.getCargoByDriverId(driverId);
     }
 
-    @PutMapping("/set-accept-status/{cargoId}/{driverLogin}")
-    @PreAuthorize("#driverLogin == authentication.principal")
+    @PutMapping("/set-accept-status/{cargoId}/{driverId}")
+    @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
-    public boolean setAcceptStatus(@PathVariable Long cargoId, @PathVariable String driverLogin) {
-        return cargoService.setAcceptStatus(cargoId, driverLogin);
+    public boolean setAcceptStatus(@PathVariable Long cargoId, @PathVariable Long driverId) {
+        return cargoService.setAcceptStatus(cargoId, driverId);
     }
 
-    @PutMapping("/set-refuse-status/{cargoId}/{driverLogin}")
-    @PreAuthorize("#driverLogin == authentication.principal")
+    @PutMapping("/set-refuse-status/{cargoId}/{driverId}")
+    @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
-    public boolean setRefuseStatus(@PathVariable Long cargoId, @PathVariable String driverLogin) {
-        return cargoService.setRefuseStatus(cargoId, driverLogin);
+    public boolean setRefuseStatus(@PathVariable Long cargoId, @PathVariable Long driverId) {
+        return cargoService.setRefuseStatus(cargoId, driverId);
     }
 
-    @PutMapping("/set-deliver-status/{cargoId}/{driverLogin}")
-    @PreAuthorize("#driverLogin == authentication.principal")
+    @PutMapping("/set-deliver-status/{cargoId}/{driverId}")
+    @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
-    public boolean setDeliverStatus(@PathVariable Long cargoId, @PathVariable String driverLogin) {
-        return cargoService.setDeliverStatus(cargoId, driverLogin);
+    public boolean setDeliverStatus(@PathVariable Long cargoId, @PathVariable Long driverId) {
+        return cargoService.setDeliverStatus(cargoId, driverId);
     }
 
     @PutMapping

@@ -97,8 +97,8 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public boolean setAcceptStatus(Long cargoId, String driverLogin) {
-        Cargo cargo = getCheckedCargoToChangeStatus(cargoId, driverLogin);
+    public boolean setAcceptStatus(Long cargoId, Long driverId) {
+        Cargo cargo = getCheckedCargoToChangeStatus(cargoId, driverId);
 
         if (!cargo.getStatus().equals(CargoStatus.CREATED)) {
             throw new ChangeCargoStatusException("Attempt to set ACCEPT status to wrong cargo");
@@ -113,8 +113,8 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public boolean setRefuseStatus(Long cargoId, String driverLogin) {
-        Cargo cargo = getCheckedCargoToChangeStatus(cargoId, driverLogin);
+    public boolean setRefuseStatus(Long cargoId, Long driverId) {
+        Cargo cargo = getCheckedCargoToChangeStatus(cargoId, driverId);
 
         if (!cargo.getStatus().equals(CargoStatus.CREATED)) {
             throw new ChangeCargoStatusException("Attempt to set REFUSED_BY_DRIVER status to wrong cargo");
@@ -129,8 +129,8 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
-    public boolean setDeliverStatus(Long cargoId, String driverLogin) {
-        Cargo cargo = getCheckedCargoToChangeStatus(cargoId, driverLogin);
+    public boolean setDeliverStatus(Long cargoId, Long driverId) {
+        Cargo cargo = getCheckedCargoToChangeStatus(cargoId, driverId);
 
         if (!cargo.getStatus().equals(CargoStatus.IN_PROGRESS)) {
             throw new ChangeCargoStatusException("Attempt to set IN_PROGRESS status to wrong cargo");
@@ -139,13 +139,13 @@ public class CargoServiceImpl implements CargoService {
         cargo.setStatus(CargoStatus.DELIVERED);
         cargo.getDriver().setStatus(DriverStatus.REST);
         cargo.getCoDriver().setStatus(DriverStatus.REST);
-        cargoRepository.save(cargo);
+//        cargoRepository.save(cargo);
 
         return true;
     }
 
-    private Cargo getCheckedCargoToChangeStatus(Long cargoId, String driverLogin) {
-        Cargo cargo = cargoRepository.getCargoToChangeStatus(cargoId, driverLogin);
+    private Cargo getCheckedCargoToChangeStatus(Long cargoId, Long driverId) {
+        Cargo cargo = cargoRepository.getCargoToChangeStatus(cargoId, driverId);
 
         if (cargo == null) {
             throw new ChangeCargoStatusException("Wrong cargo id or main driver id");

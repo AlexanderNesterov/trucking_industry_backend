@@ -8,6 +8,7 @@ import com.example.services.serviceImpl.validation.exception.UserValidationExcep
 import com.example.services.DriverService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -30,10 +31,10 @@ public class DriverController {
         return driverService.findAll();
     }
 
-    @GetMapping("/{driverDtoId}")
-    @RolesAllowed({"ROLE_ADMIN", "ROLE_DRIVER"})
-    public DriverDto findById(@PathVariable Long driverDtoId) {
-        return driverService.findById(driverDtoId);
+    @GetMapping("/{driverId}")
+    @PreAuthorize("(hasRole('ROLE_DRIVER') && #driverId == authentication.principal.driverId) || hasRole('ROLE_ADMIN')")
+    public DriverDto findById(@PathVariable Long driverId) {
+        return driverService.findById(driverId);
     }
 
     @GetMapping("/free")

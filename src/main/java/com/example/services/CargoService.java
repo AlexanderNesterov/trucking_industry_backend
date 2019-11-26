@@ -10,7 +10,7 @@ public interface CargoService {
     CargoDto getCargoByDriverId(Long driverId);
     boolean addCargo(CargoDto cargoDto);
     boolean updateCargo(CargoDto cargoDto);
-    boolean setAcceptStatus(Long cargoId, String driverLogin);
-    boolean setRefuseStatus(Long cargoId, String driverLogin);
-    boolean setDeliverStatus(Long cargoId, String driverLogin);
+    boolean setAcceptStatus(Long cargoId, Long driverId);
+    boolean setRefuseStatus(Long cargoId, Long driverId);
+    boolean setDeliverStatus(Long cargoId, Long driverId);
 }

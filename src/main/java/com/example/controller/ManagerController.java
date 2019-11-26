@@ -7,6 +7,7 @@ import com.example.services.models.UserDto;
 import com.example.services.ManagerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -30,6 +31,7 @@ public class ManagerController {
     }
 
     @GetMapping("/{managerId}")
+    @PreAuthorize("#managerId == authentication.principal.userId")
     @RolesAllowed({"ROLE_ADMIN"})
     public UserDto findById(@PathVariable Long managerId) {
         return managerService.findById(managerId);
