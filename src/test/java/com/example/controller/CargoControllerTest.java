@@ -2,10 +2,12 @@ package com.example.controller;
 
 import com.example.FreightApplication;
 import com.example.database.models.commons.CargoStatus;
+import com.example.security.models.LoginInfo;
 import com.example.services.models.CargoDto;
 import com.example.services.models.DriverDto;
 import com.example.services.models.TruckDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -19,9 +21,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,9 +55,33 @@ public class CargoControllerTest {
         updatingCargo.setCoDriver(new DriverDto());
     }
 
+    private String setUpToken(Long id, boolean isDriver) throws Exception {
+        LoginInfo info = new LoginInfo();
+
+        if (isDriver) {
+            info.setLogin("driver_" + id);
+        } else {
+            info.setLogin("manager_" + id);
+        }
+
+        info.setPassword("password");
+
+        String obj = new ObjectMapper().writeValueAsString(info);
+        MvcResult result = mockMvc
+                .perform(post("/login").content(obj))
+                .andReturn();
+
+        int length = result.getResponse().getContentAsString().length();
+        return "Bearer " + result.getResponse().getContentAsString().substring(1, length - 1);
+    }
+
     @Test
     public void findAll() throws Exception {
-        mockMvc.perform(get("/cargo"))
+        String token = setUpToken(1L, false);
+
+        mockMvc.perform(
+                get("/cargo")
+                        .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(5));
@@ -63,7 +89,11 @@ public class CargoControllerTest {
 
     @Test
     public void findByIdSuccessfully() throws Exception {
-        mockMvc.perform(get("/cargo/2"))
+        String token = setUpToken(1L, false);
+
+        mockMvc.perform(
+                get("/cargo/2")
+                        .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Chocolate"))
                 .andExpect(jsonPath("$.driver.id").value(6))
@@ -72,14 +102,24 @@ public class CargoControllerTest {
 
     @Test
     public void failedFindByIdNotFound() throws Exception {
-        mockMvc.perform(get("/cargo/10"))
+        String token = setUpToken(1L, false);
+
+        mockMvc.perform(
+                get("/cargo/10")
+                        .header("Authorization", token))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Cargo with id: 10 not found"));
     }
 
     @Test
     public void getCargoByDriverIdSuccessfully() throws Exception {
-        mockMvc.perform(get("/cargo/for-driver/3"))
+        Long driverId = 3L;
+        String url = String.format("/cargo/for-driver/%d", driverId);
+        String token = setUpToken(driverId, true);
+
+        mockMvc.perform(
+                get(url)
+                        .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Water"))
                 .andExpect(jsonPath("$.weight").value(500))
@@ -88,14 +128,26 @@ public class CargoControllerTest {
 
     @Test
     public void failedGetCargoByDriverId() throws Exception {
-        mockMvc.perform(get("/cargo/for-driver/101"))
+        Long driverId = 4L;
+        String url = String.format("/cargo/for-driver/%d", driverId);
+        String token = setUpToken(driverId, true);
+
+        mockMvc.perform(
+                get(url)
+                        .header("Authorization", token))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Cargo with driver id: 101 not found"));
+                .andExpect(jsonPath("$.message").value("Cargo with driver id: 4 not found"));
     }
 
     @Test
     public void setAcceptStatusSuccessfully() throws Exception {
-        mockMvc.perform(put("/cargo/set-accept-status/2/6"))
+        Long driverId = 6L;
+        String url = String.format("/cargo/set-accept-status/2/%d", driverId);
+        String token = setUpToken(driverId, true);
+
+        mockMvc.perform(
+                put(url)
+                        .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
                 .andExpect(jsonPath("$").value("true"));
@@ -103,7 +155,13 @@ public class CargoControllerTest {
 
     @Test
     public void failedSetAcceptStatusCoDriverId() throws Exception {
-        mockMvc.perform(put("/cargo/set-accept-status/2/7"))
+        Long driverId = 7L;
+        String url = String.format("/cargo/set-accept-status/2/%d", driverId);
+        String token = setUpToken(driverId, true);
+
+        mockMvc.perform(
+                put(url)
+                        .header("Authorization", token))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("Wrong cargo id or main driver id"));
@@ -111,7 +169,13 @@ public class CargoControllerTest {
 
     @Test
     public void failedSetAcceptStatusWrongDriver() throws Exception {
-        mockMvc.perform(put("/cargo/set-accept-status/2/12"))
+        Long driverId = 12L;
+        String token = setUpToken(driverId, true);
+        String url = String.format("/cargo/set-accept-status/2/%d", driverId);
+
+        mockMvc.perform(
+                put(url)
+                        .header("Authorization", token))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("Wrong cargo id or main driver id"));
@@ -119,7 +183,13 @@ public class CargoControllerTest {
 
     @Test
     public void failedSetAcceptStatusWrongCargoStatus() throws Exception {
-        mockMvc.perform(put("/cargo/set-accept-status/1/3"))
+        Long driverId = 3L;
+        String url = String.format("/cargo/set-accept-status/1/%d", driverId);
+        String token = setUpToken(driverId, true);
+
+        mockMvc.perform(
+                put(url)
+                        .header("Authorization", token))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("Attempt to set ACCEPT status to wrong cargo"));
@@ -127,7 +197,13 @@ public class CargoControllerTest {
 
     @Test
     public void setRefusedStatusSuccessfully() throws Exception {
-        mockMvc.perform(put("/cargo/set-refuse-status/3/8"))
+        Long driverId = 8L;
+        String url = String.format("/cargo/set-refuse-status/3/%d", driverId);
+        String token = setUpToken(driverId, true);
+
+        mockMvc.perform(
+                put(url)
+                        .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
                 .andExpect(jsonPath("$").value("true"));
@@ -135,7 +211,13 @@ public class CargoControllerTest {
 
     @Test
     public void setDeliveredStatusSuccessfully() throws Exception {
-        mockMvc.perform(put("/cargo/set-deliver-status/4/10"))
+        Long driverId = 10L;
+        String url = String.format("/cargo/set-deliver-status/4/%d", driverId);
+        String token = setUpToken(driverId, true);
+
+        mockMvc.perform(
+                put(url)
+                        .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
                 .andExpect(jsonPath("$").value("true"));
@@ -143,6 +225,8 @@ public class CargoControllerTest {
 
     @Test
     public void updateCargoSuccessfully() throws Exception {
+        String token = setUpToken(1L, false);
+
         updatingCargo.setWeight(300);
         updatingCargo.getTruck().setId(6L);
         updatingCargo.getDriver().setId(1L);
@@ -150,9 +234,11 @@ public class CargoControllerTest {
 
         String str = new ObjectMapper().writeValueAsString(updatingCargo);
 
-        mockMvc.perform(get("/trucks"))
-                .andDo(print());
-        mockMvc.perform(put("/cargo").contentType(MediaType.APPLICATION_JSON).content(str))
+        mockMvc.perform(
+                put("/cargo")
+                        .header("Authorization", token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(str))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
                 .andExpect(jsonPath("$").value("true"));

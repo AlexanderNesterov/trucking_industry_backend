@@ -2,9 +2,13 @@ package com.example.services.serviceImpl;
 
 import com.example.controller.exceptions.DriverExistsException;
 import com.example.controller.exceptions.DriverNotFoundException;
+import com.example.database.models.Driver;
+import com.example.database.models.User;
 import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.DriverRepository;
+import com.example.services.commons.IPasswordEncryptor;
+import com.example.services.mappers.UserMapper;
 import com.example.services.models.DriverDto;
 import com.example.services.models.UserDto;
 import com.example.services.DriverService;
@@ -25,8 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(MockitoJUnitRunner.class)
 public class DriverServiceImplTest {
 
-/*    @Spy
-    private IPasswordEncryptor passwordEncryptor;*/
+    private IPasswordEncryptor encryptor = rawPassword -> rawPassword;
 
     private DriverMapper driverMapper = new DriverMapperImpl();
     private DriverDto addingDriver, updatingDriver;
@@ -40,7 +43,7 @@ public class DriverServiceImplTest {
 
     @Before
     public void setUp() {
-//        driverMapper.setPasswordEncoder(passwordEncryptor);
+        driverMapper.setPasswordEncoder(encryptor);
 
         addingDriver = new DriverDto();
         UserDto user = new UserDto();
@@ -104,8 +107,8 @@ public class DriverServiceImplTest {
 
         boolean result = driverService.addDriver(addingDriver);
 
-        assertEquals(0, addingDriver.getId());
-        assertEquals(0, addingDriver.getUser().getId());
+        assertNull(addingDriver.getId());
+        assertNull(addingDriver.getUser().getId());
         assertEquals(Role.DRIVER, addingDriver.getUser().getRole());
         assertEquals(DriverStatus.REST, addingDriver.getStatus());
         assertTrue(result);
@@ -210,9 +213,6 @@ public class DriverServiceImplTest {
         userDto2.setLogin("driver_1");
         sameDriver.setUser(userDto2);
 
-        /*Mockito
-                .when(passwordEncryptor.encrypt(sameDriver.getUser().getPassword()))
-                .thenReturn("password");*/
         Mockito
                 .when(driverRepository.findById(updatingDriver.getId()))
                 .thenReturn(Optional.of(driverMapper.fromDto(sameDriver)));

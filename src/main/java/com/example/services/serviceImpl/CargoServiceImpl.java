@@ -139,7 +139,7 @@ public class CargoServiceImpl implements CargoService {
         cargo.setStatus(CargoStatus.DELIVERED);
         cargo.getDriver().setStatus(DriverStatus.REST);
         cargo.getCoDriver().setStatus(DriverStatus.REST);
-//        cargoRepository.save(cargo);
+        cargoRepository.save(cargo);
 
         return true;
     }

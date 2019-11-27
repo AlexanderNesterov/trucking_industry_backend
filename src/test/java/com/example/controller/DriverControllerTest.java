@@ -1,9 +1,11 @@
 package com.example.controller;
 
 import com.example.FreightApplication;
+import com.example.security.models.LoginInfo;
 import com.example.services.models.DriverDto;
 import com.example.services.models.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -17,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -38,6 +41,7 @@ public class DriverControllerTest {
     private DriverController driverController;
 
     private static DriverDto addingDriver, updatingDriver;
+    private static String managerToken, driverToken;
 
     @BeforeClass
     public static void setUp() {
@@ -58,9 +62,40 @@ public class DriverControllerTest {
         updatingDriver.setUser(userDto1);
     }
 
+
+    @Before
+    public void setUpToken() throws Exception {
+        LoginInfo info = new LoginInfo();
+        info.setLogin("manager_1");
+        info.setPassword("password");
+
+        String obj = new ObjectMapper().writeValueAsString(info);
+        MvcResult result = mockMvc
+                .perform(post("/login").content(obj))
+                .andReturn();
+
+        int length = result.getResponse().getContentAsString().length();
+        managerToken = "Bearer " + result.getResponse().getContentAsString().substring(1, length - 1);
+
+        info = new LoginInfo();
+        info.setLogin("driver_1");
+        info.setPassword("password");
+
+        obj = new ObjectMapper().writeValueAsString(info);
+        result = mockMvc
+                .perform(post("/login").content(obj))
+                .andReturn();
+
+        length = result.getResponse().getContentAsString().length();
+        driverToken = "Bearer " + result.getResponse().getContentAsString().substring(1, length - 1);
+    }
+
     @Test
     public void findAll() throws Exception {
-        mockMvc.perform(get("/drivers").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+                get("/drivers")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(13))
                 .andExpect(jsonPath("$[0].user.login").value("driver_1"))
@@ -70,22 +105,41 @@ public class DriverControllerTest {
     }
 
     @Test
-    public void findByIdSuccessfully() throws Exception {
-        mockMvc.perform(get("/drivers/4").contentType(MediaType.APPLICATION_JSON))
+    public void findByIdSuccessfullyByManager() throws Exception {
+        mockMvc.perform(
+                get("/drivers/4")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user.login").value("driver_4"));
     }
 
     @Test
+    public void findByIdSuccessfullyByDriver() throws Exception {
+        mockMvc.perform(
+                get("/drivers/1")
+                        .header("Authorization", driverToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.user.login").value("driver_1"));
+    }
+
+    @Test
     public void failedFindByIdNotFound() throws Exception {
-        mockMvc.perform(get("/drivers/77").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+                get("/drivers/77")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Driver with id: 77 not found"));
     }
 
     @Test
     public void getFreeDrivers() throws Exception {
-        mockMvc.perform(get("/drivers/free").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+                get("/drivers/free")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].user.login").value("driver_1"))
@@ -106,7 +160,11 @@ public class DriverControllerTest {
 
         String str = new ObjectMapper().writeValueAsString(updatingDriver);
 
-        mockMvc.perform(put("/drivers").contentType(MediaType.APPLICATION_JSON).content(str))
+        mockMvc.perform(
+                put("/drivers")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(str))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("true"));
     }
@@ -120,7 +178,11 @@ public class DriverControllerTest {
 
         String str = new ObjectMapper().writeValueAsString(updatingDriver);
 
-        mockMvc.perform(put("/drivers").contentType(MediaType.APPLICATION_JSON).content(str))
+        mockMvc.perform(
+                put("/drivers")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(str))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Driver with driver license: 0102030405 already exist"));
     }
@@ -134,7 +196,11 @@ public class DriverControllerTest {
 
         String str = new ObjectMapper().writeValueAsString(updatingDriver);
 
-        mockMvc.perform(put("/drivers").contentType(MediaType.APPLICATION_JSON).content(str))
+        mockMvc.perform(
+                put("/drivers")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(str))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("User id cannot be equals or less than 0: 0"));
@@ -147,8 +213,11 @@ public class DriverControllerTest {
 
         String str = new ObjectMapper().writeValueAsString(addingDriver);
 
-        mockMvc.perform(post("/drivers").contentType(MediaType.APPLICATION_JSON)
-                .content(str))
+        mockMvc.perform(
+                post("/drivers")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(str))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").value("true"));
     }
@@ -160,8 +229,11 @@ public class DriverControllerTest {
 
         String str = new ObjectMapper().writeValueAsString(addingDriver);
 
-        mockMvc.perform(post("/drivers").contentType(MediaType.APPLICATION_JSON)
-                .content(str))
+        mockMvc.perform(
+                post("/drivers")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(str))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("Driver with login: driver_2 already exist"));
@@ -174,8 +246,11 @@ public class DriverControllerTest {
 
         String str = new ObjectMapper().writeValueAsString(addingDriver);
 
-        mockMvc.perform(post("/drivers").contentType(MediaType.APPLICATION_JSON)
-                .content(str))
+        mockMvc.perform(
+                post("/drivers")
+                        .header("Authorization", managerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(str))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("Driver with driver license: 1020304050 already exist"));

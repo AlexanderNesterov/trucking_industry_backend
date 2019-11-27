@@ -107,7 +107,7 @@ public class CargoServiceImplTest {
         assertEquals(existFirstDriver, savingCargo.getDriver());
         assertEquals(existCoDriver, savingCargo.getCoDriver());
         assertEquals(existTruck, savingCargo.getTruck());
-        assertEquals(0, savingCargo.getId());
+        assertNull(savingCargo.getId());
         assertEquals(CargoStatus.CREATED, savingCargo.getStatus());
         assertTrue(result);
     }

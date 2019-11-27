@@ -52,7 +52,7 @@ public class TruckServiceImplTest {
         boolean t = truckService.addTruck(addingTruck);
 
         assertEquals("SERVICEABLE", addingTruck.getCondition().name());
-        assertEquals(0, addingTruck.getId());
+        assertNull(addingTruck.getId());
         assertTrue(t);
     }
 
