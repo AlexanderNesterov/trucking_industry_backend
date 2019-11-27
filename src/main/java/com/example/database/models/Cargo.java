@@ -9,7 +9,8 @@ import javax.persistence.*;
 public class Cargo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "cargo_seq", sequenceName = "cargo_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cargo_seq")
     @Column(name = "id")
     private Long id;
 

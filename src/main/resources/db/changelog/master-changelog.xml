@@ -108,6 +108,16 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
     </changeSet>
 
     <changeSet id="3" author="nesterov">
+        <preConditions>
+            <tableExists tableName="users"/>
+            <tableExists tableName="drivers"/>
+            <tableExists tableName="trucks"/>
+            <tableExists tableName="cargo"/>
+            <columnExists tableName="users" columnName="role"/>
+            <columnExists tableName="drivers" columnName="status"/>
+            <columnExists tableName="trucks" columnName="condition"/>
+            <columnExists tableName="cargo" columnName="status"/>
+        </preConditions>
         <modifyDataType tableName="users" columnName="role" newDataType="varchar(32)"/>
         <modifyDataType tableName="drivers" columnName="status" newDataType="varchar(32)"/>
         <modifyDataType tableName="trucks" columnName="condition" newDataType="varchar(32)"/>
@@ -115,6 +125,10 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
     </changeSet>
 
     <changeSet id="4" author="nesterov">
+        <preConditions>
+            <tableExists tableName="users"/>
+            <columnExists tableName="users" columnName="password"/>
+        </preConditions>
         <modifyDataType tableName="users" columnName="password" newDataType="varchar(96)"/>
     </changeSet>
 </databaseChangeLog>

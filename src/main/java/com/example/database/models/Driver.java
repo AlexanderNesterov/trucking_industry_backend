@@ -8,7 +8,8 @@ import javax.persistence.*;
 public class Driver {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "driver_seq", sequenceName = "drivers_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "driver_seq")
     @Column(name = "id")
     private Long id;
 
