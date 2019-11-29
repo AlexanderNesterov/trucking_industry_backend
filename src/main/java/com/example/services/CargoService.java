@@ -13,4 +13,5 @@ public interface CargoService {
     boolean setAcceptStatus(Long cargoId, Long driverId);
     boolean setRefuseStatus(Long cargoId, Long driverId);
     boolean setDeliverStatus(Long cargoId, Long driverId);
+    boolean setCanceledStatus(Long cargoId);
 }

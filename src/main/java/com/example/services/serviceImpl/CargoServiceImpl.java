@@ -4,10 +4,8 @@ import com.example.controller.exceptions.CargoNotFoundException;
 import com.example.controller.exceptions.ChangeCargoStatusException;
 import com.example.controller.exceptions.SavingCargoException;
 import com.example.database.models.Cargo;
-import com.example.database.models.Driver;
 import com.example.database.models.commons.CargoStatus;
 import com.example.database.models.commons.DriverStatus;
-import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.CargoRepository;
 import com.example.services.models.CargoDto;
 import com.example.services.models.DriverDto;
@@ -141,6 +139,21 @@ public class CargoServiceImpl implements CargoService {
         cargo.getCoDriver().setStatus(DriverStatus.REST);
         cargoRepository.save(cargo);
 
+        return true;
+    }
+
+    @Override
+    public boolean setCanceledStatus(Long cargoId) {
+        Cargo cargo = cargoRepository.getCargoToCancel(cargoId);
+
+        if (cargo == null) {
+            throw new ChangeCargoStatusException("Wrong cargo id or cargo status");
+        }
+
+        cargo.getDriver().setStatus(DriverStatus.REST);
+        cargo.getCoDriver().setStatus(DriverStatus.REST);
+        cargo.setStatus(CargoStatus.CANCELED);
+//        cargoRepository.save(cargo);
         return true;
     }
 

@@ -26,7 +26,7 @@ public class Cargo {
     @Column(name = "discharge_location_id")
     private int dischargeLocation;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "truck_id")
     private Truck truck;
 

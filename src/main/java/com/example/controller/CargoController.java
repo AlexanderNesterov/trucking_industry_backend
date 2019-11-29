@@ -66,6 +66,12 @@ public class CargoController {
         return cargoService.setDeliverStatus(cargoId, driverId);
     }
 
+    @PutMapping("/set-cancel-status/{cargoId}")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean setCancelStatus(@PathVariable Long cargoId) {
+        return cargoService.setCanceledStatus(cargoId);
+    }
+
     @PutMapping
     @RolesAllowed({"ROLE_ADMIN"})
     public boolean updateCargo(@RequestBody CargoDto cargoDto) {
