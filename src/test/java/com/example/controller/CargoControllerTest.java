@@ -7,7 +7,6 @@ import com.example.services.models.CargoDto;
 import com.example.services.models.DriverDto;
 import com.example.services.models.TruckDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -41,7 +40,7 @@ public class CargoControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private CargoController cargoController;
+    private OrderController cargoController;
 
     private static CargoDto updatingCargo;
 
@@ -50,9 +49,9 @@ public class CargoControllerTest {
         updatingCargo = new CargoDto();
         updatingCargo.setId(5L);
         updatingCargo.setTitle("Steel");
-        updatingCargo.setTruck(new TruckDto());
+/*        updatingCargo.setTruck(new TruckDto());
         updatingCargo.setDriver(new DriverDto());
-        updatingCargo.setCoDriver(new DriverDto());
+        updatingCargo.setCoDriver(new DriverDto());*/
     }
 
     private String setUpToken(Long id, boolean isDriver) throws Exception {
@@ -228,9 +227,9 @@ public class CargoControllerTest {
         String token = setUpToken(1L, false);
 
         updatingCargo.setWeight(300);
-        updatingCargo.getTruck().setId(6L);
+/*        updatingCargo.getTruck().setId(6L);
         updatingCargo.getDriver().setId(1L);
-        updatingCargo.getCoDriver().setId(2L);
+        updatingCargo.getCoDriver().setId(2L);*/
 
         String str = new ObjectMapper().writeValueAsString(updatingCargo);
 

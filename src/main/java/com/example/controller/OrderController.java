@@ -5,8 +5,9 @@ import com.example.controller.exceptions.ChangeCargoStatusException;
 import com.example.controller.exceptions.SavingCargoException;
 import com.example.controller.response.ErrorResponse;
 import com.example.services.models.CargoDto;
+import com.example.services.models.OrderDto;
 import com.example.services.serviceImpl.validation.exception.CargoValidationException;
-import com.example.services.CargoService;
+import com.example.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,71 +18,71 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/cargo")
-public class CargoController {
+@RequestMapping("/order")
+public class OrderController {
 
-    private CargoService cargoService;
+    private OrderService orderService;
 
-    public CargoController(CargoService cargoService) {
-        this.cargoService = cargoService;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<CargoDto> findAll() {
-        return cargoService.findAll();
+    public List<OrderDto> findAll() {
+        return orderService.findAll();
     }
 
-    @GetMapping("/{cargoId}")
+    @GetMapping("/{orderId}")
     @RolesAllowed({"ROLE_ADMIN"})
-    public CargoDto findById(@PathVariable Long cargoId) {
-        return cargoService.findById(cargoId);
+    public OrderDto findById(@PathVariable Long orderId) {
+        return orderService.findById(orderId);
     }
 
     @GetMapping("/for-driver/{driverId}")
     @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
-    public CargoDto getCargoByDriverId(@PathVariable Long driverId) {
-        return cargoService.getCargoByDriverId(driverId);
+    public OrderDto getOrderByDriverId(@PathVariable Long driverId) {
+        return orderService.getOrderByDriverId(driverId);
     }
 
-    @PutMapping("/set-accept-status/{cargoId}/{driverId}")
+    @PutMapping("/set-accept-status/{orderId}/{driverId}")
     @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
-    public boolean setAcceptStatus(@PathVariable Long cargoId, @PathVariable Long driverId) {
-        return cargoService.setAcceptStatus(cargoId, driverId);
+    public boolean setAcceptStatus(@PathVariable Long orderId, @PathVariable Long driverId) {
+        return orderService.setAcceptStatus(orderId, driverId);
     }
 
-    @PutMapping("/set-refuse-status/{cargoId}/{driverId}")
+    @PutMapping("/set-refuse-status/{orderId}/{driverId}")
     @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
-    public boolean setRefuseStatus(@PathVariable Long cargoId, @PathVariable Long driverId) {
-        return cargoService.setRefuseStatus(cargoId, driverId);
+    public boolean setRefuseStatus(@PathVariable Long orderId, @PathVariable Long driverId) {
+        return orderService.setRefuseStatus(orderId, driverId);
     }
 
-    @PutMapping("/set-deliver-status/{cargoId}/{driverId}")
+    @PutMapping("/set-deliver-status/{orderId}/{driverId}")
     @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
-    public boolean setDeliverStatus(@PathVariable Long cargoId, @PathVariable Long driverId) {
-        return cargoService.setDeliverStatus(cargoId, driverId);
+    public boolean setDeliverStatus(@PathVariable Long orderId, @PathVariable Long driverId) {
+        return orderService.setDeliverStatus(orderId, driverId);
     }
 
-    @PutMapping("/set-cancel-status/{cargoId}")
+    @PutMapping("/set-cancel-status/{orderId}")
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean setCancelStatus(@PathVariable Long cargoId) {
-        return cargoService.setCanceledStatus(cargoId);
+    public boolean setCancelStatus(@PathVariable Long orderId) {
+        return orderService.setCanceledStatus(orderId);
     }
 
     @PutMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean updateCargo(@RequestBody CargoDto cargoDto) {
-        return cargoService.updateCargo(cargoDto);
+    public boolean updateOrder(@RequestBody OrderDto orderDto) {
+        return orderService.updateOrder(orderDto);
     }
 
     @PostMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean addCargo(@RequestBody CargoDto cargoDto) {
-        return cargoService.addCargo(cargoDto);
+    public boolean addOrder(@RequestBody OrderDto orderDto) {
+        return orderService.addOrder(orderDto);
     }
 
     @ExceptionHandler

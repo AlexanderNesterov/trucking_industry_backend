@@ -1,0 +1,100 @@
+package com.example.database.models;
+
+import com.example.database.models.commons.OrderStatus;
+import org.hibernate.annotations.Cascade;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "orders")
+public class Order {
+
+    @Id
+    @SequenceGenerator(name = "order_seq", sequenceName = "orders_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq")
+    @Column(name = "id")
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "truck_id")
+    private Truck truck;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "driver_id")
+    private Driver driver;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "co_driver_id")
+    private Driver coDriver;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private List<Cargo> cargoList;
+
+    @Column(name = "total_weight")
+    private double totalWeight;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private OrderStatus status;
+
+    public Order() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Truck getTruck() {
+        return truck;
+    }
+
+    public void setTruck(Truck truck) {
+        this.truck = truck;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
+    public Driver getCoDriver() {
+        return coDriver;
+    }
+
+    public void setCoDriver(Driver coDriver) {
+        this.coDriver = coDriver;
+    }
+
+    public List<Cargo> getCargoList() {
+        return cargoList;
+    }
+
+    public void setCargoList(List<Cargo> cargoList) {
+        this.cargoList = cargoList;
+    }
+
+    public double getTotalWeight() {
+        return totalWeight;
+    }
+
+    public void setTotalWeight(double totalWeight) {
+        this.totalWeight = totalWeight;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+}

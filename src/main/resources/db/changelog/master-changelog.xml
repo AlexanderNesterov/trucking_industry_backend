@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog
-xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="nesterov">
-
         <createTable tableName="users">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -69,6 +68,56 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
     </changeSet>
 
     <changeSet id="2" author="nesterov">
+        <createTable tableName="cities">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="latitude" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="nesterov">
+        <createTable tableName="orders">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="truck_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="driver_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_driver_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_weight" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(32)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="orders" baseColumnNames="truck_id"
+                                 constraintName="fk_order_truck" referencedTableName="trucks"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="orders" baseColumnNames="driver_id"
+                                 constraintName="fk_order_driver" referencedTableName="drivers"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="orders" baseColumnNames="co_driver_id"
+                                 constraintName="fk_order_co_driver" referencedTableName="drivers"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="4" author="nesterov">
         <createTable tableName="cargo">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -80,34 +129,29 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="weight" type="numeric">
                 <constraints nullable="false"/>
             </column>
-            <column name="load_location_id" type="int"/>
-            <column name="discharge_location_id" type="int"/>
-            <column name="truck_id" type="int">
+            <column name="load_location_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="driver_id" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="co_driver_id" type="int">
+            <column name="discharge_location_id" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="status" type="int"/>
+            <column name="order_id" type="int"/>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="truck_id"
-                                 constraintName="fk_cargo_truck" referencedTableName="trucks"
+        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="load_location_id"
+                                 constraintName="fk_cargo_load_cities" referencedTableName="cities"
                                  referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="driver_id"
-                                 constraintName="fk_cargo_driver" referencedTableName="drivers"
+        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="discharge_location_id"
+                                 constraintName="fk_cargo_discharge_cities" referencedTableName="cities"
                                  referencedColumnNames="id"/>
-
-        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="co_driver_id"
-                                 constraintName="fk_cargo_co_driver" referencedTableName="drivers"
+        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="order_id"
+                                 constraintName="fk_cargo_order" referencedTableName="orders"
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="3" author="nesterov">
+    <changeSet id="5" author="nesterov">
         <preConditions>
             <tableExists tableName="users"/>
             <tableExists tableName="drivers"/>
@@ -124,7 +168,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
         <modifyDataType tableName="cargo" columnName="status" newDataType="varchar(32)"/>
     </changeSet>
 
-    <changeSet id="4" author="nesterov">
+    <changeSet id="6" author="nesterov">
         <preConditions>
             <tableExists tableName="users"/>
             <columnExists tableName="users" columnName="password"/>

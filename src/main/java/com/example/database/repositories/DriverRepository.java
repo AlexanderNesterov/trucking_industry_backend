@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface DriverRepository extends JpaRepository<Driver, Long> {
     @Query("from Driver d where d.status = 'REST' " +
-            "and d.id not in (select c.driver.id from Cargo c where c.status in (" +
-            "com.example.database.models.commons.CargoStatus.CREATED, " +
-            "com.example.database.models.commons.CargoStatus.IN_PROGRESS)) " +
-            "and d.id not in (select c.coDriver.id from Cargo c where c.status in (" +
-            "com.example.database.models.commons.CargoStatus.CREATED, " +
-            "com.example.database.models.commons.CargoStatus.IN_PROGRESS))")
+            "and d.id not in (select o.driver.id from Order o where o.status in (" +
+            "com.example.database.models.commons.OrderStatus.CREATED, " +
+            "com.example.database.models.commons.OrderStatus.IN_PROGRESS)) " +
+            "and d.id not in (select o.coDriver.id from Order o where o.status in (" +
+            "com.example.database.models.commons.OrderStatus.CREATED, " +
+            "com.example.database.models.commons.OrderStatus.IN_PROGRESS))")
     List<Driver> getFreeDrivers();
 
     Driver getDriverByDriverLicense(String driverLicense);
@@ -23,11 +23,11 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     Driver getDriverByLogin(@Param("driverLogin") String driverLogin);
 
     @Query("from Driver d where d.status = 'REST' and d.id = :driverId " +
-            "and d.id not in (select c.driver.id from Cargo c where c.status in (" +
-            "com.example.database.models.commons.CargoStatus.CREATED, " +
-            "com.example.database.models.commons.CargoStatus.IN_PROGRESS)) " +
-            "and d.id not in (select c.coDriver.id from Cargo c where c.status in (" +
-            "com.example.database.models.commons.CargoStatus.CREATED, " +
-            "com.example.database.models.commons.CargoStatus.IN_PROGRESS))")
+            "and d.id not in (select o.driver.id from Order o where o.status in (" +
+            "com.example.database.models.commons.OrderStatus.CREATED, " +
+            "com.example.database.models.commons.OrderStatus.IN_PROGRESS)) " +
+            "and d.id not in (select o.coDriver.id from Order o where o.status in (" +
+            "com.example.database.models.commons.OrderStatus.CREATED, " +
+            "com.example.database.models.commons.OrderStatus.IN_PROGRESS))")
     Driver getFreeDriver(@Param("driverId") Long driverId);
 }

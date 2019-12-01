@@ -7,11 +7,8 @@ public class CargoDto {
     private Long id;
     private String title;
     private String description;
-    private int loadLocation;
-    private int dischargeLocation;
-    private TruckDto truck;
-    private DriverDto driver;
-    private DriverDto coDriver;
+    private CityDto loadLocation;
+    private CityDto dischargeLocation;
     private double weight;
     private CargoStatus status;
 
@@ -42,44 +39,20 @@ public class CargoDto {
         this.description = description;
     }
 
-    public int getLoadLocation() {
+    public CityDto getLoadLocation() {
         return loadLocation;
     }
 
-    public void setLoadLocation(int loadLocation) {
+    public void setLoadLocation(CityDto loadLocation) {
         this.loadLocation = loadLocation;
     }
 
-    public int getDischargeLocation() {
+    public CityDto getDischargeLocation() {
         return dischargeLocation;
     }
 
-    public void setDischargeLocation(int dischargeLocation) {
+    public void setDischargeLocation(CityDto dischargeLocation) {
         this.dischargeLocation = dischargeLocation;
-    }
-
-    public TruckDto getTruck() {
-        return truck;
-    }
-
-    public void setTruck(TruckDto truck) {
-        this.truck = truck;
-    }
-
-    public DriverDto getDriver() {
-        return driver;
-    }
-
-    public void setDriver(DriverDto driver) {
-        this.driver = driver;
-    }
-
-    public DriverDto getCoDriver() {
-        return coDriver;
-    }
-
-    public void setCoDriver(DriverDto coDriver) {
-        this.coDriver = coDriver;
     }
 
     public double getWeight() {

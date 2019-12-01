@@ -11,6 +11,6 @@ public interface CargoMapper {
 
     Cargo fromDto(CargoDto cargoDto);
     CargoDto toDto(Cargo cargo);
-    List<Cargo> fromListDto(List<CargoDto> cargoDtos);
-    List<CargoDto> toListDto(List<Cargo> cargos);
+    List<Cargo> fromListDto(List<CargoDto> cargoDtoList);
+    List<CargoDto> toListDto(List<Cargo> cargoList);
 }

@@ -58,7 +58,7 @@ public class CargoValidator {
     }
 
     private static void checkTruck() {
-        TruckDto truck = checkingCargo.getTruck();
+/*        TruckDto truck = checkingCargo.getTruck();
 
         if (truck == null) {
             throw new CargoValidationException("Truck property cannot be null");
@@ -66,11 +66,11 @@ public class CargoValidator {
 
         if (truck.getId() <= 0) {
             throw new CargoValidationException("Truck id cannot be equals or less than 0");
-        }
+        }*/
     }
 
     private static void checkDriver() {
-        DriverDto driver = checkingCargo.getDriver();
+/*        DriverDto driver = checkingCargo.getDriver();
 
         if (driver == null) {
             throw new CargoValidationException("Driver property cannot be null");
@@ -78,11 +78,11 @@ public class CargoValidator {
 
         if (driver.getId() <= 0) {
             throw new CargoValidationException("Driver id cannot be equals or less than 0");
-        }
+        }*/
     }
 
     private static void checkCoDriver() {
-        DriverDto coDriver = checkingCargo.getCoDriver();
+/*        DriverDto coDriver = checkingCargo.getCoDriver();
 
         if (coDriver == null) {
             throw new CargoValidationException("Co-Driver property cannot be null");
@@ -90,6 +90,6 @@ public class CargoValidator {
 
         if (coDriver.getId() <= 0) {
             throw new CargoValidationException("Co-Driver id cannot be equals or less than 0");
-        }
+        }*/
     }
 }

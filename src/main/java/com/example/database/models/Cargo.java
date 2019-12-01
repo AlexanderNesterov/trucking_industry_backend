@@ -20,23 +20,13 @@ public class Cargo {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "load_location_id")
-    private int loadLocation;
+    @JoinColumn(name = "load_location_id")
+    @ManyToOne
+    private City loadLocation;
 
-    @Column(name = "discharge_location_id")
-    private int dischargeLocation;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "truck_id")
-    private Truck truck;
-
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "driver_id")
-    private Driver driver;
-
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "co_driver_id")
-    private Driver coDriver;
+    @JoinColumn(name = "discharge_location_id")
+    @ManyToOne
+    private City dischargeLocation;
 
     @Column(name = "weight")
     private double weight;
@@ -72,44 +62,20 @@ public class Cargo {
         this.description = description;
     }
 
-    public int getLoadLocation() {
+    public City getLoadLocation() {
         return loadLocation;
     }
 
-    public void setLoadLocation(int loadLocation) {
+    public void setLoadLocation(City loadLocation) {
         this.loadLocation = loadLocation;
     }
 
-    public int getDischargeLocation() {
+    public City getDischargeLocation() {
         return dischargeLocation;
     }
 
-    public void setDischargeLocation(int dischargeLocation) {
+    public void setDischargeLocation(City dischargeLocation) {
         this.dischargeLocation = dischargeLocation;
-    }
-
-    public Truck getTruck() {
-        return truck;
-    }
-
-    public void setTruck(Truck truck) {
-        this.truck = truck;
-    }
-
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
-
-    public Driver getCoDriver() {
-        return coDriver;
-    }
-
-    public void setCoDriver(Driver coDriver) {
-        this.coDriver = coDriver;
     }
 
     public double getWeight() {

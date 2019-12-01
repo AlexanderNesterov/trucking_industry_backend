@@ -11,18 +11,18 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
     @Query("from Truck t where t.capacity >= :weight " +
             "and t.condition = com.example.database.models.commons.TruckCondition.SERVICEABLE " +
             "and t.id not in " +
-            "(select t.id from Cargo c join c.truck t where " +
-            "c.status in (" +
-            "com.example.database.models.commons.CargoStatus.CREATED, " +
-            "com.example.database.models.commons.CargoStatus.IN_PROGRESS))")
+            "(select t.id from Order o join o.truck t where " +
+            "o.status in (" +
+            "com.example.database.models.commons.OrderStatus.CREATED, " +
+            "com.example.database.models.commons.OrderStatus.IN_PROGRESS))")
     List<Truck> getFreeTrucks(@Param("weight") double weight);
 
     Truck getTruckByRegistrationNumber(String registrationNumber);
 
-    @Query("from Truck t where t.id = :truckId and t.capacity >= :cargoWeight " +
+    @Query("from Truck t where t.id = :truckId and t.capacity >= :orderWeight " +
             "and t.condition = com.example.database.models.commons.TruckCondition.SERVICEABLE " +
-            "and t.id not in (select c.truck.id from Cargo c where c.status in (" +
-            "com.example.database.models.commons.CargoStatus.CREATED, " +
-            "com.example.database.models.commons.CargoStatus.IN_PROGRESS))")
-    Truck getFreeTruck(@Param("truckId") Long truckId, @Param("cargoWeight") double cargoWeight);
+            "and t.id not in (select o.truck.id from Order o where o.status in (" +
+            "com.example.database.models.commons.OrderStatus.CREATED, " +
+            "com.example.database.models.commons.OrderStatus.IN_PROGRESS))")
+    Truck getFreeTruck(@Param("truckId") Long truckId, @Param("orderWeight") double orderWeight);
 }
