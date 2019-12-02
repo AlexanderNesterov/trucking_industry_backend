@@ -1,15 +1,16 @@
 package com.example.services.serviceImpl.validation;
 
-import com.example.services.models.UserDto;
+import com.example.services.models.FullInfoUserDto;
+import com.example.services.models.SimpleUserDto;
 import com.example.services.serviceImpl.validation.exception.UserValidationException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserValidator {
-    private static UserDto checkingUser;
+    private static FullInfoUserDto checkingUser;
 
-    public static void validate(UserDto user, boolean isUpdate) {
+    public static void validate(FullInfoUserDto user, boolean isUpdate) {
         checkingUser = user;
         if (!isUpdate) {
             checkLogin();

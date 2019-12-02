@@ -2,14 +2,14 @@ package com.example.services.models;
 
 import com.example.database.models.commons.DriverStatus;
 
-public class DriverDto {
+public class SimpleDriverDto {
 
     private Long id;
     private String driverLicense;
     private DriverStatus status;
-    private UserDto user;
+    private SimpleUserDto user;
 
-    public DriverDto() {
+    public SimpleDriverDto() {
     }
 
     public Long getId() {
@@ -36,11 +36,11 @@ public class DriverDto {
         this.status = status;
     }
 
-    public UserDto getUser() {
+    public SimpleUserDto getUser() {
         return user;
     }
 
-    public void setUser(UserDto user) {
+    public void setUser(SimpleUserDto user) {
         this.user = user;
     }
 }

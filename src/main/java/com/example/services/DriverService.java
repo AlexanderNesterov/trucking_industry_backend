@@ -1,14 +1,16 @@
 package com.example.services;
 
-import com.example.services.models.DriverDto;
+import com.example.services.models.FullInfoDriverDto;
+import com.example.services.models.SimpleDriverDto;
+
 import java.util.List;
 
 public interface DriverService {
     
-    DriverDto findById(Long driverDtoId);
-    List<DriverDto> findAll();
-    List<DriverDto> getFreeDrivers();
-    DriverDto getFreeDriver(Long driverId);
-    boolean updateDriver(DriverDto driver);
-    boolean addDriver(DriverDto driver);
+    FullInfoDriverDto findById(Long driverDtoId);
+    List<SimpleDriverDto> findAll();
+    List<SimpleDriverDto> getFreeDrivers();
+    SimpleDriverDto getFreeDriver(Long driverId);
+    boolean updateDriver(FullInfoDriverDto driver);
+    boolean addDriver(FullInfoDriverDto driver);
 }

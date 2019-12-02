@@ -1,8 +1,6 @@
 package com.example.services.serviceImpl.validation;
 
 import com.example.services.models.CargoDto;
-import com.example.services.models.DriverDto;
-import com.example.services.models.TruckDto;
 import com.example.services.serviceImpl.validation.exception.CargoValidationException;
 
 public class CargoValidator {

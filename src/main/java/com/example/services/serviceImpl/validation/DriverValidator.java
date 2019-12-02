@@ -1,16 +1,18 @@
 package com.example.services.serviceImpl.validation;
 
-import com.example.services.models.DriverDto;
-import com.example.services.models.UserDto;
+import com.example.services.models.FullInfoDriverDto;
+import com.example.services.models.FullInfoUserDto;
+import com.example.services.models.SimpleDriverDto;
+import com.example.services.models.SimpleUserDto;
 import com.example.services.serviceImpl.validation.exception.UserValidationException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DriverValidator {
-    private static DriverDto checkingDriver;
+    private static FullInfoDriverDto checkingDriver;
 
-    public static void validate(DriverDto driver, boolean isUpdate) {
+    public static void validate(FullInfoDriverDto driver, boolean isUpdate) {
         checkingDriver = driver;
 
         checkDriverLicense();
@@ -35,7 +37,7 @@ public class DriverValidator {
     }
 
     private static void checkUser(boolean isUpdate) {
-        UserDto user = checkingDriver.getUser();
+        FullInfoUserDto user = checkingDriver.getUser();
 
         if (user == null) {
             throw new UserValidationException("UserDto property cannot be null");

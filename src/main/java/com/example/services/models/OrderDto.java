@@ -7,8 +7,8 @@ import java.util.List;
 public class OrderDto {
     private Long id;
     private TruckDto truck;
-    private DriverDto driver;
-    private DriverDto coDriver;
+    private SimpleDriverDto driver;
+    private SimpleDriverDto coDriver;
     private List<CargoDto> cargoList;
     private double totalWeight;
     private OrderStatus status;
@@ -32,19 +32,19 @@ public class OrderDto {
         this.truck = truck;
     }
 
-    public DriverDto getDriver() {
+    public SimpleDriverDto getDriver() {
         return driver;
     }
 
-    public void setDriver(DriverDto driver) {
+    public void setDriver(SimpleDriverDto driver) {
         this.driver = driver;
     }
 
-    public DriverDto getCoDriver() {
+    public SimpleDriverDto getCoDriver() {
         return coDriver;
     }
 
-    public void setCoDriver(DriverDto coDriver) {
+    public void setCoDriver(SimpleDriverDto coDriver) {
         this.coDriver = coDriver;
     }
 

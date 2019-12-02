@@ -4,8 +4,6 @@ import com.example.FreightApplication;
 import com.example.database.models.commons.CargoStatus;
 import com.example.security.models.LoginInfo;
 import com.example.services.models.CargoDto;
-import com.example.services.models.DriverDto;
-import com.example.services.models.TruckDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;

@@ -3,7 +3,6 @@ package com.example.services.serviceImpl;
 import com.example.controller.exceptions.CargoNotFoundException;
 import com.example.controller.exceptions.ChangeCargoStatusException;
 import com.example.controller.exceptions.SavingCargoException;
-import com.example.database.models.Cargo;
 import com.example.database.models.Order;
 import com.example.database.models.commons.CargoStatus;
 import com.example.database.models.commons.DriverStatus;
@@ -11,7 +10,7 @@ import com.example.database.models.commons.OrderStatus;
 import com.example.database.repositories.OrderRepository;
 import com.example.services.mappers.OrderMapper;
 import com.example.services.models.CargoDto;
-import com.example.services.models.DriverDto;
+import com.example.services.models.SimpleDriverDto;
 import com.example.services.models.OrderDto;
 import com.example.services.models.TruckDto;
 import com.example.services.OrderService;
@@ -207,12 +206,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void checkDrivers(OrderDto savingOrder) {
-        DriverDto driver = driverService.getFreeDriver(savingOrder.getDriver().getId());
+        SimpleDriverDto driver = driverService.getFreeDriver(savingOrder.getDriver().getId());
         if (driver == null) {
             throw new SavingCargoException("Wrong driver id or driver status");
         }
 
-        DriverDto coDriver = driverService.getFreeDriver(savingOrder.getCoDriver().getId());
+        SimpleDriverDto coDriver = driverService.getFreeDriver(savingOrder.getCoDriver().getId());
         if (coDriver == null) {
             throw new SavingCargoException("Wrong co-driver id or co-driver status");
         }

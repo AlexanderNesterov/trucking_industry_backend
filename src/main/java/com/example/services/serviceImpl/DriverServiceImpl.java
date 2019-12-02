@@ -6,7 +6,8 @@ import com.example.database.models.Driver;
 import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.DriverRepository;
-import com.example.services.models.DriverDto;
+import com.example.services.models.FullInfoDriverDto;
+import com.example.services.models.SimpleDriverDto;
 import com.example.services.serviceImpl.validation.DriverValidator;
 import com.example.services.DriverService;
 import com.example.services.mappers.DriverMapper;
@@ -34,27 +35,27 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public DriverDto findById(Long driverDtoId) {
+    public FullInfoDriverDto findById(Long driverDtoId) {
         Optional<Driver> driver = driverRepository.findById(driverDtoId);
 
         if (driver.isPresent()) {
-            return driverMapper.toDto(driver.get());
+            return driverMapper.toFullInfoDto(driver.get());
         } else {
             throw new DriverNotFoundException("Driver with id: " + driverDtoId + " not found");
         }
     }
 
     @Override
-    public List<DriverDto> findAll() {
-        List<DriverDto> driverDtos = new ArrayList<>();
+    public List<SimpleDriverDto> findAll() {
+        List<SimpleDriverDto> driverDtos = new ArrayList<>();
         driverRepository.findAll().forEach(driver ->
                 driverDtos.add(driverMapper.toDto(driver)));
         return driverDtos;
     }
 
     @Override
-    public boolean updateDriver(DriverDto driverDto) {
-        DriverDto sameDriverDto = findById(driverDto.getId());
+    public boolean updateDriver(FullInfoDriverDto driverDto) {
+        FullInfoDriverDto sameDriverDto = findById(driverDto.getId());
         driverDto.getUser().setLogin(sameDriverDto.getUser().getLogin());
 
         checkSavingDriver(driverDto, true);
@@ -62,30 +63,30 @@ public class DriverServiceImpl implements DriverService {
         driverDto.getUser().setRole(sameDriverDto.getUser().getRole());
         driverDto.getUser().setPassword(sameDriverDto.getUser().getPassword());
         driverDto.setStatus(sameDriverDto.getStatus());
-        driverRepository.save(driverMapper.fromDto(driverDto));
+        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
         return true;
     }
 
     @Override
-    public boolean addDriver(DriverDto driverDto) {
-        DriverValidator.validate(driverDto, false);
+    public boolean addDriver(FullInfoDriverDto driverDto) {
+//        DriverValidator.validate(driverDto, false);
         checkSavingDriver(driverDto, false);
 
         driverDto.setId(null);
         driverDto.getUser().setId(null);
         driverDto.getUser().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
-        driverRepository.save(driverMapper.fromDto(driverDto));
+        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
         return true;
     }
 
     @Override
-    public List<DriverDto> getFreeDrivers() {
+    public List<SimpleDriverDto> getFreeDrivers() {
         return driverMapper.toListDto(driverRepository.getFreeDrivers());
     }
 
     @Override
-    public DriverDto getFreeDriver(Long driverId) {
+    public SimpleDriverDto getFreeDriver(Long driverId) {
         return driverMapper.toDto(driverRepository.getFreeDriver(driverId));
     }
 
@@ -97,7 +98,7 @@ public class DriverServiceImpl implements DriverService {
         return driverRepository.getDriverByDriverLicense(driverLicense);
     }
 
-    private void checkSavingDriver(DriverDto savingDriver, boolean isUpdate) {
+    private void checkSavingDriver(FullInfoDriverDto savingDriver, boolean isUpdate) {
         StringBuilder exception = new StringBuilder();
 
         if (isUpdate && savingDriver.getUser().getId() == 0) {

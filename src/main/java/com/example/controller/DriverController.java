@@ -3,7 +3,8 @@ package com.example.controller;
 import com.example.controller.exceptions.DriverExistsException;
 import com.example.controller.exceptions.DriverNotFoundException;
 import com.example.controller.response.ErrorResponse;
-import com.example.services.models.DriverDto;
+import com.example.services.models.FullInfoDriverDto;
+import com.example.services.models.SimpleDriverDto;
 import com.example.services.serviceImpl.validation.exception.UserValidationException;
 import com.example.services.DriverService;
 import org.springframework.http.HttpStatus;
@@ -27,32 +28,32 @@ public class DriverController {
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<DriverDto> findAll() {
+    public List<SimpleDriverDto> findAll() {
         return driverService.findAll();
     }
 
     @GetMapping("/{driverId}")
     @PreAuthorize("(hasRole('ROLE_DRIVER') && #driverId == authentication.principal.driverId) || hasRole('ROLE_ADMIN')")
-    public DriverDto findById(@PathVariable Long driverId) {
+    public FullInfoDriverDto findById(@PathVariable Long driverId) {
         return driverService.findById(driverId);
     }
 
     @GetMapping("/free")
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<DriverDto> getFreeDrivers() {
+    public List<SimpleDriverDto> getFreeDrivers() {
         return driverService.getFreeDrivers();
     }
 
     @PutMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean updateDriver(@RequestBody DriverDto driverDto) {
+    public boolean updateDriver(@RequestBody FullInfoDriverDto driverDto) {
         return driverService.updateDriver(driverDto);
     }
 
     @PostMapping
     @RolesAllowed({"ROLE_ADMIN"})
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean addDriver(@RequestBody DriverDto driverDto) {
+    public boolean addDriver(@RequestBody FullInfoDriverDto driverDto) {
         return driverService.addDriver(driverDto);
     }
 
