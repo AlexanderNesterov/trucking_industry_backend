@@ -20,9 +20,9 @@ import com.example.services.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -58,10 +58,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findAll() {
-        List<OrderDto> orderDtoList = new ArrayList<>();
-        orderRepository.findAll().forEach(cargo -> orderDtoList.add(orderMapper.toDto(cargo)));
-
-        return orderDtoList;
+        return orderRepository.findAll().stream()
+                .map(cargo -> orderMapper.toDto(cargo))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -75,18 +74,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean addOrder(OrderDto orderDto) {
-//        CargoValidator.validate(orderDto);
-        checkSavingOrder(orderDto, false);
+    public boolean addOrder(OrderDto order) {
+//        CargoValidator.validate(order);
+        checkSavingOrder(order, false);
 
-        orderDto.setId(null);
-        orderDto.setStatus(OrderStatus.CREATED);
+        order.setId(null);
+        order.setStatus(OrderStatus.CREATED);
+        order.getCargoList().forEach(cargo -> cargo.setStatus(CargoStatus.CREATED));
 
-        for (CargoDto cargo : orderDto.getCargoList()) {
-            cargo.setStatus(CargoStatus.CREATED);
-        }
-
-        orderRepository.save(orderMapper.fromDto(orderDto));
+        orderRepository.save(orderMapper.fromDto(order));
         return true;
     }
 
@@ -109,6 +105,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ChangeCargoStatusException("Attempt to set ACCEPT status to wrong order");
         }
 
+        order.getCargoList().forEach(cargo -> cargo.setStatus(CargoStatus.IN_PROGRESS));
         order.setStatus(OrderStatus.IN_PROGRESS);
         order.getDriver().setStatus(DriverStatus.ACTIVE);
         order.getCoDriver().setStatus(DriverStatus.ACTIVE);
@@ -134,19 +131,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean setDeliverStatus(Long orderId, Long driverId) {
-        Order order = getCheckedOrderToChangeStatus(orderId, driverId);
+    public void tryToSetDeliverStatus(Long orderId) {
+        OrderDto order = findById(orderId);
 
-        if (!order.getStatus().equals(OrderStatus.IN_PROGRESS)) {
-            throw new ChangeCargoStatusException("Attempt to set IN_PROGRESS status to wrong order");
+        long deliveredCargoCounter = order.getCargoList()
+                .stream()
+                .filter(cargo -> cargo.getStatus().equals(CargoStatus.DELIVERED))
+                .count();
+
+        if (deliveredCargoCounter == order.getCargoList().size()) {
+            order.setStatus(OrderStatus.DELIVERED);
+            order.getDriver().setStatus(DriverStatus.REST);
+            order.getCoDriver().setStatus(DriverStatus.REST);
+            orderRepository.save(orderMapper.fromDto(order));
         }
-
-        order.setStatus(OrderStatus.DELIVERED);
-        order.getDriver().setStatus(DriverStatus.REST);
-        order.getCoDriver().setStatus(DriverStatus.REST);
-        orderRepository.save(order);
-
-        return true;
     }
 
     @Override
@@ -157,14 +155,15 @@ public class OrderServiceImpl implements OrderService {
             throw new ChangeCargoStatusException("Wrong order id or order status");
         }
 
+        order.getCargoList().forEach(cargo -> cargo.setStatus(CargoStatus.CANCELED));
+        order.setStatus(OrderStatus.CANCELED);
         order.getDriver().setStatus(DriverStatus.REST);
         order.getCoDriver().setStatus(DriverStatus.REST);
-        order.setStatus(OrderStatus.CANCELED);
         orderRepository.save(order);
         return true;
     }
 
-    private Order getCheckedOrderToChangeStatus(Long orderId, Long driverId) {
+    public Order getCheckedOrderToChangeStatus(Long orderId, Long driverId) {
         Order order = orderRepository.getOrderToChangeStatus(orderId, driverId);
 
         if (order == null) {

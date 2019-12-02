@@ -20,16 +20,19 @@ public class Cargo {
     @Column(name = "description")
     private String description;
 
-    @JoinColumn(name = "load_location_id")
     @ManyToOne
+    @JoinColumn(name = "load_location_id")
     private City loadLocation;
 
-    @JoinColumn(name = "discharge_location_id")
     @ManyToOne
+    @JoinColumn(name = "discharge_location_id")
     private City dischargeLocation;
 
     @Column(name = "weight")
     private double weight;
+
+    @ManyToOne
+    private Order order;
 
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
@@ -84,6 +87,14 @@ public class Cargo {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public CargoStatus getStatus() {

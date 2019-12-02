@@ -28,7 +28,7 @@ public class Order {
     @JoinColumn(name = "co_driver_id")
     private Driver coDriver;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name = "order_id")
     private List<Cargo> cargoList;
 

@@ -24,4 +24,13 @@ public interface CargoRepository extends JpaRepository<Cargo, Long> {
             "com.example.database.models.commons.CargoStatus.DELIVERED," +
             "com.example.database.models.commons.CargoStatus.CANCELED)")
     Cargo getCargoToCancel(@Param("cargoId") Long cargoId);*/
+
+    @Query("from Cargo c where c.id = :cargoId " +
+            "and c.order.id = :orderId " +
+            "and c.status = com.example.database.models.commons.CargoStatus.IN_PROGRESS " +
+            "and (select o.driver.id from Order o where o.id = :orderId " +
+            "and o.driver.id = :driverId " +
+            "and o.status = com.example.database.models.commons.OrderStatus.IN_PROGRESS) = :driverId")
+    Cargo getCargoToDeliver(@Param("orderId") Long orderId, @Param("cargoId") Long cargoId,
+                            @Param("driverId") Long driverId);
 }

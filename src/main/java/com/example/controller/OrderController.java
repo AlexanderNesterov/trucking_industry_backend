@@ -60,13 +60,6 @@ public class OrderController {
         return orderService.setRefuseStatus(orderId, driverId);
     }
 
-    @PutMapping("/set-deliver-status/{orderId}/{driverId}")
-    @PreAuthorize("#driverId == authentication.principal.driverId")
-    @RolesAllowed({"ROLE_DRIVER"})
-    public boolean setDeliverStatus(@PathVariable Long orderId, @PathVariable Long driverId) {
-        return orderService.setDeliverStatus(orderId, driverId);
-    }
-
     @PutMapping("/set-cancel-status/{orderId}")
     @RolesAllowed({"ROLE_ADMIN"})
     public boolean setCancelStatus(@PathVariable Long orderId) {
