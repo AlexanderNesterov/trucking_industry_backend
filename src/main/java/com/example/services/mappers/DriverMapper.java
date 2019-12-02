@@ -26,7 +26,6 @@ public abstract class DriverMapper {
         return passwordEncryptor.encrypt(dto.getPassword());
     }
 
-//    public abstract Driver fromDto(SimpleDriverDto driverDto);
     public abstract SimpleDriverDto toDto(Driver driver);
     public abstract List<Driver> fromListDto(List<SimpleDriverDto> driverDtos);
     public abstract List<SimpleDriverDto> toListDto(List<Driver> drivers);
