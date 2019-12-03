@@ -4,7 +4,6 @@ import com.example.controller.exceptions.CargoNotFoundException;
 import com.example.controller.exceptions.ChangeCargoStatusException;
 import com.example.controller.exceptions.SavingCargoException;
 import com.example.controller.response.ErrorResponse;
-import com.example.services.models.CargoDto;
 import com.example.services.models.OrderDto;
 import com.example.services.serviceImpl.validation.exception.CargoValidationException;
 import com.example.services.OrderService;

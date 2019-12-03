@@ -230,8 +230,4 @@ public class OrderServiceImpl implements OrderService {
 
         savingOrder.setTruck(truckDto);
     }
-
-    private void checkCargoList(OrderDto savingOrder) {
-        List<CargoDto> cargoList = savingOrder.getCargoList();
-    }
 }

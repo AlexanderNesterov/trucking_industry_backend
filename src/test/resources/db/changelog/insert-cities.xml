@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="insert_cities" author="nesterov">
+        <insert tableName="cities">
+            <column name="name">Moscow</column>
+            <column name="latitude">23</column>
+            <column name="longitude">45</column>
+        </insert>
+        <insert tableName="cities">
+            <column name="name">Voronezh</column>
+            <column name="latitude">18</column>
+            <column name="longitude">89</column>
+        </insert>
+        <insert tableName="cities">
+            <column name="name">Novosibirsk</column>
+            <column name="latitude">78</column>
+            <column name="longitude">34</column>
+        </insert>
+        <insert tableName="cities">
+            <column name="name">Saint-Petersburg</column>
+            <column name="latitude">12</column>
+            <column name="longitude">14</column>
+        </insert>
+        <insert tableName="cities">
+            <column name="name">Kalinigrad</column>
+            <column name="latitude">34</column>
+            <column name="longitude">12</column>
+        </insert>
+        <insert tableName="cities">
+            <column name="name">Rostov</column>
+            <column name="latitude">90</column>
+            <column name="longitude">76</column>
+        </insert>
+        <insert tableName="cities">
+            <column name="name">Vladivostok</column>
+            <column name="latitude">34</column>
+            <column name="longitude">23</column>
+        </insert>
+        <insert tableName="cities">
+            <column name="name">Vladikavkaz</column>
+            <column name="latitude">90</column>
+            <column name="longitude">87</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
