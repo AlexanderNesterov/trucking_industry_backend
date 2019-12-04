@@ -8,7 +8,7 @@ import java.util.List;
 public interface DriverService {
     
     FullInfoDriverDto findById(Long driverDtoId);
-    List<SimpleDriverDto> findAll();
+    List<SimpleDriverDto> findAll(int page, int pageSize);
     List<SimpleDriverDto> getFreeDrivers();
     List<SimpleDriverDto> getDriversBySearch(String text);
     SimpleDriverDto getFreeDriver(Long driverId);

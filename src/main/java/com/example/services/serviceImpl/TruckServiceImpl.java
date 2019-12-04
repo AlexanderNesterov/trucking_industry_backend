@@ -10,11 +10,13 @@ import com.example.services.serviceImpl.validation.TruckValidator;
 import com.example.services.TruckService;
 import com.example.services.mappers.TruckMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TruckServiceImpl implements TruckService {
@@ -44,11 +46,12 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public List<TruckDto> findAll() {
-        List<TruckDto> truckDtos = new ArrayList<>();
-        truckRepository.findAll().forEach(truck ->
-                truckDtos.add(truckMapper.toDto(truck)));
-        return truckDtos;
+    public List<TruckDto> findAll(int page, int pageSize) {
+        Pageable request = PageRequest.of(page - 1, pageSize);
+
+        return truckRepository.findAll(request).stream()
+                .map(truck -> truckMapper.toDto(truck))
+                .collect(Collectors.toList());
     }
 
     @Override

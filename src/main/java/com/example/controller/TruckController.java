@@ -26,8 +26,8 @@ public class TruckController {
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<TruckDto> findAll() {
-        return truckService.findAll();
+    public List<TruckDto> findAll(@RequestParam("page") int page, @RequestParam("size") int pageSize) {
+        return truckService.findAll(page, pageSize);
     }
 
     @GetMapping("/search/{text}")

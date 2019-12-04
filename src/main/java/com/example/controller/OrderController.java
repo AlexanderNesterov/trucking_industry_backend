@@ -28,8 +28,8 @@ public class OrderController {
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<OrderDto> findAll() {
-        return orderService.findAll();
+    public List<OrderDto> findAll(@RequestParam("page") int page, @RequestParam("size") int pageSize) {
+        return orderService.findAll(page, pageSize);
     }
 
     @GetMapping("/search/{text}")

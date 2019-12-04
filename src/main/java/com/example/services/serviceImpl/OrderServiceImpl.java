@@ -16,6 +16,8 @@ import com.example.services.OrderService;
 import com.example.services.DriverService;
 import com.example.services.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,8 +57,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findAll() {
-        return orderRepository.findAll().stream()
+    public List<OrderDto> findAll(int page, int pageSize) {
+        Pageable request = PageRequest.of(page - 1, pageSize);
+
+        return orderRepository.findAll(request).stream()
                 .map(cargo -> orderMapper.toDto(cargo))
                 .collect(Collectors.toList());
     }

@@ -11,11 +11,13 @@ import com.example.services.models.SimpleDriverDto;
 import com.example.services.DriverService;
 import com.example.services.mappers.DriverMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DriverServiceImpl implements DriverService {
@@ -45,11 +47,12 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public List<SimpleDriverDto> findAll() {
-        List<SimpleDriverDto> driverDtos = new ArrayList<>();
-        driverRepository.findAll().forEach(driver ->
-                driverDtos.add(driverMapper.toDto(driver)));
-        return driverDtos;
+    public List<SimpleDriverDto> findAll(int page, int pageSize) {
+        Pageable request = PageRequest.of(page - 1, pageSize);
+
+        return driverRepository.findAll(request).stream()
+                .map(driver -> driverMapper.toDto(driver))
+                .collect(Collectors.toList());
     }
 
     @Override

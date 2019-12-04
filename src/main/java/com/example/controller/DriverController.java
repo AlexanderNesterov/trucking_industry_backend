@@ -28,8 +28,8 @@ public class DriverController {
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<SimpleDriverDto> findAll() {
-        return driverService.findAll();
+    public List<SimpleDriverDto> findAll(@RequestParam("page") int pageNumber, @RequestParam("size") int pageSize) {
+        return driverService.findAll(pageNumber, pageSize);
     }
 
     @GetMapping("/{driverId}")
