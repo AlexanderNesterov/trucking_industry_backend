@@ -9,6 +9,7 @@ public class TruckDto {
     private String model;
     private double capacity;
     private TruckCondition condition;
+    private String searchString;
 
     public TruckDto() {
     }
@@ -51,5 +52,13 @@ public class TruckDto {
 
     public void setCondition(TruckCondition condition) {
         this.condition = condition;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 }

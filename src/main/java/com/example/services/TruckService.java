@@ -8,6 +8,7 @@ public interface TruckService {
 
     TruckDto findById(Long truckDtoId);
     List<TruckDto> findAll();
+    List<TruckDto> getTrucksBySearch(String text);
     List<TruckDto> getFreeTrucks(double weight);
     TruckDto getFreeTruck(Long truckId, double weight);
     boolean updateTruck(TruckDto truckDto);

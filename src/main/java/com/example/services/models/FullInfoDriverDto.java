@@ -8,6 +8,7 @@ public class FullInfoDriverDto {
     private String driverLicense;
     private DriverStatus status;
     private FullInfoUserDto user;
+    private String searchString;
 
     public FullInfoDriverDto() {
     }
@@ -42,5 +43,13 @@ public class FullInfoDriverDto {
 
     public void setUser(FullInfoUserDto user) {
         this.user = user;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 }

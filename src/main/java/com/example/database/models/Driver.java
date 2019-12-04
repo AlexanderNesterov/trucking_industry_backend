@@ -24,6 +24,9 @@ public class Driver {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "search_string")
+    private String searchString;
+
     public Driver() {
     }
 
@@ -57,5 +60,13 @@ public class Driver {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 }

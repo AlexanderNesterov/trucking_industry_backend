@@ -32,6 +32,12 @@ public class OrderController {
         return orderService.findAll();
     }
 
+    @GetMapping("/search/{text}")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public List<OrderDto> getOrdersBySearch(@PathVariable String text) {
+        return orderService.getOrdersBySearch(text);
+    }
+
     @GetMapping("/{orderId}")
     @RolesAllowed({"ROLE_ADMIN"})
     public OrderDto findById(@PathVariable Long orderId) {
@@ -42,7 +48,8 @@ public class OrderController {
     @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
     public OrderDto getOrderByDriverId(@PathVariable Long driverId) {
-        return orderService.getOrderByDriverId(driverId);
+        OrderDto orderByDriverId = orderService.getOrderByDriverId(driverId);
+        return orderByDriverId;
     }
 
     @PutMapping("/set-accept-status/{orderId}/{driverId}")

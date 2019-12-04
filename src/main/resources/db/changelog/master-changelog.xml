@@ -175,4 +175,21 @@
         </preConditions>
         <modifyDataType tableName="users" columnName="password" newDataType="varchar(96)"/>
     </changeSet>
+    
+    <changeSet id="7" author="nesterov">
+        <preConditions>
+            <tableExists tableName="orders"/>
+            <tableExists tableName="drivers"/>
+            <tableExists tableName="trucks"/>
+        </preConditions>
+        <addColumn tableName="orders">
+            <column name="search_string" type="varchar(512)"/>
+        </addColumn>
+        <addColumn tableName="drivers">
+            <column name="search_string" type="varchar(512)"/>
+        </addColumn>
+        <addColumn tableName="trucks">
+            <column name="search_string" type="varchar(512)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

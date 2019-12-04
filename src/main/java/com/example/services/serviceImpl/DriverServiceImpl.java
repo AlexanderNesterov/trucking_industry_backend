@@ -8,7 +8,6 @@ import com.example.database.models.commons.Role;
 import com.example.database.repositories.DriverRepository;
 import com.example.services.models.FullInfoDriverDto;
 import com.example.services.models.SimpleDriverDto;
-import com.example.services.serviceImpl.validation.DriverValidator;
 import com.example.services.DriverService;
 import com.example.services.mappers.DriverMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +75,7 @@ public class DriverServiceImpl implements DriverService {
         driverDto.getUser().setId(null);
         driverDto.getUser().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
+        driverDto.setSearchString(combineSearchString(driverDto));
         driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
         return true;
     }
@@ -88,6 +88,11 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public SimpleDriverDto getFreeDriver(Long driverId) {
         return driverMapper.toDto(driverRepository.getFreeDriver(driverId));
+    }
+
+    @Override
+    public List<SimpleDriverDto> getDriversBySearch(String text) {
+        return driverMapper.toListDto(this.driverRepository.getDriverBySearch(text));
     }
 
     private Driver getDriverByLogin(String driverLogin) {
@@ -127,5 +132,23 @@ public class DriverServiceImpl implements DriverService {
         exception.append(savingDriver.getDriverLicense());
         exception.append(" already exist");
         throw new DriverExistsException(exception.toString());
+    }
+
+    private String combineSearchString(FullInfoDriverDto driver) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(driver.getUser().getFirstName());
+        sb.append(" ");
+        sb.append(driver.getUser().getLastName());
+        sb.append(" ");
+        sb.append(driver.getUser().getEmail());
+        sb.append(" ");
+        sb.append(driver.getUser().getPhone());
+        sb.append(" ");
+        sb.append(driver.getDriverLicense());
+        sb.append(" ");
+        sb.append(driver.getStatus());
+
+        return sb.toString().toLowerCase();
     }
 }

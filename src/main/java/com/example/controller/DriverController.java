@@ -38,6 +38,12 @@ public class DriverController {
         return driverService.findById(driverId);
     }
 
+    @GetMapping("/search/{text}")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public List<SimpleDriverDto> getDriversBySearch(@PathVariable String text) {
+        return driverService.getDriversBySearch(text);
+    }
+
     @GetMapping("/free")
     @RolesAllowed({"ROLE_ADMIN"})
     public List<SimpleDriverDto> getFreeDrivers() {

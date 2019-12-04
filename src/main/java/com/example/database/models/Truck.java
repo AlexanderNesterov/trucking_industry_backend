@@ -26,6 +26,9 @@ public class Truck {
     @Enumerated(value = EnumType.STRING)
     private TruckCondition condition;
 
+    @Column(name = "search_string")
+    private String searchString;
+
     public Truck() {
     }
 
@@ -67,5 +70,13 @@ public class Truck {
 
     public void setCondition(TruckCondition condition) {
         this.condition = condition;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 }

@@ -30,6 +30,12 @@ public class TruckController {
         return truckService.findAll();
     }
 
+    @GetMapping("/search/{text}")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public List<TruckDto> findAll(@PathVariable String text) {
+        return truckService.getTrucksBySearch(text);
+    }
+
     @GetMapping("free/{weight}")
     @RolesAllowed({"ROLE_ADMIN"})
     public List<TruckDto> getFreeTrucks(@PathVariable double weight) {

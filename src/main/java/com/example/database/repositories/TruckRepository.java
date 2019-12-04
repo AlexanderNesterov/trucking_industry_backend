@@ -25,4 +25,7 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
             "com.example.database.models.commons.OrderStatus.CREATED, " +
             "com.example.database.models.commons.OrderStatus.IN_PROGRESS))")
     Truck getFreeTruck(@Param("truckId") Long truckId, @Param("orderWeight") double orderWeight);
+
+    @Query("from Truck t where t.searchString like %:text%")
+    List<Truck> getTrucksBySearch(@Param("text") String text);
 }

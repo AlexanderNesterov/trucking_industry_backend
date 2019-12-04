@@ -9,6 +9,7 @@ public interface OrderService {
 
     OrderDto findById(Long orderId);
     List<OrderDto> findAll();
+    List<OrderDto> getOrdersBySearch(String text);
     OrderDto getOrderByDriverId(Long orderId);
     Order getCheckedOrderToChangeStatus(Long orderId, Long driverId);
     boolean addOrder(OrderDto orderDto);

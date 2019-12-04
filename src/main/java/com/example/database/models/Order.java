@@ -28,7 +28,7 @@ public class Order {
     @JoinColumn(name = "co_driver_id")
     private Driver coDriver;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "order_id")
     private List<Cargo> cargoList;
 
@@ -38,6 +38,9 @@ public class Order {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "status")
     private OrderStatus status;
+
+    @Column(name = "search_string")
+    private String searchString;
 
     public Order() {
     }
@@ -96,5 +99,13 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 }

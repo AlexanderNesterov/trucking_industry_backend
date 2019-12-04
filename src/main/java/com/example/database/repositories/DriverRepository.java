@@ -30,4 +30,7 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
             "com.example.database.models.commons.OrderStatus.CREATED, " +
             "com.example.database.models.commons.OrderStatus.IN_PROGRESS))")
     Driver getFreeDriver(@Param("driverId") Long driverId);
+
+    @Query("from Driver d where d.searchString LIKE %:text%")
+    List<Driver> getDriverBySearch(@Param("text") String text);
 }

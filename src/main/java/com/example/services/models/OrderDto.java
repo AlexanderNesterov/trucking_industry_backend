@@ -12,6 +12,7 @@ public class OrderDto {
     private List<CargoDto> cargoList;
     private double totalWeight;
     private OrderStatus status;
+    private String searchString;
 
     public OrderDto() {
     }
@@ -70,5 +71,13 @@ public class OrderDto {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 }

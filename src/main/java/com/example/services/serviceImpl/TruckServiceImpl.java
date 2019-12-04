@@ -52,6 +52,11 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
+    public List<TruckDto> getTrucksBySearch(String text) {
+        return truckMapper.toListDto(truckRepository.getTrucksBySearch(text));
+    }
+
+    @Override
     public boolean updateTruck(TruckDto truckDto) {
         TruckValidator.validate(truckDto);
         Truck existTruck = truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber());
@@ -79,6 +84,7 @@ public class TruckServiceImpl implements TruckService {
 
         truckDto.setId(null);
         truckDto.setCondition(TruckCondition.SERVICEABLE);
+        truckDto.setSearchString(combineSearchString(truckDto));
         truckRepository.save(truckMapper.fromDto(truckDto));
         return true;
     }
@@ -91,5 +97,17 @@ public class TruckServiceImpl implements TruckService {
     @Override
     public TruckDto getFreeTruck(Long truckId, double weight) {
         return truckMapper.toDto(truckRepository.getFreeTruck(truckId, weight));
+    }
+
+    private String combineSearchString(TruckDto truck) {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append(truck.getRegistrationNumber()).append(" ")
+                .append(truck.getModel()).append(" ")
+                .append(truck.getCapacity()).append(" ")
+                .append(truck.getCondition());
+
+        return sb.toString().toLowerCase();
     }
 }
