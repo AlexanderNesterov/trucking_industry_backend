@@ -3,6 +3,7 @@ package com.example.services;
 import com.example.services.models.FullInfoDriverDto;
 import com.example.services.models.SimpleDriverDto;
 
+import javax.validation.Valid;
 import java.util.List;
 
 public interface DriverService {
@@ -12,6 +13,6 @@ public interface DriverService {
     List<SimpleDriverDto> getFreeDrivers();
     List<SimpleDriverDto> getDriversBySearch(String text);
     SimpleDriverDto getFreeDriver(Long driverId);
-    boolean updateDriver(FullInfoDriverDto driver);
-    boolean addDriver(FullInfoDriverDto driver);
+    boolean updateDriver(@Valid FullInfoDriverDto driver);
+    boolean addDriver(@Valid FullInfoDriverDto driver);
 }

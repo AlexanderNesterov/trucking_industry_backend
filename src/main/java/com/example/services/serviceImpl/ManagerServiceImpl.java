@@ -3,22 +3,21 @@ package com.example.services.serviceImpl;
 import com.example.controller.exceptions.ManagerExistException;
 import com.example.controller.exceptions.ManagerNotFoundException;
 import com.example.database.models.Manager;
-import com.example.database.models.User;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.ManagerRepository;
 import com.example.services.ManagerService;
 import com.example.services.mappers.ManagerMapper;
 import com.example.services.models.FullInfoManagerDto;
-import com.example.services.models.FullInfoUserDto;
 import com.example.services.models.SimpleManagerDto;
-import com.example.services.serviceImpl.validation.UserValidator;
-import com.example.services.mappers.UserMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Validated
 public class ManagerServiceImpl implements ManagerService {
 
     private final ManagerRepository managerRepository;
@@ -46,7 +45,7 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public boolean updateManager(FullInfoManagerDto manager) {
+    public boolean updateManager(@Valid FullInfoManagerDto manager) {
 //        UserValidator.validate(manager, false);
         FullInfoManagerDto sameManager = findById(manager.getId());
 
@@ -58,7 +57,7 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public boolean addManager(FullInfoManagerDto manager) {
+    public boolean addManager(@Valid FullInfoManagerDto manager) {
 //        UserValidator.validate(manager, false);
         Manager managerWithSameLogin = managerRepository.getManagerByLogin(manager.getUser().getLogin());
 

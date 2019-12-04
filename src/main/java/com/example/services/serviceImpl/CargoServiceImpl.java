@@ -1,6 +1,6 @@
 package com.example.services.serviceImpl;
 
-import com.example.controller.exceptions.ChangeCargoStatusException;
+import com.example.controller.exceptions.ChangeOrderStatusException;
 import com.example.database.models.Cargo;
 import com.example.database.models.commons.CargoStatus;
 import com.example.database.repositories.CargoRepository;
@@ -28,7 +28,7 @@ public class CargoServiceImpl implements CargoService {
         Cargo cargo = cargoRepository.getCargoToDeliver(orderId, cargoId, driverId);
 
         if (cargo == null) {
-            throw new ChangeCargoStatusException("Order id or driver id or cargo id or " +
+            throw new ChangeOrderStatusException("Order id or driver id or cargo id or " +
                     "cargo status or order status is wrong");
         }
 

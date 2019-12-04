@@ -2,14 +2,24 @@ package com.example.services.models;
 
 import com.example.database.models.commons.OrderStatus;
 
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.util.List;
+
+import static com.example.services.serviceImpl.validation.Message.*;
 
 public class OrderDto {
     private Long id;
     private TruckDto truck;
     private SimpleDriverDto driver;
     private SimpleDriverDto coDriver;
+
+    @Valid
     private List<CargoDto> cargoList;
+
+    @NotNull(message = TOTAL_WEIGHT + IS_NULL)
+    @DecimalMin(value = "1", message = TOTAL_WEIGHT + TOO_SMALL + T_WEIGHT_MIN_VALUE)
+    @DecimalMax(value = "1000000", message = TOTAL_WEIGHT + TOO_BIG + T_WEIGHT_MAX_VALUE)
     private double totalWeight;
     private OrderStatus status;
     private String searchString;

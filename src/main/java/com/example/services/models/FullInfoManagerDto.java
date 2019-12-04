@@ -2,9 +2,13 @@ package com.example.services.models;
 
 import com.example.database.models.commons.ManagerStatus;
 
+import javax.validation.Valid;
+
 public class FullInfoManagerDto {
     private Long id;
     private ManagerStatus status;
+
+    @Valid
     private FullInfoUserDto user;
 
     public FullInfoManagerDto() {

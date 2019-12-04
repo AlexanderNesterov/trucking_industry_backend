@@ -1,8 +1,8 @@
 package com.example.controller;
 
-import com.example.controller.exceptions.CargoNotFoundException;
-import com.example.controller.exceptions.ChangeCargoStatusException;
-import com.example.controller.exceptions.SavingCargoException;
+import com.example.controller.exceptions.OrderNotFoundException;
+import com.example.controller.exceptions.ChangeOrderStatusException;
+import com.example.controller.exceptions.SavingOrderException;
 import com.example.controller.response.ErrorResponse;
 import com.example.services.models.OrderDto;
 import com.example.services.serviceImpl.validation.exception.CargoValidationException;
@@ -84,7 +84,7 @@ public class OrderController {
     }
 
     @ExceptionHandler
-    public ResponseEntity handleException(CargoNotFoundException exc) {
+    public ResponseEntity handleException(OrderNotFoundException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.NOT_FOUND.value());
@@ -94,7 +94,7 @@ public class OrderController {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({SavingCargoException.class, ChangeCargoStatusException.class,
+    @ExceptionHandler({SavingOrderException.class, ChangeOrderStatusException.class,
             CargoValidationException.class})
     public ResponseEntity handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();

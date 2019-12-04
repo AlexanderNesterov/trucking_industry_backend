@@ -14,12 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 public class DriverServiceImpl implements DriverService {
 
     private DriverRepository driverRepository;
@@ -56,7 +59,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public boolean updateDriver(FullInfoDriverDto driverDto) {
+    public boolean updateDriver(@Valid FullInfoDriverDto driverDto) {
         FullInfoDriverDto sameDriverDto = findById(driverDto.getId());
         driverDto.getUser().setLogin(sameDriverDto.getUser().getLogin());
 
@@ -65,12 +68,12 @@ public class DriverServiceImpl implements DriverService {
         driverDto.getUser().setRole(sameDriverDto.getUser().getRole());
         driverDto.getUser().setPassword(sameDriverDto.getUser().getPassword());
         driverDto.setStatus(sameDriverDto.getStatus());
-        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
+//        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
         return true;
     }
 
     @Override
-    public boolean addDriver(FullInfoDriverDto driverDto) {
+    public boolean addDriver(@Valid FullInfoDriverDto driverDto) {
 //        DriverValidator.validate(driverDto, false);
         checkSavingDriver(driverDto, false);
 
@@ -79,7 +82,7 @@ public class DriverServiceImpl implements DriverService {
         driverDto.getUser().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
         driverDto.setSearchString(combineSearchString(driverDto));
-        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
+//        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
         return true;
     }
 

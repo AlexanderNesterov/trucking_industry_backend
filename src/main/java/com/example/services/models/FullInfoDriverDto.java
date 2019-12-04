@@ -2,11 +2,22 @@ package com.example.services.models;
 
 import com.example.database.models.commons.DriverStatus;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import static com.example.services.serviceImpl.validation.Message.*;
+
 public class FullInfoDriverDto {
 
     private Long id;
+
+    @NotNull(message = DRIVER_LICENSE + IS_NULL)
+    @Pattern(regexp = "\\d{10}", message = DRIVER_LICENSE + INVALID_FORMAT)
     private String driverLicense;
     private DriverStatus status;
+
+    @Valid
     private FullInfoUserDto user;
     private String searchString;
 

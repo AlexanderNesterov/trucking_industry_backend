@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -52,7 +54,7 @@ public class DriverController {
 
     @PutMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean updateDriver(@RequestBody FullInfoDriverDto driverDto) {
+    public boolean updateDriver(@Valid @RequestBody FullInfoDriverDto driverDto) {
         return driverService.updateDriver(driverDto);
     }
 
@@ -63,8 +65,8 @@ public class DriverController {
         return driverService.addDriver(driverDto);
     }
 
-    @ExceptionHandler({DriverExistsException.class, UserValidationException.class})
-    public ResponseEntity handleException(RuntimeException exc) {
+    @ExceptionHandler({DriverExistsException.class, UserValidationException.class, ConstraintViolationException.class})
+    public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());

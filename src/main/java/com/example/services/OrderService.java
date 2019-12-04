@@ -1,8 +1,8 @@
 package com.example.services;
 
-import com.example.database.models.Order;
 import com.example.services.models.OrderDto;
 
+import javax.validation.Valid;
 import java.util.List;
 
 public interface OrderService {
@@ -11,9 +11,8 @@ public interface OrderService {
     List<OrderDto> findAll(int page, int pageSize);
     List<OrderDto> getOrdersBySearch(String text);
     OrderDto getOrderByDriverId(Long orderId);
-    Order getCheckedOrderToChangeStatus(Long orderId, Long driverId);
-    boolean addOrder(OrderDto orderDto);
-    boolean updateOrder(OrderDto orderDto);
+    boolean addOrder(@Valid OrderDto orderDto);
+    boolean updateOrder(@Valid OrderDto orderDto);
     boolean setAcceptStatus(Long orderId, Long driverId);
     boolean setRefuseStatus(Long orderId, Long driverId);
     void tryToSetDeliverStatus(Long orderId);

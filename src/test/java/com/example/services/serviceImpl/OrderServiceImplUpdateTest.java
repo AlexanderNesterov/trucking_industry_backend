@@ -1,6 +1,6 @@
 package com.example.services.serviceImpl;
 
-import com.example.controller.exceptions.SavingCargoException;
+import com.example.controller.exceptions.SavingOrderException;
 import com.example.database.models.commons.OrderStatus;
 import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.TruckCondition;
@@ -110,7 +110,7 @@ public class OrderServiceImplUpdateTest {
                 .when(orderRepository.getOrderToUpdate(updatingOrder.getId()))
                 .thenReturn(null);
 
-        SavingCargoException thrown = assertThrows(SavingCargoException.class,
+        SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));
 
         assertTrue(thrown.getMessage().contains("Wrong order id or order status not equals 'REFUSED_BY_DRIVER'"));
@@ -128,7 +128,7 @@ public class OrderServiceImplUpdateTest {
                 .when(orderRepository.getOrderToUpdate(updatingOrder.getId()))
                 .thenReturn(orderMapper.fromDto(existOrder));
 
-        SavingCargoException thrown = assertThrows(SavingCargoException.class,
+        SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));
 
         assertTrue(thrown.getMessage().contains("Driver id and co-driver id cannot be equals"));
@@ -153,7 +153,7 @@ public class OrderServiceImplUpdateTest {
                 .when(driverService.getFreeDriver(updatingOrder.getDriver().getId()))
                 .thenReturn(null);
 
-        SavingCargoException thrown = assertThrows(SavingCargoException.class,
+        SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));
 
         assertTrue(thrown.getMessage().contains("Wrong driver id or driver status"));
@@ -185,7 +185,7 @@ public class OrderServiceImplUpdateTest {
                 .when(driverService.getFreeDriver(updatingOrder.getCoDriver().getId()))
                 .thenReturn(null);
 
-        SavingCargoException thrown = assertThrows(SavingCargoException.class,
+        SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));
 
         assertTrue(thrown.getMessage().contains("Wrong co-driver id or co-driver status"));
@@ -223,7 +223,7 @@ public class OrderServiceImplUpdateTest {
                 .when(truckService.getFreeTruck(updatingOrder.getTruck().getId(), updatingOrder.getTotalWeight()))
                 .thenReturn(null);
 
-        SavingCargoException thrown = assertThrows(SavingCargoException.class,
+        SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));
 
         assertTrue(thrown.getMessage().contains("Wrong truck id or truck condition or truck already include in another cargo"));
@@ -263,7 +263,7 @@ public class OrderServiceImplUpdateTest {
                 .when(truckService.getFreeTruck(updatingOrder.getTruck().getId(), updatingOrder.getTotalWeight()))
                 .thenReturn(null);
 
-        SavingCargoException thrown = assertThrows(SavingCargoException.class,
+        SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));
 
         assertTrue(thrown.getMessage().contains("Wrong truck id or truck condition or truck already include in another cargo"));
@@ -305,7 +305,7 @@ public class OrderServiceImplUpdateTest {
                 .when(truckService.getFreeTruck(updatingOrder.getTruck().getId(), updatingOrder.getTotalWeight()))
                 .thenReturn(null);
 
-        SavingCargoException thrown = assertThrows(SavingCargoException.class,
+        SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));
 
         assertTrue(thrown.getMessage().contains("Wrong truck id or truck condition or truck already include in another cargo"));

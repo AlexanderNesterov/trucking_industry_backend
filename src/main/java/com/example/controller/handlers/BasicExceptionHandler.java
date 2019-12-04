@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class BasicExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity handleException(HttpMessageNotReadableException exc) {
+    public ResponseEntity<ErrorResponse> handleException(HttpMessageNotReadableException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -23,7 +23,7 @@ public class BasicExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity handleException(AccessDeniedException exc) {
+    public ResponseEntity<ErrorResponse> handleException(AccessDeniedException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.FORBIDDEN.value());

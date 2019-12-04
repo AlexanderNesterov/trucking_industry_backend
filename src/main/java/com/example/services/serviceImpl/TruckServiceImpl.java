@@ -1,24 +1,26 @@
 package com.example.services.serviceImpl;
 
-import com.example.controller.exceptions.RegistrationNumberExistsException;
+import com.example.controller.exceptions.TruckExistsException;
 import com.example.controller.exceptions.TruckNotFoundException;
 import com.example.database.models.Truck;
 import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.TruckRepository;
 import com.example.services.models.TruckDto;
-import com.example.services.serviceImpl.validation.TruckValidator;
 import com.example.services.TruckService;
 import com.example.services.mappers.TruckMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 public class TruckServiceImpl implements TruckService {
 
     private TruckRepository truckRepository;
@@ -60,13 +62,13 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public boolean updateTruck(TruckDto truckDto) {
+    public boolean updateTruck(@Valid TruckDto truckDto) {
         TruckValidator.validate(truckDto);
         Truck existTruck = truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber());
         TruckDto sameTruck = findById(truckDto.getId());
 
         if (existTruck != null && !existTruck.getId().equals(truckDto.getId())) {
-            throw new RegistrationNumberExistsException("Truck with registration number: " +
+            throw new TruckExistsException("Truck with registration number: " +
                     truckDto.getRegistrationNumber() + " already exists");
         }
 
@@ -76,19 +78,19 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public boolean addTruck(TruckDto truckDto) {
+    public boolean addTruck(@Valid TruckDto truckDto) {
         TruckValidator.validate(truckDto);
         Truck existTruck = truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber());
 
         if (existTruck != null) {
-            throw new RegistrationNumberExistsException("Truck with registration number: " +
+            throw new TruckExistsException("Truck with registration number: " +
                     truckDto.getRegistrationNumber() + " already exists");
         }
 
         truckDto.setId(null);
         truckDto.setCondition(TruckCondition.SERVICEABLE);
         truckDto.setSearchString(combineSearchString(truckDto));
-        truckRepository.save(truckMapper.fromDto(truckDto));
+//        truckRepository.save(truckMapper.fromDto(truckDto));
         return true;
     }
 

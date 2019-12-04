@@ -1,14 +1,26 @@
 package com.example.services.models;
 
 import com.example.database.models.commons.CargoStatus;
+import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.*;
+import static com.example.services.serviceImpl.validation.Message.*;
 
 public class CargoDto {
 
     private Long id;
+
+    @NotBlank(message = TITLE + IS_BLANK)
+    @Length(max = 32, message = TITLE + TOO_LONG + TITLE_MAX_LENGTH)
     private String title;
+
+    @Length(max = 256, message = DESCRIPTION + TOO_LONG + DESCRIPTION_MAX_LENGTH)
     private String description;
     private CityDto loadLocation;
     private CityDto dischargeLocation;
+
+    @NotNull(message = WEIGHT + IS_NULL)
+    @DecimalMin(value = "1", message = WEIGHT + TOO_SMALL + WEIGHT_MIN_VALUE)
+    @DecimalMax(value = "1000000", message = WEIGHT + TOO_BIG + WEIGHT_MAX_VALUE)
     private double weight;
     private CargoStatus status;
 

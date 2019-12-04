@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.controller.exceptions.RegistrationNumberExistsException;
+import com.example.controller.exceptions.TruckExistsException;
 import com.example.controller.exceptions.TruckNotFoundException;
 import com.example.controller.response.ErrorResponse;
 import com.example.services.models.TruckDto;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
@@ -61,7 +62,7 @@ public class TruckController {
         return truckService.addTruck(truckDto);
     }
 
-    @ExceptionHandler({RegistrationNumberExistsException.class, TruckValidationException.class})
+    @ExceptionHandler({TruckExistsException.class, TruckValidationException.class, ConstraintViolationException.class})
     public ResponseEntity handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 

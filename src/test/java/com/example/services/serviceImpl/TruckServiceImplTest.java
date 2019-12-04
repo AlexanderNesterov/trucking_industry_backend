@@ -1,6 +1,6 @@
 package com.example.services.serviceImpl;
 
-import com.example.controller.exceptions.RegistrationNumberExistsException;
+import com.example.controller.exceptions.TruckExistsException;
 import com.example.controller.exceptions.TruckNotFoundException;
 import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.TruckRepository;
@@ -68,7 +68,7 @@ public class TruckServiceImplTest {
                 .when(truckRepository.getTruckByRegistrationNumber(addingTruck.getRegistrationNumber())).
                 thenReturn(truckMapper.fromDto(existsTruck));
 
-        RegistrationNumberExistsException thrown = assertThrows(RegistrationNumberExistsException.class,
+        TruckExistsException thrown = assertThrows(TruckExistsException.class,
                 () -> truckService.addTruck(this.addingTruck));
 
         assertTrue(thrown.getMessage()
@@ -138,7 +138,7 @@ public class TruckServiceImplTest {
                 .when(truckRepository.findById(23L))
                 .thenReturn(Optional.of(truckMapper.fromDto(sameTruck)));
 
-        RegistrationNumberExistsException thrown = assertThrows(RegistrationNumberExistsException.class,
+        TruckExistsException thrown = assertThrows(TruckExistsException.class,
                 () -> truckService.updateTruck(updatingTruck));
 
         assertTrue(thrown.getMessage()

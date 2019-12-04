@@ -1,6 +1,6 @@
 package com.example.services.serviceImpl;
 
-import com.example.controller.exceptions.CargoNotFoundException;
+import com.example.controller.exceptions.OrderNotFoundException;
 import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.OrderStatus;
 import com.example.database.models.commons.TruckCondition;
@@ -63,7 +63,7 @@ public class OrderServiceImplTest {
                 .when(orderRepository.findById(90L))
                 .thenReturn(Optional.empty());
 
-        CargoNotFoundException thrown = assertThrows(CargoNotFoundException.class,
+        OrderNotFoundException thrown = assertThrows(OrderNotFoundException.class,
                 () -> orderService.findById(90L));
 
         assertTrue(thrown.getMessage().contains("not found"));
@@ -136,7 +136,7 @@ public class OrderServiceImplTest {
 
     @Test
     public void failedGetCargoByDriverId() {
-        CargoNotFoundException thrown = assertThrows(CargoNotFoundException.class,
+        OrderNotFoundException thrown = assertThrows(OrderNotFoundException.class,
                 () -> orderService.getOrderByDriverId(12L));
 
         assertTrue(thrown.getMessage().contains("not found"));
