@@ -48,8 +48,7 @@ public class OrderController {
     @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})
     public OrderDto getOrderByDriverId(@PathVariable Long driverId) {
-        OrderDto orderByDriverId = orderService.getOrderByDriverId(driverId);
-        return orderByDriverId;
+        return orderService.getOrderByDriverId(driverId);
     }
 
     @PutMapping("/set-accept-status/{orderId}/{driverId}")

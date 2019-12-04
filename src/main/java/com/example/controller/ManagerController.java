@@ -3,7 +3,9 @@ package com.example.controller;
 import com.example.controller.exceptions.ManagerExistException;
 import com.example.controller.exceptions.ManagerNotFoundException;
 import com.example.controller.response.ErrorResponse;
+import com.example.services.models.FullInfoManagerDto;
 import com.example.services.models.FullInfoUserDto;
+import com.example.services.models.SimpleManagerDto;
 import com.example.services.models.SimpleUserDto;
 import com.example.services.ManagerService;
 import org.springframework.http.HttpStatus;
@@ -27,27 +29,27 @@ public class ManagerController {
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<SimpleUserDto> findAll() {
+    public List<SimpleManagerDto> findAll() {
         return managerService.findAll();
     }
 
     @GetMapping("/{managerId}")
     @PreAuthorize("#managerId == authentication.principal.userId")
     @RolesAllowed({"ROLE_ADMIN"})
-    public FullInfoUserDto findById(@PathVariable Long managerId) {
+    public FullInfoManagerDto findById(@PathVariable Long managerId) {
         return managerService.findById(managerId);
     }
 
     @PutMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean updateManager(@RequestBody FullInfoUserDto userDto) {
-        return managerService.updateManager(userDto);
+    public boolean updateManager(@RequestBody FullInfoManagerDto managerDto) {
+        return managerService.updateManager(managerDto);
     }
 
     @PostMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean addManager(@RequestBody FullInfoUserDto userDto) {
-        return managerService.addManager(userDto);
+    public boolean addManager(@RequestBody FullInfoManagerDto managerDto) {
+        return managerService.addManager(managerDto);
     }
 
     @ExceptionHandler

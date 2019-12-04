@@ -192,4 +192,24 @@
             <column name="search_string" type="varchar(512)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="8" author="nesterov">
+        <preConditions>
+            <tableExists tableName="users"/>
+        </preConditions>
+        <createTable tableName="managers">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(32)"/>
+            <column name="search_string" type="varchar(512)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="managers" baseColumnNames="user_id"
+                                 constraintName="fk_manager_user" referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>
