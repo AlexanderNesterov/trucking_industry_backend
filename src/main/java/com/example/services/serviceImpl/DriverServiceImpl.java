@@ -68,21 +68,20 @@ public class DriverServiceImpl implements DriverService {
         driverDto.getUser().setRole(sameDriverDto.getUser().getRole());
         driverDto.getUser().setPassword(sameDriverDto.getUser().getPassword());
         driverDto.setStatus(sameDriverDto.getStatus());
-//        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
+        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
         return true;
     }
 
     @Override
     public boolean addDriver(@Valid FullInfoDriverDto driverDto) {
-//        DriverValidator.validate(driverDto, false);
         checkSavingDriver(driverDto, false);
 
         driverDto.setId(null);
         driverDto.getUser().setId(null);
         driverDto.getUser().setRole(Role.DRIVER);
         driverDto.setStatus(DriverStatus.REST);
-        driverDto.setSearchString(combineSearchString(driverDto));
-//        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
+        driverDto.combineSearchString();
+        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
         return true;
     }
 
@@ -140,7 +139,7 @@ public class DriverServiceImpl implements DriverService {
         throw new DriverExistsException(exception.toString());
     }
 
-    private String combineSearchString(FullInfoDriverDto driver) {
+/*    private String combineSearchString(FullInfoDriverDto driver) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(driver.getUser().getFirstName());
@@ -156,5 +155,5 @@ public class DriverServiceImpl implements DriverService {
         sb.append(driver.getStatus());
 
         return sb.toString().toLowerCase();
-    }
+    }*/
 }

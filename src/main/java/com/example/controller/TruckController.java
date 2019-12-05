@@ -4,7 +4,6 @@ import com.example.controller.exceptions.TruckExistsException;
 import com.example.controller.exceptions.TruckNotFoundException;
 import com.example.controller.response.ErrorResponse;
 import com.example.services.models.TruckDto;
-import com.example.services.serviceImpl.validation.exception.TruckValidationException;
 import com.example.services.TruckService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +61,7 @@ public class TruckController {
         return truckService.addTruck(truckDto);
     }
 
-    @ExceptionHandler({TruckExistsException.class, TruckValidationException.class, ConstraintViolationException.class})
+    @ExceptionHandler({TruckExistsException.class, ConstraintViolationException.class})
     public ResponseEntity handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 

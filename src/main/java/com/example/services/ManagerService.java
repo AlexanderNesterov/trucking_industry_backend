@@ -11,7 +11,8 @@ import java.util.List;
 public interface ManagerService {
     
     FullInfoManagerDto findById(Long managerId);
-    List<SimpleManagerDto> findAll();
+    List<SimpleManagerDto> findAll(int page, int size);
+    List<SimpleManagerDto> getManagersBySearch(String text);
     boolean updateManager(@Valid FullInfoManagerDto user);
     boolean addManager(@Valid FullInfoManagerDto user);
 }

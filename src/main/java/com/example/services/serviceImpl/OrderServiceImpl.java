@@ -8,10 +8,9 @@ import com.example.database.models.commons.CargoStatus;
 import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.OrderStatus;
 import com.example.database.repositories.OrderRepository;
+import com.example.services.CityService;
 import com.example.services.mappers.OrderMapper;
-import com.example.services.models.SimpleDriverDto;
-import com.example.services.models.OrderDto;
-import com.example.services.models.TruckDto;
+import com.example.services.models.*;
 import com.example.services.OrderService;
 import com.example.services.DriverService;
 import com.example.services.TruckService;
@@ -25,6 +24,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Validated
@@ -34,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private DriverService driverService;
     private TruckService truckService;
+    private CityService cityService;
 
     public OrderServiceImpl(OrderMapper orderMapper) {
         this.orderMapper = orderMapper;
@@ -41,11 +42,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     public OrderServiceImpl(OrderMapper orderMapper, OrderRepository orderRepository,
-                            DriverService driverService, TruckService truckService) {
+                            DriverService driverService, TruckService truckService,
+                            CityService cityService) {
         this.orderMapper = orderMapper;
         this.orderRepository = orderRepository;
         this.driverService = driverService;
         this.truckService = truckService;
+        this.cityService = cityService;
     }
 
     @Override
@@ -75,7 +78,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean updateOrder(@Valid OrderDto orderDto) {
-//        CargoValidator.validate(orderDto);
         checkSavingOrder(orderDto, true);
 
         orderDto.setStatus(OrderStatus.CREATED);
@@ -86,15 +88,16 @@ public class OrderServiceImpl implements OrderService {
     // save id into search string
     @Override
     public boolean addOrder(@Valid OrderDto order) {
-//        CargoValidator.validate(order);
         checkSavingOrder(order, false);
 
         order.setId(null);
         order.setStatus(OrderStatus.CREATED);
         order.getCargoList().forEach(cargo -> cargo.setStatus(CargoStatus.CREATED));
-//        Order savedOrder = orderRepository.save(orderMapper.fromDto(order));
-//        String searchString  = combineSearchString(savedOrder);
-//        orderRepository.setOrderSearchString(searchString, savedOrder.getId());
+        Order savedOrder = orderRepository.save(orderMapper.fromDto(order));
+        OrderDto orderDto = orderMapper.toDto(savedOrder);
+        orderDto.combineSearchString();
+
+        orderRepository.setOrderSearchString(orderDto.getSearchString(), savedOrder.getId());
         return true;
     }
 
@@ -199,6 +202,8 @@ public class OrderServiceImpl implements OrderService {
         checkDriversIds(savingOrder);
         checkDrivers(savingOrder);
         checkTruck(savingOrder);
+        checkCargoList(savingOrder);
+        checkCities(savingOrder);
     }
 
     private void checkOrder(OrderDto savingOrder) {
@@ -250,7 +255,51 @@ public class OrderServiceImpl implements OrderService {
         savingOrder.setTruck(truckDto);
     }
 
-    private String combineSearchString(Order order) {
+    private void checkCargoList(OrderDto savingOrder) {
+        double countedTotalWeight  = savingOrder.getCargoList().stream()
+                .mapToDouble(CargoDto::getWeight)
+                .sum();
+
+        if (countedTotalWeight != savingOrder.getTotalWeight()) {
+            throw new SavingOrderException("Incorrect total weight");
+        }
+    }
+
+    private void checkCities(OrderDto savingOrder) {
+        boolean isSameLoadAndDischargeLocation = savingOrder.getCargoList().stream()
+                .anyMatch(cargoDto ->
+                        cargoDto.getLoadLocation().getId().equals(cargoDto.getDischargeLocation().getId()));
+
+        if (isSameLoadAndDischargeLocation) {
+            throw new SavingOrderException("Cargo can't has equals load and discharge location");
+        }
+
+        Long[] cityIds = Stream.concat(
+                savingOrder.getCargoList().stream().map(cargoDto -> cargoDto.getLoadLocation().getId()),
+                savingOrder.getCargoList().stream().map(cargoDto -> cargoDto.getDischargeLocation().getId()))
+                .distinct()
+                .toArray(Long[]::new);
+
+        List<CityDto> cities = cityService.findCitiesByListId(cityIds);
+
+        if (cities.size() != cityIds.length) {
+            throw new SavingOrderException("Wrong city id");
+        }
+
+        for (CityDto city : cities) {
+            for (CargoDto cargoDto : savingOrder.getCargoList()) {
+                if (city.getId().equals(cargoDto.getLoadLocation().getId())) {
+                    cargoDto.setLoadLocation(city);
+                }
+
+                if (city.getId().equals(cargoDto.getDischargeLocation().getId())) {
+                    cargoDto.setDischargeLocation(city);
+                }
+            }
+        }
+    }
+
+/*    private String combineSearchString(Order order) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(order.getId());
@@ -274,5 +323,5 @@ public class OrderServiceImpl implements OrderService {
         order.getCargoList().forEach(cargoDto -> sb.append(cargoDto.getDischargeLocation().getName()).append(" "));
 
         return sb.toString().toLowerCase();
-    }
+    }*/
 }

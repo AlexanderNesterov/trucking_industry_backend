@@ -90,6 +90,7 @@ public class JwtAccessFilter extends BasicAuthenticationFilter {
             CustomPrincipal principal = new CustomPrincipal();
             principal.setSubject(jwtToken.getBody().getSubject());
             principal.setDriverId(jwtToken.getBody().get("driverId", Long.class));
+            principal.setManagerId(jwtToken.getBody().get("managerId", Long.class));
             principal.setUserId(jwtToken.getBody().get("userId", Long.class));
 
             authentication

@@ -63,7 +63,6 @@ public class TruckServiceImpl implements TruckService {
 
     @Override
     public boolean updateTruck(@Valid TruckDto truckDto) {
-        TruckValidator.validate(truckDto);
         Truck existTruck = truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber());
         TruckDto sameTruck = findById(truckDto.getId());
 
@@ -79,7 +78,6 @@ public class TruckServiceImpl implements TruckService {
 
     @Override
     public boolean addTruck(@Valid TruckDto truckDto) {
-        TruckValidator.validate(truckDto);
         Truck existTruck = truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber());
 
         if (existTruck != null) {
@@ -90,7 +88,7 @@ public class TruckServiceImpl implements TruckService {
         truckDto.setId(null);
         truckDto.setCondition(TruckCondition.SERVICEABLE);
         truckDto.setSearchString(combineSearchString(truckDto));
-//        truckRepository.save(truckMapper.fromDto(truckDto));
+        truckRepository.save(truckMapper.fromDto(truckDto));
         return true;
     }
 

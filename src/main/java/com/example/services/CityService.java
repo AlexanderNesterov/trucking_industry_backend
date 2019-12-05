@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface CityService {
     List<CityDto> findAll();
+    List<CityDto> findCitiesByListId(Long[] listId);
 }

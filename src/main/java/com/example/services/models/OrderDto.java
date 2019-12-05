@@ -1,6 +1,7 @@
 package com.example.services.models;
 
 import com.example.database.models.commons.OrderStatus;
+import com.example.services.models.interfaces.Searchable;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -8,7 +9,7 @@ import java.util.List;
 
 import static com.example.services.serviceImpl.validation.Message.*;
 
-public class OrderDto {
+public class OrderDto implements Searchable {
     private Long id;
     private TruckDto truck;
     private SimpleDriverDto driver;
@@ -89,5 +90,25 @@ public class OrderDto {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
+    }
+
+    @Override
+    public void combineSearchString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append(id).append(" ")
+                .append(driver.getUser().getFirstName()).append(" ")
+                .append(driver.getUser().getLastName()).append(" ")
+                .append(coDriver.getUser().getFirstName()).append(" ")
+                .append(coDriver.getUser().getLastName()).append(" ")
+                .append(truck.getRegistrationNumber()).append(" ")
+                .append(totalWeight).append(" ")
+                .append(status).append(" ");
+        cargoList.forEach(cargoDto -> sb.append(cargoDto.getTitle()).append(" "));
+        cargoList.forEach(cargoDto -> sb.append(cargoDto.getLoadLocation().getName()).append(" "));
+        cargoList.forEach(cargoDto -> sb.append(cargoDto.getDischargeLocation().getName()).append(" "));
+
+        searchString = sb.toString().toLowerCase();
     }
 }

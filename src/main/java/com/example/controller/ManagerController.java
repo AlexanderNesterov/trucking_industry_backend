@@ -29,12 +29,18 @@ public class ManagerController {
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<SimpleManagerDto> findAll() {
-        return managerService.findAll();
+    public List<SimpleManagerDto> findAll(@RequestParam("page") int page, @RequestParam("size") int pageSize) {
+        return managerService.findAll(page, pageSize);
+    }
+
+    @GetMapping("/search")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public List<SimpleManagerDto> getManagersBySearch(@RequestParam("text") String text) {
+        return managerService.getManagersBySearch(text);
     }
 
     @GetMapping("/{managerId}")
-    @PreAuthorize("#managerId == authentication.principal.userId")
+    @PreAuthorize("#managerId == authentication.principal.managerId")
     @RolesAllowed({"ROLE_ADMIN"})
     public FullInfoManagerDto findById(@PathVariable Long managerId) {
         return managerService.findById(managerId);

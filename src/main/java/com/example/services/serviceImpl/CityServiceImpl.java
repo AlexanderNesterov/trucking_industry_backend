@@ -6,9 +6,7 @@ import com.example.services.mappers.CityMapper;
 import com.example.services.models.CityDto;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CityServiceImpl implements CityService {
@@ -23,10 +21,11 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<CityDto> findAll() {
-        return cityRepository
-                .findAll()
-                .stream()
-                .map(cityMapper::toDto)
-                .collect(Collectors.toList());
+        return cityMapper.toListDto(cityRepository.findAll());
+    }
+
+    @Override
+    public List<CityDto> findCitiesByListId(Long[] listId) {
+        return cityMapper.toListDto(cityRepository.getCitiesById(listId));
     }
 }

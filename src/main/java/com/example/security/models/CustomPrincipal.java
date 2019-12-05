@@ -5,6 +5,7 @@ public class CustomPrincipal {
     private String subject;
     private Long userId;
     private Long driverId;
+    private Long managerId;
 
     public CustomPrincipal() {
     }
@@ -31,5 +32,13 @@ public class CustomPrincipal {
 
     public void setDriverId(Long driverId) {
         this.driverId = driverId;
+    }
+
+    public Long getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(Long managerId) {
+        this.managerId = managerId;
     }
 }

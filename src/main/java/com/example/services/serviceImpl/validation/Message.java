@@ -20,7 +20,7 @@ public class Message {
     public static final String IS_BLANK = " IS BLANK";
     public static final String TOO_LONG = " IS TOO LONG. MAX LENGTH IS ";
     public static final String TOO_BIG = " IS TOO BIG. MAX VALUE IS ";
-    public static final String TOO_SMALL = " IS TOO LONG. MAX VALUE IS ";
+    public static final String TOO_SMALL = " IS TOO SMALL. MIN VALUE IS ";
     public static final String INVALID_FORMAT = " INVALID FORMAT";
 
     public static final String PASSWORD_LENGTH = " PASSWORD_LENGTH BETWEEN 8 AND 32 SYMBOLS";

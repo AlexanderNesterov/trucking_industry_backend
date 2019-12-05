@@ -1,9 +1,11 @@
 package com.example.security.service.impl;
 
 import com.example.database.models.Driver;
+import com.example.database.models.Manager;
 import com.example.database.models.User;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.DriverRepository;
+import com.example.database.repositories.ManagerRepository;
 import com.example.database.repositories.UserRepository;
 import com.example.security.service.TokenService;
 import io.jsonwebtoken.Claims;
@@ -35,10 +37,13 @@ public class TokenServiceImpl implements TokenService {
 
     private final UserRepository userRepository;
     private final DriverRepository driverRepository;
+    private final ManagerRepository managerRepository;
 
-    public TokenServiceImpl(UserRepository userRepository, DriverRepository driverRepository) {
+    public TokenServiceImpl(UserRepository userRepository, DriverRepository driverRepository,
+                            ManagerRepository managerRepository) {
         this.userRepository = userRepository;
         this.driverRepository = driverRepository;
+        this.managerRepository = managerRepository;
     }
 
     @Override
@@ -73,11 +78,13 @@ public class TokenServiceImpl implements TokenService {
         }
 
         if (userRole.equals(Role.ADMIN.name())) {
+            Manager manager = managerRepository.getManagerByLogin(username);
             token = Jwts
                     .builder()
                     .signWith(SIGNING_KEY)
                     .setSubject(username)
                     .claim("role", userRole)
+                    .claim("managerId", manager.getId())
                     .claim("userId", user.getId())
                     .setIssuedAt(date)
                     .setExpiration(Date.from(now.plus(Duration.ofMinutes(20))))

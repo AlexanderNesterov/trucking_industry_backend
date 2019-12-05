@@ -1,13 +1,14 @@
 package com.example.services.models;
 
 import com.example.database.models.commons.TruckCondition;
+import com.example.services.models.interfaces.Searchable;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 
 import static com.example.services.serviceImpl.validation.Message.*;
 
-public class TruckDto {
+public class TruckDto implements Searchable {
 
     private Long id;
 
@@ -75,5 +76,18 @@ public class TruckDto {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
+    }
+
+    @Override
+    public void combineSearchString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append(registrationNumber).append(" ")
+                .append(model).append(" ")
+                .append(capacity).append(" ")
+                .append(condition);
+
+        searchString =  sb.toString().toLowerCase();
     }
 }

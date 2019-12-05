@@ -1,6 +1,7 @@
 package com.example.services.models;
 
 import com.example.database.models.commons.DriverStatus;
+import com.example.services.models.interfaces.Searchable;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -8,7 +9,7 @@ import javax.validation.constraints.Pattern;
 
 import static com.example.services.serviceImpl.validation.Message.*;
 
-public class FullInfoDriverDto {
+public class FullInfoDriverDto implements Searchable {
 
     private Long id;
 
@@ -62,5 +63,20 @@ public class FullInfoDriverDto {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
+    }
+
+    @Override
+    public void combineSearchString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append(user.getFirstName()).append(" ")
+                .append(user.getLastName()).append(" ")
+                .append(user.getEmail()).append(" ")
+                .append(user.getPhone()).append(" ")
+                .append(driverLicense).append(" ")
+                .append(status);
+
+        searchString = sb.toString().toLowerCase();
     }
 }

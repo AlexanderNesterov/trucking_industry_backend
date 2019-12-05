@@ -3,18 +3,22 @@ package com.example.services.serviceImpl;
 import com.example.controller.exceptions.ManagerExistException;
 import com.example.controller.exceptions.ManagerNotFoundException;
 import com.example.database.models.Manager;
+import com.example.database.models.commons.ManagerStatus;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.ManagerRepository;
 import com.example.services.ManagerService;
 import com.example.services.mappers.ManagerMapper;
 import com.example.services.models.FullInfoManagerDto;
 import com.example.services.models.SimpleManagerDto;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -40,25 +44,33 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public List<SimpleManagerDto> findAll() {
-        return managerMapper.toListDto(managerRepository.findAll());
+    public List<SimpleManagerDto> findAll(int page, int size) {
+        Pageable request = PageRequest.of(page, size);
+
+        return managerRepository.findAll(request).stream()
+                .map(managerMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SimpleManagerDto> getManagersBySearch(String text) {
+        return managerMapper.toListDto(managerRepository.getManagerBySearch(text));
     }
 
     @Override
     public boolean updateManager(@Valid FullInfoManagerDto manager) {
-//        UserValidator.validate(manager, false);
         FullInfoManagerDto sameManager = findById(manager.getId());
 
         manager.getUser().setPassword(sameManager.getUser().getPassword());
         manager.getUser().setLogin(sameManager.getUser().getLogin());
         manager.getUser().setRole(Role.ADMIN);
+        manager.setStatus(sameManager.getStatus());
         managerRepository.save(managerMapper.fromFullInfoDto(manager));
         return true;
     }
 
     @Override
     public boolean addManager(@Valid FullInfoManagerDto manager) {
-//        UserValidator.validate(manager, false);
         Manager managerWithSameLogin = managerRepository.getManagerByLogin(manager.getUser().getLogin());
 
         if (managerWithSameLogin != null) {
@@ -67,7 +79,21 @@ public class ManagerServiceImpl implements ManagerService {
 
         manager.setId(null);
         manager.getUser().setRole(Role.ADMIN);
+        manager.setStatus(ManagerStatus.ACTIVE);
+        manager.combineSearchString();
         managerRepository.save(managerMapper.fromFullInfoDto(manager));
         return true;
     }
+
+/*    private String combineSearchString(FullInfoManagerDto managerDto) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(managerDto.getUser().getFirstName()).append(" ")
+                .append(managerDto.getUser().getLastName()).append(" ")
+                .append(managerDto.getUser().getPhone()).append(" ")
+                .append(managerDto.getUser().getEmail()).append(" ")
+                .append(managerDto.getStatus());
+
+        return sb.toString().toLowerCase();
+    }*/
 }
