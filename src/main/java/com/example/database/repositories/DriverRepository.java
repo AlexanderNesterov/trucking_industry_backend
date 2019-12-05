@@ -1,6 +1,7 @@
 package com.example.database.repositories;
 
 import com.example.database.models.Driver;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,6 +32,6 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
             "com.example.database.models.commons.OrderStatus.IN_PROGRESS))")
     Driver getFreeDriver(@Param("driverId") Long driverId);
 
-    @Query("from Driver d where d.searchString LIKE %:text%")
-    List<Driver> getDriverBySearch(@Param("text") String text);
+    @Query("from Driver d where d.searchString like %:text%")
+    List<Driver> getDrivers(@Param("text") String text, Pageable pageable);
 }

@@ -23,7 +23,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -63,17 +62,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findAll(int page, int pageSize) {
+    public List<OrderDto> getOrders(String text, int page, int pageSize) {
         Pageable request = PageRequest.of(page - 1, pageSize);
 
-        return orderRepository.findAll(request).stream()
-                .map(cargo -> orderMapper.toDto(cargo))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<OrderDto> getOrdersBySearch(String text) {
-        return orderMapper.toListDto(orderRepository.getOrdersBySearch(text));
+        return orderMapper.toListDto(orderRepository.getOrders(text, request));
     }
 
     @Override

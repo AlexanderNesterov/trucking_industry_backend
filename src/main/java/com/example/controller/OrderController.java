@@ -26,16 +26,12 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping
+    @GetMapping("/search")
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<OrderDto> findAll(@RequestParam("page") int page, @RequestParam("size") int pageSize) {
-        return orderService.findAll(page, pageSize);
-    }
-
-    @GetMapping("/search/{text}")
-    @RolesAllowed({"ROLE_ADMIN"})
-    public List<OrderDto> getOrdersBySearch(@PathVariable String text) {
-        return orderService.getOrdersBySearch(text);
+    public List<OrderDto> getOrdersBySearch(@RequestParam("text") String text,
+                                            @RequestParam("page") int page,
+                                            @RequestParam("size") int pageSize) {
+        return orderService.getOrders(text, page, pageSize);
     }
 
     @GetMapping("/{orderId}")
@@ -84,7 +80,7 @@ public class OrderController {
     }
 
     @ExceptionHandler
-    public ResponseEntity handleException(OrderNotFoundException exc) {
+    public ResponseEntity<ErrorResponse> handleException(OrderNotFoundException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.NOT_FOUND.value());
@@ -95,7 +91,7 @@ public class OrderController {
     }
 
     @ExceptionHandler({SavingOrderException.class, ChangeOrderStatusException.class, ConstraintViolationException.class})
-    public ResponseEntity handleException(RuntimeException exc) {
+    public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());

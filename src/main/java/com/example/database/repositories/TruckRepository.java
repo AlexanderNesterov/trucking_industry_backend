@@ -1,6 +1,7 @@
 package com.example.database.repositories;
 
 import com.example.database.models.Truck;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,5 +28,5 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
     Truck getFreeTruck(@Param("truckId") Long truckId, @Param("orderWeight") double orderWeight);
 
     @Query("from Truck t where t.searchString like %:text%")
-    List<Truck> getTrucksBySearch(@Param("text") String text);
+    List<Truck> getTrucks(@Param("text") String text, Pageable pageable);
 }

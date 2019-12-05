@@ -9,9 +9,8 @@ import java.util.List;
 public interface DriverService {
     
     FullInfoDriverDto findById(Long driverDtoId);
-    List<SimpleDriverDto> findAll(int page, int pageSize);
     List<SimpleDriverDto> getFreeDrivers();
-    List<SimpleDriverDto> getDriversBySearch(String text);
+    List<SimpleDriverDto> getDrivers(String text, int page, int pageSize);
     SimpleDriverDto getFreeDriver(Long driverId);
     boolean updateDriver(@Valid FullInfoDriverDto driver);
     boolean addDriver(@Valid FullInfoDriverDto driver);

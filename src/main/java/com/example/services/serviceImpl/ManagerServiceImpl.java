@@ -18,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -44,17 +43,10 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public List<SimpleManagerDto> findAll(int page, int size) {
-        Pageable request = PageRequest.of(page, size);
-
-        return managerRepository.findAll(request).stream()
-                .map(managerMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<SimpleManagerDto> getManagersBySearch(String text) {
-        return managerMapper.toListDto(managerRepository.getManagerBySearch(text));
+    public List<SimpleManagerDto> getManagers(String text, int page, int size) {
+        Pageable request = PageRequest.of(page, size
+        );
+        return managerMapper.toListDto(managerRepository.getManagers(text, request));
     }
 
     @Override

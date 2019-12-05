@@ -24,16 +24,12 @@ public class TruckController {
         this.truckService = truckService;
     }
 
-    @GetMapping
+    @GetMapping("/search")
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<TruckDto> findAll(@RequestParam("page") int page, @RequestParam("size") int pageSize) {
-        return truckService.findAll(page, pageSize);
-    }
-
-    @GetMapping("/search/{text}")
-    @RolesAllowed({"ROLE_ADMIN"})
-    public List<TruckDto> findAll(@PathVariable String text) {
-        return truckService.getTrucksBySearch(text);
+    public List<TruckDto> findAll(@RequestParam("text") String text,
+                                  @RequestParam("page") int page,
+                                  @RequestParam("size") int pageSize) {
+        return truckService.getTrucks(text, page, pageSize);
     }
 
     @GetMapping("free/{weight}")
@@ -62,7 +58,7 @@ public class TruckController {
     }
 
     @ExceptionHandler({TruckExistsException.class, ConstraintViolationException.class})
-    public ResponseEntity handleException(RuntimeException exc) {
+    public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -73,7 +69,7 @@ public class TruckController {
     }
 
     @ExceptionHandler
-    public ResponseEntity handleException(TruckNotFoundException exc) {
+    public ResponseEntity<ErrorResponse> handleException(TruckNotFoundException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.NOT_FOUND.value());

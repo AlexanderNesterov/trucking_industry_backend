@@ -27,16 +27,12 @@ public class ManagerController {
         this.managerService = managerService;
     }
 
-    @GetMapping
-    @RolesAllowed({"ROLE_ADMIN"})
-    public List<SimpleManagerDto> findAll(@RequestParam("page") int page, @RequestParam("size") int pageSize) {
-        return managerService.findAll(page, pageSize);
-    }
-
     @GetMapping("/search")
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<SimpleManagerDto> getManagersBySearch(@RequestParam("text") String text) {
-        return managerService.getManagersBySearch(text);
+    public List<SimpleManagerDto> getManagersBySearch(@RequestParam("text") String text,
+                                                      @RequestParam("page") int page,
+                                                      @RequestParam("size") int pageSize) {
+        return managerService.getManagers(text, page, pageSize);
     }
 
     @GetMapping("/{managerId}")
@@ -59,7 +55,7 @@ public class ManagerController {
     }
 
     @ExceptionHandler
-    public ResponseEntity handleException(ManagerExistException exc) {
+    public ResponseEntity<ErrorResponse> handleException(ManagerExistException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -70,7 +66,7 @@ public class ManagerController {
     }
 
     @ExceptionHandler
-    public ResponseEntity handleException(ManagerNotFoundException exc) {
+    public ResponseEntity<ErrorResponse> handleException(ManagerNotFoundException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.NOT_FOUND.value());

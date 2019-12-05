@@ -27,22 +27,18 @@ public class DriverController {
         this.driverService = driverService;
     }
 
-    @GetMapping
-    @RolesAllowed({"ROLE_ADMIN"})
-    public List<SimpleDriverDto> findAll(@RequestParam("page") int pageNumber, @RequestParam("size") int pageSize) {
-        return driverService.findAll(pageNumber, pageSize);
-    }
-
     @GetMapping("/{driverId}")
     @PreAuthorize("(hasRole('ROLE_DRIVER') && #driverId == authentication.principal.driverId) || hasRole('ROLE_ADMIN')")
     public FullInfoDriverDto findById(@PathVariable Long driverId) {
         return driverService.findById(driverId);
     }
 
-    @GetMapping("/search/{text}")
+    @GetMapping("/search")
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<SimpleDriverDto> getDriversBySearch(@PathVariable String text) {
-        return driverService.getDriversBySearch(text);
+    public List<SimpleDriverDto> getDriversBySearch(@RequestParam("text") String text,
+                                                    @RequestParam("page") int page,
+                                                    @RequestParam("size") int pageSize) {
+        return driverService.getDrivers(text, page, pageSize);
     }
 
     @GetMapping("/free")
@@ -76,7 +72,7 @@ public class DriverController {
     }
 
     @ExceptionHandler
-    public ResponseEntity handleException(DriverNotFoundException exc) {
+    public ResponseEntity<ErrorResponse> handleException(DriverNotFoundException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.NOT_FOUND.value());

@@ -19,7 +19,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -50,12 +49,10 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public List<SimpleDriverDto> findAll(int page, int pageSize) {
+    public List<SimpleDriverDto> getDrivers(String text, int page, int pageSize) {
         Pageable request = PageRequest.of(page - 1, pageSize);
 
-        return driverRepository.findAll(request).stream()
-                .map(driver -> driverMapper.toDto(driver))
-                .collect(Collectors.toList());
+        return driverMapper.toListDto(this.driverRepository.getDrivers(text, request));
     }
 
     @Override
@@ -93,11 +90,6 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public SimpleDriverDto getFreeDriver(Long driverId) {
         return driverMapper.toDto(driverRepository.getFreeDriver(driverId));
-    }
-
-    @Override
-    public List<SimpleDriverDto> getDriversBySearch(String text) {
-        return driverMapper.toListDto(this.driverRepository.getDriverBySearch(text));
     }
 
     private Driver getDriverByLogin(String driverLogin) {

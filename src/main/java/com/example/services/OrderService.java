@@ -8,8 +8,7 @@ import java.util.List;
 public interface OrderService {
 
     OrderDto findById(Long orderId);
-    List<OrderDto> findAll(int page, int pageSize);
-    List<OrderDto> getOrdersBySearch(String text);
+    List<OrderDto> getOrders(String text, int page, int size);
     OrderDto getOrderByDriverId(Long orderId);
     boolean addOrder(@Valid OrderDto orderDto);
     boolean updateOrder(@Valid OrderDto orderDto);

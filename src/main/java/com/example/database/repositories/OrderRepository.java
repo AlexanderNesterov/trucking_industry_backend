@@ -1,6 +1,7 @@
 package com.example.database.repositories;
 
 import com.example.database.models.Order;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,7 +30,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Order getOrderToCancel(@Param("orderId") Long orderId);
 
     @Query("from Order o where o.searchString like %:text%")
-    List<Order> getOrdersBySearch(@Param("text") String text);
+    List<Order> getOrders(@Param("text") String text, Pageable pageable);
 
     @Transactional
     @Modifying

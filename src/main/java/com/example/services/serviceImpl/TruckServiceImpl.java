@@ -17,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -48,17 +47,10 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public List<TruckDto> findAll(int page, int pageSize) {
+    public List<TruckDto> getTrucks(String text, int page, int pageSize) {
         Pageable request = PageRequest.of(page - 1, pageSize);
 
-        return truckRepository.findAll(request).stream()
-                .map(truck -> truckMapper.toDto(truck))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TruckDto> getTrucksBySearch(String text) {
-        return truckMapper.toListDto(truckRepository.getTrucksBySearch(text));
+        return truckMapper.toListDto(truckRepository.getTrucks(text, request));
     }
 
     @Override
@@ -87,7 +79,7 @@ public class TruckServiceImpl implements TruckService {
 
         truckDto.setId(null);
         truckDto.setCondition(TruckCondition.SERVICEABLE);
-        truckDto.setSearchString(combineSearchString(truckDto));
+        truckDto.combineSearchString();
         truckRepository.save(truckMapper.fromDto(truckDto));
         return true;
     }
@@ -102,7 +94,7 @@ public class TruckServiceImpl implements TruckService {
         return truckMapper.toDto(truckRepository.getFreeTruck(truckId, weight));
     }
 
-    private String combineSearchString(TruckDto truck) {
+/*    private String combineSearchString(TruckDto truck) {
         StringBuilder sb = new StringBuilder();
 
         sb
@@ -112,5 +104,5 @@ public class TruckServiceImpl implements TruckService {
                 .append(truck.getCondition());
 
         return sb.toString().toLowerCase();
-    }
+    }*/
 }
