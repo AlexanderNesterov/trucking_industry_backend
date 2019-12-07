@@ -28,8 +28,7 @@ public class Order {
     @JoinColumn(name = "co_driver_id")
     private Driver coDriver;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "order_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "order")
     private List<Cargo> cargoList;
 
     @Column(name = "total_weight")

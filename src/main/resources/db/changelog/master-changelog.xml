@@ -3,9 +3,7 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet id="1" author="nesterov">
         <createTable tableName="users">
@@ -72,7 +70,10 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(32)">
+            <column name="name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="varchar(128)">
                 <constraints nullable="false"/>
             </column>
             <column name="latitude" type="numeric">
@@ -211,5 +212,24 @@
         <addForeignKeyConstraint baseTableName="managers" baseColumnNames="user_id"
                                  constraintName="fk_manager_user" referencedTableName="users"
                                  referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="9" author="nesterov">
+        <preConditions>
+            <tableExists tableName="users"/>
+            <tableExists tableName="managers"/>
+        </preConditions>
+        <insert tableName="users">
+            <column name="login">administrator</column>
+            <column name="password">JltIM9amwN+otroA2WW/1U70Yy/qgBPjQdXVv0lLcBl7nOw+Naoz9R/NEezc9uaI2O5E3GFVbf7H2KMzfJ1l+Z9kidNTJkRF</column>
+            <column name="first_name">Admin</column>
+            <column name="last_name">Admin</column>
+            <column name="email">admin@admin.admin</column>
+            <column name="role">ADMIN</column>
+        </insert>
+        <insert tableName="managers">
+            <column name="user_id">1</column>
+            <column name="status">ACTIVE</column>
+        </insert>
     </changeSet>
 </databaseChangeLog>

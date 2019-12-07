@@ -18,7 +18,7 @@ public class SimpleUserDto {
     @Pattern(regexp = "[[A-Z]|[a-z]][[a-z]|\\s|[A-Z]]{1,31}", message = LAST_NAME + INVALID_FORMAT)
     private String lastName;
 
-    @Pattern(regexp = "\\d{11}", message = PHONE + INVALID_FORMAT)
+    @Pattern(regexp = "^$|\\d{11}", message = PHONE + INVALID_FORMAT)
     private String phone;
 
     @NotBlank(message = EMAIL + IS_BLANK)

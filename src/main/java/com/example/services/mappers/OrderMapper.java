@@ -10,10 +10,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
 
-    Order fromDto(OrderDto orderDto);
-
     @Mapping(target = "searchString", ignore = true)
     OrderDto toDto(Order order);
+    Order fromDto(OrderDto orderDto);
     List<Order> fromListDto(List<OrderDto> orderDtoList);
     List<OrderDto> toListDto(List<Order> orderList);
 }

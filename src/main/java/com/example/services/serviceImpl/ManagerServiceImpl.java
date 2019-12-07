@@ -44,8 +44,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<SimpleManagerDto> getManagers(String text, int page, int size) {
-        Pageable request = PageRequest.of(page, size
-        );
+        Pageable request = PageRequest.of(page, size);
         return managerMapper.toListDto(managerRepository.getManagers(text, request));
     }
 

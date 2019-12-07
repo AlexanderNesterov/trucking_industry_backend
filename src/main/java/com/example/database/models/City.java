@@ -15,6 +15,9 @@ public class City {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "country")
+    private String country;
+
     @Column(name = "latitude")
     private double latitude;
 
@@ -38,6 +41,14 @@ public class City {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public double getLatitude() {

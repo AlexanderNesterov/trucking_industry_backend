@@ -1,5 +1,7 @@
 package com.example.services.serviceImpl;
 
+import com.example.controller.exceptions.SavingCityException;
+import com.example.database.models.City;
 import com.example.database.repositories.CityRepository;
 import com.example.services.CityService;
 import com.example.services.mappers.CityMapper;
@@ -27,5 +29,17 @@ public class CityServiceImpl implements CityService {
     @Override
     public List<CityDto> findCitiesByListId(Long[] listId) {
         return cityMapper.toListDto(cityRepository.getCitiesById(listId));
+    }
+
+    @Override
+    public boolean addCity(CityDto city) {
+        List<City> existCities = cityRepository.getCitiesByNameAndCountry(city.getName(), city.getCountry());
+
+        if (existCities.size() != 0) {
+            throw new SavingCityException("City with this name or country already exists");
+        }
+
+        cityRepository.save(cityMapper.fromDto(city));
+        return false;
     }
 }

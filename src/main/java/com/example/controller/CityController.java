@@ -2,10 +2,7 @@ package com.example.controller;
 
 import com.example.services.CityService;
 import com.example.services.models.CityDto;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
@@ -25,5 +22,11 @@ public class CityController {
     @RolesAllowed({"ROLE_ADMIN"})
     public List<CityDto> findAll() {
         return cityService.findAll();
+    }
+
+    @PostMapping
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean addCity(@RequestBody CityDto city) {
+        return cityService.addCity(city);
     }
 }
