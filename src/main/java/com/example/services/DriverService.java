@@ -12,6 +12,7 @@ public interface DriverService {
     List<SimpleDriverDto> getFreeDrivers();
     List<SimpleDriverDto> getDrivers(String text, int page, int pageSize);
     SimpleDriverDto getFreeDriver(Long driverId);
+    boolean isDriverLicenseExists(String driverLicense);
     boolean updateDriver(@Valid FullInfoDriverDto driver);
     boolean addDriver(@Valid FullInfoDriverDto driver);
 }

@@ -27,6 +27,12 @@ public class DriverController {
         this.driverService = driverService;
     }
 
+    @GetMapping("/check")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean checkDriverLicense(@RequestParam("driver-license") String driverLicense) {
+        return driverService.isDriverLicenseExists(driverLicense);
+    }
+
     @GetMapping("/{driverId}")
     @PreAuthorize("(hasRole('ROLE_DRIVER') && #driverId == authentication.principal.driverId) || hasRole('ROLE_ADMIN')")
     public FullInfoDriverDto findById(@PathVariable Long driverId) {

@@ -32,6 +32,12 @@ public class TruckController {
         return truckService.getTrucks(text, page, pageSize);
     }
 
+    @GetMapping("/check")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean checkRegistrationNumber(@RequestParam("registration-number") String registrationNumber) {
+        return truckService.isRegistrationNumberExists(registrationNumber);
+    }
+
     @GetMapping("free/{weight}")
     @RolesAllowed({"ROLE_ADMIN"})
     public List<TruckDto> getFreeTrucks(@PathVariable double weight) {

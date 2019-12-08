@@ -11,6 +11,7 @@ public interface TruckService {
     List<TruckDto> getTrucks(String text, int page, int pageSize);
     List<TruckDto> getFreeTrucks(double weight);
     TruckDto getFreeTruck(Long truckId, double weight);
+    boolean isRegistrationNumberExists(String registrationNumber);
     boolean updateTruck(@Valid TruckDto truckDto);
     boolean addTruck(@Valid TruckDto truckDto);
 }

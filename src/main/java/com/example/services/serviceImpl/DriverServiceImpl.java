@@ -38,6 +38,13 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    public boolean isDriverLicenseExists(String driverLicense) {
+        Long existDriverId = driverRepository.getDriverIdByDriverLicense(driverLicense);
+
+        return existDriverId == null;
+    }
+
+    @Override
     public FullInfoDriverDto findById(Long driverDtoId) {
         Optional<Driver> driver = driverRepository.findById(driverDtoId);
 
@@ -51,7 +58,6 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public List<SimpleDriverDto> getDrivers(String text, int page, int pageSize) {
         Pageable request = PageRequest.of(page - 1, pageSize);
-
         return driverMapper.toListDto(this.driverRepository.getDrivers(text, request));
     }
 
@@ -130,22 +136,4 @@ public class DriverServiceImpl implements DriverService {
         exception.append(" already exist");
         throw new DriverExistsException(exception.toString());
     }
-
-/*    private String combineSearchString(FullInfoDriverDto driver) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(driver.getUser().getFirstName());
-        sb.append(" ");
-        sb.append(driver.getUser().getLastName());
-        sb.append(" ");
-        sb.append(driver.getUser().getEmail());
-        sb.append(" ");
-        sb.append(driver.getUser().getPhone());
-        sb.append(" ");
-        sb.append(driver.getDriverLicense());
-        sb.append(" ");
-        sb.append(driver.getStatus());
-
-        return sb.toString().toLowerCase();
-    }*/
 }

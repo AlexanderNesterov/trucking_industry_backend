@@ -34,4 +34,10 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
 
     @Query("from Driver d where d.searchString like %:text%")
     List<Driver> getDrivers(@Param("text") String text, Pageable pageable);
+
+    @Query("select u.id from User u where u.login = :login")
+    Long getUserIdByLogin(@Param("login") String login);
+
+    @Query("select d.id from Driver d where d.driverLicense = :driverLicense")
+    Long getDriverIdByDriverLicense(@Param("driverLicense") String driverLicense);
 }

@@ -44,7 +44,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<SimpleManagerDto> getManagers(String text, int page, int size) {
-        Pageable request = PageRequest.of(page, size);
+        Pageable request = PageRequest.of(page - 1, size);
         return managerMapper.toListDto(managerRepository.getManagers(text, request));
     }
 
@@ -75,16 +75,4 @@ public class ManagerServiceImpl implements ManagerService {
         managerRepository.save(managerMapper.fromFullInfoDto(manager));
         return true;
     }
-
-/*    private String combineSearchString(FullInfoManagerDto managerDto) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(managerDto.getUser().getFirstName()).append(" ")
-                .append(managerDto.getUser().getLastName()).append(" ")
-                .append(managerDto.getUser().getPhone()).append(" ")
-                .append(managerDto.getUser().getEmail()).append(" ")
-                .append(managerDto.getStatus());
-
-        return sb.toString().toLowerCase();
-    }*/
 }

@@ -290,30 +290,4 @@ public class OrderServiceImpl implements OrderService {
             }
         }
     }
-
-/*    private String combineSearchString(Order order) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(order.getId());
-        sb.append(" ");
-        sb.append(order.getDriver().getUser().getFirstName());
-        sb.append(" ");
-        sb.append(order.getDriver().getUser().getLastName());
-        sb.append(" ");
-        sb.append(order.getCoDriver().getUser().getFirstName());
-        sb.append(" ");
-        sb.append(order.getCoDriver().getUser().getLastName());
-        sb.append(" ");
-        sb.append(order.getTruck().getRegistrationNumber());
-        sb.append(" ");
-        sb.append(order.getTotalWeight());
-        sb.append(" ");
-        sb.append(order.getStatus());
-        sb.append(" ");
-        order.getCargoList().forEach(cargoDto -> sb.append(cargoDto.getTitle()).append(" "));
-        order.getCargoList().forEach(cargoDto -> sb.append(cargoDto.getLoadLocation().getName()).append(" "));
-        order.getCargoList().forEach(cargoDto -> sb.append(cargoDto.getDischargeLocation().getName()).append(" "));
-
-        return sb.toString().toLowerCase();
-    }*/
 }

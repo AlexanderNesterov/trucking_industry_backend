@@ -47,9 +47,14 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
+    public boolean isRegistrationNumberExists(String registrationNumber) {
+        Long existTruckId = truckRepository.getTruckIdByRegistrationNumber(registrationNumber);
+        return existTruckId == null;
+    }
+
+    @Override
     public List<TruckDto> getTrucks(String text, int page, int pageSize) {
         Pageable request = PageRequest.of(page - 1, pageSize);
-
         return truckMapper.toListDto(truckRepository.getTrucks(text, request));
     }
 
@@ -93,16 +98,4 @@ public class TruckServiceImpl implements TruckService {
     public TruckDto getFreeTruck(Long truckId, double weight) {
         return truckMapper.toDto(truckRepository.getFreeTruck(truckId, weight));
     }
-
-/*    private String combineSearchString(TruckDto truck) {
-        StringBuilder sb = new StringBuilder();
-
-        sb
-                .append(truck.getRegistrationNumber()).append(" ")
-                .append(truck.getModel()).append(" ")
-                .append(truck.getCapacity()).append(" ")
-                .append(truck.getCondition());
-
-        return sb.toString().toLowerCase();
-    }*/
 }

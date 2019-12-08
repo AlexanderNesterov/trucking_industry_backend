@@ -29,4 +29,7 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
 
     @Query("from Truck t where t.searchString like %:text%")
     List<Truck> getTrucks(@Param("text") String text, Pageable pageable);
+
+    @Query("select t.id from Truck t where t.registrationNumber = :registrationNumber")
+    Long getTruckIdByRegistrationNumber(@Param("registrationNumber") String registrationNumber);
 }
