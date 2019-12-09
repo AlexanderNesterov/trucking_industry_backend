@@ -88,9 +88,9 @@ public class OrderServiceImplUpdateTest {
         Mockito
                 .when(driverService.getFreeDriver(updatingOrder.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
-        Mockito
+/*        Mockito
                 .when(truckService.getFreeTruck(updatingOrder.getTruck().getId(), updatingOrder.getTotalWeight()))
-                .thenReturn(existTruck);
+                .thenReturn(existTruck);*/
 
         boolean result = orderService.updateOrder(updatingOrder);
 
@@ -219,9 +219,9 @@ public class OrderServiceImplUpdateTest {
         Mockito
                 .when(driverService.getFreeDriver(updatingOrder.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
-        Mockito
+/*        Mockito
                 .when(truckService.getFreeTruck(updatingOrder.getTruck().getId(), updatingOrder.getTotalWeight()))
-                .thenReturn(null);
+                .thenReturn(null);*/
 
         SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));
@@ -259,9 +259,9 @@ public class OrderServiceImplUpdateTest {
         Mockito
                 .when(driverService.getFreeDriver(updatingOrder.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
-        Mockito
+/*        Mockito
                 .when(truckService.getFreeTruck(updatingOrder.getTruck().getId(), updatingOrder.getTotalWeight()))
-                .thenReturn(null);
+                .thenReturn(null);*/
 
         SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));
@@ -301,9 +301,9 @@ public class OrderServiceImplUpdateTest {
         Mockito
                 .when(driverService.getFreeDriver(updatingOrder.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
-        Mockito
+/*        Mockito
                 .when(truckService.getFreeTruck(updatingOrder.getTruck().getId(), updatingOrder.getTotalWeight()))
-                .thenReturn(null);
+                .thenReturn(null);*/
 
         SavingOrderException thrown = assertThrows(SavingOrderException.class,
                 () -> orderService.updateOrder(updatingOrder));

@@ -73,6 +73,7 @@ public class OrderServiceImpl implements OrderService {
         checkSavingOrder(orderDto, true);
 
         orderDto.setStatus(OrderStatus.CREATED);
+        orderDto.combineSearchString();
         orderRepository.save(orderMapper.fromDto(orderDto));
         return true;
     }
@@ -85,6 +86,7 @@ public class OrderServiceImpl implements OrderService {
         order.setId(null);
         order.setStatus(OrderStatus.CREATED);
         order.getCargoList().forEach(cargo -> cargo.setStatus(CargoStatus.CREATED));
+        order.getCargoList().forEach(cargo -> cargo.setId(null));
         Order savedOrder = orderRepository.save(orderMapper.fromDto(order));
         OrderDto orderDto = orderMapper.toDto(savedOrder);
         orderDto.combineSearchString();
@@ -204,6 +206,8 @@ public class OrderServiceImpl implements OrderService {
         if (order == null) {
             throw new SavingOrderException("Wrong order id or order status not equals 'REFUSED_BY_DRIVER'");
         }
+
+        savingOrder.setId(order.getId());
     }
 
     private void checkDriversIds(OrderDto savingOrder) {
@@ -237,7 +241,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void checkTruck(OrderDto savingOrder) {
-        TruckDto truckDto = truckService.getFreeTruck(savingOrder.getTruck().getId(), savingOrder.getTotalWeight());
+        TruckDto truckDto = truckService.getFreeTruck(savingOrder.getTruck().getId(), savingOrder.getId(),
+                savingOrder.getTotalWeight());
 
         if (truckDto == null) {
             throw new SavingOrderException(
@@ -248,7 +253,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void checkCargoList(OrderDto savingOrder) {
-        double countedTotalWeight  = savingOrder.getCargoList().stream()
+        double countedTotalWeight = savingOrder.getCargoList().stream()
                 .mapToDouble(CargoDto::getWeight)
                 .sum();
 

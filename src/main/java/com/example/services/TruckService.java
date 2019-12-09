@@ -10,7 +10,7 @@ public interface TruckService {
     TruckDto findById(Long truckDtoId);
     List<TruckDto> getTrucks(String text, int page, int pageSize);
     List<TruckDto> getFreeTrucks(double weight);
-    TruckDto getFreeTruck(Long truckId, double weight);
+    TruckDto getFreeTruck(Long truckId, Long orderId, double weight);
     boolean isRegistrationNumberExists(String registrationNumber);
     boolean updateTruck(@Valid TruckDto truckDto);
     boolean addTruck(@Valid TruckDto truckDto);

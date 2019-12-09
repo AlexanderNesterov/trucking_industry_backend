@@ -20,15 +20,16 @@ public class Order {
     @JoinColumn(name = "truck_id")
     private Truck truck;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne
     @JoinColumn(name = "driver_id")
     private Driver driver;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne
     @JoinColumn(name = "co_driver_id")
     private Driver coDriver;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "order_id")
     private List<Cargo> cargoList;
 
     @Column(name = "total_weight")

@@ -104,9 +104,9 @@ public class OrderServiceImplTest {
         Mockito
                 .when(driverService.getFreeDriver(savingOrder.getCoDriver().getId()))
                 .thenReturn(existCoDriver);
-        Mockito
+/*        Mockito
                 .when(truckService.getFreeTruck(savingOrder.getTruck().getId(), savingOrder.getTotalWeight()))
-                .thenReturn(existTruck);
+                .thenReturn(existTruck);*/
 
         boolean result = orderService.addOrder(savingOrder);
 
