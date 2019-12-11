@@ -232,4 +232,16 @@
             <column name="status">ACTIVE</column>
         </insert>
     </changeSet>
+
+    <changeSet id="10" author="nesterov">
+        <preConditions>
+            <tableExists tableName="managers"/>
+            <tableExists tableName="users"/>
+            <columnExists tableName="managers" columnName="status"/>
+        </preConditions>
+        <dropColumn tableName="managers" columnName="status"/>
+        <addColumn tableName="users">
+            <column name="status" type="varchar(32)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

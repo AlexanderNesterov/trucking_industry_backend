@@ -207,7 +207,7 @@ public class OrderServiceImplUpdateTest {
 
         TruckDto existTruck = new TruckDto();
         existTruck.setId(updatingOrder.getTruck().getId());
-        existTruck.setCondition(TruckCondition.FAULTY);
+//        existTruck.setCondition(TruckCondition.FAULTY);
         existTruck.setCapacity(700);
 
         Mockito

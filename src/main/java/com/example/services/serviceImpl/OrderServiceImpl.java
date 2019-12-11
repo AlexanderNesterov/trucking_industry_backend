@@ -73,6 +73,8 @@ public class OrderServiceImpl implements OrderService {
         checkSavingOrder(orderDto, true);
 
         orderDto.setStatus(OrderStatus.CREATED);
+        orderDto.getDriver().setStatus(DriverStatus.ASSIGNED);
+        orderDto.getCoDriver().setStatus(DriverStatus.ASSIGNED);
         orderDto.combineSearchString();
         orderRepository.save(orderMapper.fromDto(orderDto));
         return true;
@@ -90,6 +92,8 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save(orderMapper.fromDto(order));
         OrderDto orderDto = orderMapper.toDto(savedOrder);
         orderDto.combineSearchString();
+        driverService.setDriverStatus(new Long[] {order.getDriver().getId(), order.getCoDriver().getId()},
+                DriverStatus.ASSIGNED);
 
         orderRepository.setOrderSearchString(orderDto.getSearchString(), savedOrder.getId());
         return true;
@@ -104,6 +108,12 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return orderDto;
+    }
+
+    @Override
+    public boolean checkOrderToBlockDriver(Long driverId) {
+        Order order = orderRepository.getOrderByDriverId(driverId);
+        return order == null;
     }
 
     @Override

@@ -44,7 +44,7 @@ public class ManagerController {
 
     @PutMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean updateManager(@RequestBody FullInfoManagerDto managerDto) {
+    public boolean updateManager(@RequestBody SimpleManagerDto managerDto) {
         return managerService.updateManager(managerDto);
     }
 

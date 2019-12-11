@@ -107,7 +107,7 @@ public class TruckServiceImplTest {
         sameTruck.setModel("Renault t-500");
         sameTruck.setRegistrationNumber("AA89009");
         sameTruck.setCapacity(300);
-        sameTruck.setCondition(TruckCondition.FAULTY);
+//        sameTruck.setCondition(TruckCondition.FAULTY);
 
         Mockito
                 .when(truckRepository.getTruckByRegistrationNumber("AA89009"))
@@ -129,7 +129,7 @@ public class TruckServiceImplTest {
         TruckDto sameTruck = new TruckDto();
         sameTruck.setId(90L);
         sameTruck.setRegistrationNumber("AA89009");
-        sameTruck.setCondition(TruckCondition.FAULTY);
+//        sameTruck.setCondition(TruckCondition.FAULTY);
 
         Mockito
                 .when(truckRepository.getTruckByRegistrationNumber("AA89009"))

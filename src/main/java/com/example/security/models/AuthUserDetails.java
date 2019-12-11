@@ -1,5 +1,6 @@
 package com.example.security.models;
 
+import com.example.database.models.commons.AccountStatus;
 import com.example.database.models.commons.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,11 +14,13 @@ public class AuthUserDetails implements UserDetails {
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> auth;
+    private final AccountStatus status;
 
-    public AuthUserDetails(String username, String password, Role role) {
+    public AuthUserDetails(String username, String password, Role role, AccountStatus status) {
         this.username = username;
         this.password = password;
         auth = List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        this.status = status;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class AuthUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return status.equals(AccountStatus.ACTIVE);
     }
 
     @Override

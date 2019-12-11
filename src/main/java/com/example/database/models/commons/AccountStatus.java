@@ -1,6 +1,6 @@
 package com.example.database.models.commons;
 
-public enum ManagerStatus {
+public enum AccountStatus {
     ACTIVE,
-    FIRED
+    BLOCKED
 }

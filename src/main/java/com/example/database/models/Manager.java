@@ -1,8 +1,5 @@
 package com.example.database.models;
 
-import com.example.database.models.commons.DriverStatus;
-import com.example.database.models.commons.ManagerStatus;
-
 import javax.persistence.*;
 
 @Entity
@@ -14,10 +11,6 @@ public class Manager {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "manager_seq")
     @Column(name = "id")
     private Long id;
-
-    @Column(name = "status")
-    @Enumerated(value = EnumType.STRING)
-    private ManagerStatus status;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
@@ -35,14 +28,6 @@ public class Manager {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public ManagerStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ManagerStatus status) {
-        this.status = status;
     }
 
     public User getUser() {

@@ -27,6 +27,7 @@ public abstract class DriverMapper {
     }
 
     public abstract SimpleDriverDto toDto(Driver driver);
+    public abstract Driver toDto(SimpleDriverDto driver);
     public abstract List<Driver> fromListDto(List<SimpleDriverDto> driverDtos);
     public abstract List<SimpleDriverDto> toListDto(List<Driver> drivers);
 

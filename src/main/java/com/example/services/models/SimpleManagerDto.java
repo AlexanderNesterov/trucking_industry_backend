@@ -1,10 +1,11 @@
 package com.example.services.models;
 
-import com.example.database.models.commons.ManagerStatus;
+import javax.validation.Valid;
 
 public class SimpleManagerDto {
     private Long id;
-    private ManagerStatus status;
+
+    @Valid
     private SimpleUserDto user;
 
     public SimpleManagerDto() {
@@ -16,14 +17,6 @@ public class SimpleManagerDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public ManagerStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ManagerStatus status) {
-        this.status = status;
     }
 
     public SimpleUserDto getUser() {

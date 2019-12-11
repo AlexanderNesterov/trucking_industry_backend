@@ -34,8 +34,15 @@ public class TruckController {
 
     @GetMapping("/check")
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean checkRegistrationNumber(@RequestParam("registration-number") String registrationNumber) {
-        return truckService.isRegistrationNumberExists(registrationNumber);
+    public boolean checkRegistrationNumber(@RequestParam("registration-number") String registrationNumber,
+                                           @RequestParam("truckId") Long truckId) {
+        return truckService.isRegistrationNumberExists(registrationNumber, truckId);
+    }
+
+    @GetMapping("/check-to-update")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean canUpdateTruck(@RequestParam("truckId") Long truckId) {
+        return truckService.canUpdateTruck(truckId);
     }
 
     @GetMapping("free/{weight}")
@@ -61,6 +68,18 @@ public class TruckController {
     @ResponseStatus(HttpStatus.CREATED)
     public boolean addTruck(@RequestBody TruckDto truckDto) {
         return truckService.addTruck(truckDto);
+    }
+
+    @PutMapping("/set-broken")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean setBrokenStatus(@RequestParam("truckId") Long truckId) {
+        return truckService.setBrokenStatus(truckId);
+    }
+
+    @PutMapping("/set-serviceable")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean setServiceableStatus(@RequestParam("truckId") Long truckId) {
+        return truckService.setServiceableStatus(truckId);
     }
 
     @ExceptionHandler({TruckExistsException.class, ConstraintViolationException.class})

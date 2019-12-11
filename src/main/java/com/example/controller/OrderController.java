@@ -6,6 +6,7 @@ import com.example.controller.exceptions.SavingOrderException;
 import com.example.controller.response.ErrorResponse;
 import com.example.services.models.OrderDto;
 import com.example.services.OrderService;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,6 +60,12 @@ public class OrderController {
     @RolesAllowed({"ROLE_DRIVER"})
     public boolean setRefuseStatus(@PathVariable Long orderId, @PathVariable Long driverId) {
         return orderService.setRefuseStatus(orderId, driverId);
+    }
+
+    @GetMapping("/for-manager/{driverId}")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean checkOrderToBlockDriver(@PathVariable Long driverId) {
+        return orderService.checkOrderToBlockDriver(driverId);
     }
 
     @PutMapping("/set-cancel-status/{orderId}")

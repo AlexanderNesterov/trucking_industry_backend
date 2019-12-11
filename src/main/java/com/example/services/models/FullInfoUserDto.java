@@ -1,5 +1,6 @@
 package com.example.services.models;
 
+import com.example.database.models.commons.AccountStatus;
 import com.example.database.models.commons.Role;
 import org.hibernate.validator.constraints.Length;
 
@@ -15,7 +16,10 @@ public class FullInfoUserDto extends SimpleUserDto {
     @NotBlank(message = PASSWORD + IS_BLANK)
     @Length(min = 8, max = 32, message = PASSWORD + PASSWORD_LENGTH)
     private String password;
+
     private Role role;
+
+    private AccountStatus status;
 
     public FullInfoUserDto() {
     }
@@ -42,5 +46,13 @@ public class FullInfoUserDto extends SimpleUserDto {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
     }
 }

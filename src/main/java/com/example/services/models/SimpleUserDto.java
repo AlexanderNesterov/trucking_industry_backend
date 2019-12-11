@@ -1,5 +1,7 @@
 package com.example.services.models;
 
+import com.example.database.models.commons.AccountStatus;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -24,6 +26,8 @@ public class SimpleUserDto {
     @NotBlank(message = EMAIL + IS_BLANK)
     @Email(message = EMAIL + INVALID_FORMAT)
     private String email;
+
+    private AccountStatus status;
 
     public SimpleUserDto() {
     }
@@ -66,5 +70,13 @@ public class SimpleUserDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
     }
 }

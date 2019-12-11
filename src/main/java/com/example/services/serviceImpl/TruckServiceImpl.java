@@ -1,5 +1,7 @@
 package com.example.services.serviceImpl;
 
+import com.example.controller.exceptions.SavingTruckException;
+import com.example.controller.exceptions.SetStatusException;
 import com.example.controller.exceptions.TruckExistsException;
 import com.example.controller.exceptions.TruckNotFoundException;
 import com.example.database.models.Truck;
@@ -47,9 +49,9 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public boolean isRegistrationNumberExists(String registrationNumber) {
+    public boolean isRegistrationNumberExists(String registrationNumber, Long truckId) {
         Long existTruckId = truckRepository.getTruckIdByRegistrationNumber(registrationNumber);
-        return existTruckId == null;
+        return existTruckId == null || existTruckId.equals(truckId);
     }
 
     @Override
@@ -60,6 +62,10 @@ public class TruckServiceImpl implements TruckService {
 
     @Override
     public boolean updateTruck(@Valid TruckDto truckDto) {
+        if (!canUpdateTruck(truckDto.getId())) {
+            throw new SavingTruckException("Wrong truck id or truck included in order");
+        }
+
         Truck existTruck = truckRepository.getTruckByRegistrationNumber(truckDto.getRegistrationNumber());
         TruckDto sameTruck = findById(truckDto.getId());
 
@@ -97,5 +103,43 @@ public class TruckServiceImpl implements TruckService {
     @Override
     public TruckDto getFreeTruck(Long truckId, Long orderId, double weight) {
         return truckMapper.toDto(truckRepository.getFreeTruck(truckId, orderId, weight));
+    }
+
+    @Override
+    public boolean canUpdateTruck(Long truckId) {
+        Long existTruckId = truckRepository.getTruckIdToUpdate(truckId);
+        return existTruckId != null;
+    }
+
+    @Override
+    public boolean setBrokenStatus(Long truckId) {
+        Optional<Truck> existsTruckOpt = truckRepository.getTruckToSetStatus(truckId, TruckCondition.SERVICEABLE);
+        Truck existsTruck;
+
+        if (existsTruckOpt.isEmpty()) {
+            throw new SetStatusException("Wrong truck id or condition");
+        } else {
+            existsTruck = existsTruckOpt.get();
+        }
+
+        existsTruck.setCondition(TruckCondition.BROKEN);
+        truckRepository.save(existsTruck);
+        return true;
+    }
+
+    @Override
+    public boolean setServiceableStatus(Long truckId) {
+        Optional<Truck> existsTruckOpt = truckRepository.getTruckToSetStatus(truckId, TruckCondition.BROKEN);
+        Truck existsTruck;
+
+        if (existsTruckOpt.isEmpty()) {
+            throw new SetStatusException("Wrong truck id or condition");
+        } else {
+            existsTruck = existsTruckOpt.get();
+        }
+
+        existsTruck.setCondition(TruckCondition.SERVICEABLE);
+        truckRepository.save(existsTruck);
+        return true;
     }
 }

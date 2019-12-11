@@ -29,13 +29,14 @@ public class DriverController {
 
     @GetMapping("/check")
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean checkDriverLicense(@RequestParam("driver-license") String driverLicense) {
-        return driverService.isDriverLicenseExists(driverLicense);
+    public boolean checkDriverLicense(@RequestParam("driver-license") String driverLicense,
+                                      @RequestParam("driverId") Long driverId) {
+        return driverService.isDriverLicenseExists(driverLicense, driverId);
     }
 
     @GetMapping("/{driverId}")
     @PreAuthorize("(hasRole('ROLE_DRIVER') && #driverId == authentication.principal.driverId) || hasRole('ROLE_ADMIN')")
-    public FullInfoDriverDto findById(@PathVariable Long driverId) {
+    public SimpleDriverDto findById(@PathVariable Long driverId) {
         return driverService.findById(driverId);
     }
 
@@ -55,7 +56,7 @@ public class DriverController {
 
     @PutMapping
     @RolesAllowed({"ROLE_ADMIN"})
-    public boolean updateDriver(@Valid @RequestBody FullInfoDriverDto driverDto) {
+    public boolean updateDriver(@Valid @RequestBody SimpleDriverDto driverDto) {
         return driverService.updateDriver(driverDto);
     }
 

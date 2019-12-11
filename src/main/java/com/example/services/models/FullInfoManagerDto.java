@@ -1,13 +1,11 @@
 package com.example.services.models;
 
-import com.example.database.models.commons.ManagerStatus;
 import com.example.services.models.interfaces.Searchable;
 
 import javax.validation.Valid;
 
 public class FullInfoManagerDto implements Searchable {
     private Long id;
-    private ManagerStatus status;
 
     @Valid
     private FullInfoUserDto user;
@@ -23,14 +21,6 @@ public class FullInfoManagerDto implements Searchable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public ManagerStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ManagerStatus status) {
-        this.status = status;
     }
 
     public FullInfoUserDto getUser() {
@@ -57,8 +47,7 @@ public class FullInfoManagerDto implements Searchable {
                 .append(user.getFirstName()).append(" ")
                 .append(user.getLastName()).append(" ")
                 .append(user.getPhone()).append(" ")
-                .append(user.getEmail()).append(" ")
-                .append(status);
+                .append(user.getEmail());
 
         searchString = sb.toString().toLowerCase();
     }

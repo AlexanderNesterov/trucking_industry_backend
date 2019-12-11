@@ -2,8 +2,9 @@ package com.example.services.serviceImpl;
 
 import com.example.controller.exceptions.ManagerExistException;
 import com.example.controller.exceptions.ManagerNotFoundException;
+import com.example.controller.exceptions.SavingManagerException;
 import com.example.database.models.Manager;
-import com.example.database.models.commons.ManagerStatus;
+import com.example.database.models.commons.AccountStatus;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.ManagerRepository;
 import com.example.services.ManagerService;
@@ -49,14 +50,28 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public boolean updateManager(@Valid FullInfoManagerDto manager) {
-        FullInfoManagerDto sameManager = findById(manager.getId());
+    public boolean updateManager(@Valid SimpleManagerDto manager) {
+        Optional<Manager> sameManagerOpt = managerRepository.findById(manager.getId());
+        Manager sameManager;
+
+        if (sameManagerOpt.isEmpty()) {
+            throw new SavingManagerException("Wrong manager id");
+        } else {
+            sameManager = sameManagerOpt.get();
+        }
+
+        sameManager.getUser().setFirstName(manager.getUser().getFirstName());
+        sameManager.getUser().setLastName(manager.getUser().getLastName());
+        sameManager.getUser().setPhone(manager.getUser().getPhone());
+        sameManager.getUser().setEmail(manager.getUser().getEmail());
+        managerRepository.save(sameManager);
+/*        FullInfoManagerDto sameManager = findById(manager.getId());
 
         manager.getUser().setPassword(sameManager.getUser().getPassword());
         manager.getUser().setLogin(sameManager.getUser().getLogin());
         manager.getUser().setRole(Role.ADMIN);
-        manager.setStatus(sameManager.getStatus());
-        managerRepository.save(managerMapper.fromFullInfoDto(manager));
+        manager.getUser().setStatus(sameManager.getUser().getStatus());
+        managerRepository.save(managerMapper.fromFullInfoDto(manager));*/
         return true;
     }
 
@@ -70,7 +85,7 @@ public class ManagerServiceImpl implements ManagerService {
 
         manager.setId(null);
         manager.getUser().setRole(Role.ADMIN);
-        manager.setStatus(ManagerStatus.ACTIVE);
+        manager.getUser().setStatus(AccountStatus.ACTIVE);
         manager.combineSearchString();
         managerRepository.save(managerMapper.fromFullInfoDto(manager));
         return true;

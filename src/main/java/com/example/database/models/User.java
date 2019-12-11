@@ -1,5 +1,6 @@
 package com.example.database.models;
 
+import com.example.database.models.commons.AccountStatus;
 import com.example.database.models.commons.Role;
 
 import javax.persistence.*;
@@ -35,6 +36,10 @@ public class User {
     @Column(name = "role")
     @Enumerated(value = EnumType.STRING)
     private Role role;
+
+    @Column(name = "status")
+    @Enumerated(value = EnumType.STRING)
+    private AccountStatus status;
 
     public User() {
     }
@@ -103,17 +108,11 @@ public class User {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
-                '}';
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
     }
 }

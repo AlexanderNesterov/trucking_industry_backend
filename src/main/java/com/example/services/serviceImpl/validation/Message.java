@@ -1,6 +1,7 @@
 package com.example.services.serviceImpl.validation;
 
 public class Message {
+    public static final String ID = "ID";
     public static final String LOGIN = "LOGIN";
     public static final String PASSWORD = "PASSWORD";
     public static final String TITLE = "TITLE";
