@@ -6,6 +6,7 @@ import com.example.database.models.commons.CargoStatus;
 import com.example.database.repositories.CargoRepository;
 import com.example.services.CargoService;
 import com.example.services.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class CargoServiceImpl implements CargoService {
     public CargoServiceImpl() {
     }
 
+    @Autowired
     public CargoServiceImpl(CargoRepository cargoRepository, OrderService orderService) {
         this.cargoRepository = cargoRepository;
         this.orderService = orderService;

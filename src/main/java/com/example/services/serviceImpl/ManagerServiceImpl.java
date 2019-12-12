@@ -1,5 +1,6 @@
 package com.example.services.serviceImpl;
 
+import com.example.controller.exceptions.BlockAccountException;
 import com.example.controller.exceptions.ManagerNotFoundException;
 import com.example.controller.exceptions.SavingManagerException;
 import com.example.database.models.Manager;
@@ -8,6 +9,7 @@ import com.example.database.models.commons.Role;
 import com.example.database.repositories.ManagerRepository;
 import com.example.services.ManagerService;
 import com.example.services.UserService;
+import com.example.services.commons.message.UserExceptionMessage;
 import com.example.services.mappers.ManagerMapper;
 import com.example.services.models.FullInfoManagerDto;
 import com.example.services.models.SimpleManagerDto;
@@ -94,6 +96,19 @@ public class ManagerServiceImpl implements ManagerService {
         manager.getUser().setStatus(AccountStatus.ACTIVE);
         manager.combineSearchString();
         managerRepository.save(managerMapper.fromFullInfoDto(manager));
+        return true;
+    }
+
+    @Override
+    public boolean blockAccount(Long userId, Long managerId) {
+        userService.checkUser(userId, AccountStatus.ACTIVE);
+        SimpleManagerDto existsManager = findById(managerId);
+
+        if (existsManager == null) {
+            throw new BlockAccountException(String.format(UserExceptionMessage.WRONG_MANAGER_ID, managerId));
+        }
+
+        userService.setStatus(AccountStatus.BLOCKED, userId);
         return true;
     }
 }

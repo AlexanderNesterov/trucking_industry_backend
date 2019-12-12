@@ -25,7 +25,7 @@ public class UserController {
         return userService.isLoginExists(login);
     }
 
-    @PutMapping("/block-driver/{userId}/{driverId}")
+/*    @PutMapping("/block-driver/{userId}/{driverId}")
     @RolesAllowed({"ROLE_ADMIN"})
     public boolean blockDriverAccount(@PathVariable Long userId, @PathVariable Long driverId) {
         return userService.blockDriverAccount(userId, driverId);
@@ -36,7 +36,7 @@ public class UserController {
     @RolesAllowed({"ROLE_ADMIN"})
     public boolean blockManagerAccount(@PathVariable Long userId, @PathVariable Long managerId) {
         return userService.blockManagerAccount(userId, managerId);
-    }
+    }*/
 
     @PutMapping("/unlock/{userId}")
     @RolesAllowed({"ROLE_ADMIN"})

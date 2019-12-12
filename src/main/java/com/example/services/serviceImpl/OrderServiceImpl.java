@@ -72,6 +72,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getOrdersToSendMail() {
+        return orderRepository.getOrdersToSendMail();
+    }
+
+    @Override
     public boolean updateOrder(@Valid OrderDto orderDto) {
         checkSavingOrder(orderDto, true);
 
@@ -189,6 +194,11 @@ public class OrderServiceImpl implements OrderService {
         order.getCoDriver().setStatus(DriverStatus.REST);
         orderRepository.save(order);
         return true;
+    }
+
+    @Override
+    public void setEmailSent(Long orderId) {
+        orderRepository.setSentEmail(orderId);
     }
 
     private Order getCheckedOrderToChangeStatus(Long orderId, Long driverId) {

@@ -67,6 +67,12 @@ public class DriverController {
         return driverService.addDriver(driverDto);
     }
 
+    @PutMapping("/block/{userId}/{driverId}")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean blockDriverAccount(@PathVariable Long userId, @PathVariable Long driverId) {
+        return driverService.blockAccount(userId, driverId);
+    }
+
     @ExceptionHandler({SavingDriverException.class, ConstraintViolationException.class})
     public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();

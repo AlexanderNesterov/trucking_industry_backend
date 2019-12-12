@@ -1,5 +1,6 @@
 package com.example.services.serviceImpl;
 
+import com.example.controller.exceptions.BlockAccountException;
 import com.example.controller.exceptions.DriverNotFoundException;
 import com.example.controller.exceptions.SavingDriverException;
 import com.example.database.models.Driver;
@@ -24,6 +25,7 @@ import java.util.Optional;
 
 import static com.example.services.commons.message.DriverExceptionMessage.*;
 import static com.example.services.commons.message.UserExceptionMessage.LOGIN_EXISTS;
+import static com.example.services.commons.message.UserExceptionMessage.WRONG_DRIVER_OR_HAS_ORDER;
 
 @Service
 @Validated
@@ -44,6 +46,11 @@ public class DriverServiceImpl implements DriverService {
         this.driverMapper = driverMapper;
         this.userService = userService;
     }
+
+/*    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }*/
 
     @Override
     public boolean isDriverLicenseExists(String driverLicense, Long driverId) {
@@ -117,6 +124,19 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public void setDriverStatus(Long[] driverIds, DriverStatus status) {
         driverRepository.setDriverStatus(driverIds, status);
+    }
+
+    @Override
+    public boolean blockAccount(Long userId, Long driverId) {
+        userService.checkUser(userId, AccountStatus.ACTIVE);
+        SimpleDriverDto existsDriver = getFreeDriver(driverId);
+
+        if (existsDriver == null) {
+            throw new BlockAccountException(String.format(WRONG_DRIVER_OR_HAS_ORDER, driverId));
+        }
+
+        userService.setStatus(AccountStatus.BLOCKED, userId);
+        return true;
     }
 
     private void checkDriverLicense(Long savingDriverId, String driverLicense, boolean isUpdate) {

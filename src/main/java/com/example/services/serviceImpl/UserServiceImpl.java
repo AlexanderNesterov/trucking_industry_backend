@@ -10,8 +10,8 @@ import com.example.services.ManagerService;
 import com.example.services.UserService;
 import com.example.services.mappers.UserMapper;
 import com.example.services.models.ChangePasswordDto;
-import com.example.services.models.SimpleDriverDto;
 import com.example.services.models.SimpleManagerDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,27 +23,38 @@ public class UserServiceImpl implements UserService {
 
     private UserMapper userMapper;
     private UserRepository userRepository;
-    private DriverService driverService;
-    private ManagerService managerService;
+//    private DriverService driverService;
+//    private ManagerService managerService;
 
     public UserServiceImpl() {
     }
 
-    public UserServiceImpl(UserMapper userMapper, UserRepository userRepository,
-                           DriverService driverService, ManagerService managerService) {
+    @Autowired
+    public UserServiceImpl(UserMapper userMapper, UserRepository userRepository
+                           /*DriverService driverService, ManagerService managerService*/) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
-        this.driverService = driverService;
-        this.managerService = managerService;
+//        this.driverService = driverService;
+//        this.managerService = managerService;
     }
+
+/*    @Autowired
+    public void setDriverService(DriverService driverService) {
+        this.driverService = driverService;
+    }
+
+    @Autowired
+    public void setManagerService(ManagerService managerService) {
+        this.managerService = managerService;
+    }*/
 
     @Override
     public boolean isLoginExists(String login) {
         User existUser = userRepository.getUserByLogin(login);
-        return existUser == null;
+        return existUser != null;
     }
 
-    @Override
+/*    @Override
     public boolean blockDriverAccount(Long userId, Long driverId) {
         checkUser(userId, AccountStatus.ACTIVE);
         SimpleDriverDto existsDriver = driverService.getFreeDriver(driverId);
@@ -54,9 +65,9 @@ public class UserServiceImpl implements UserService {
 
         userRepository.setStatus(AccountStatus.BLOCKED, userId);
         return true;
-    }
+    }*/
 
-    @Override
+/*    @Override
     public boolean blockManagerAccount(Long userId, Long managerId) {
         checkUser(userId, AccountStatus.ACTIVE);
         SimpleManagerDto existsManager = managerService.findById(managerId);
@@ -67,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.setStatus(AccountStatus.BLOCKED, userId);
         return true;
-    }
+    }*/
 
     @Override
     public boolean unlockAccount(Long userId) {
@@ -96,11 +107,18 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private void checkUser(Long userId, AccountStatus status) {
+    @Override
+    public void checkUser(Long userId, AccountStatus status) {
         User existsUser = userRepository.getUserByIdAndStatus(userId, status);
 
         if (existsUser == null) {
             throw new BlockAccountException(String.format(WRONG_USER_OR_STATUS, userId));
         }
+    }
+
+    @Override
+    public boolean setStatus(AccountStatus status, Long userId) {
+        userRepository.setStatus(status, userId);
+        return true;
     }
 }

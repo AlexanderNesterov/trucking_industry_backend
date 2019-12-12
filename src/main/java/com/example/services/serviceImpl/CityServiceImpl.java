@@ -6,6 +6,7 @@ import com.example.database.repositories.CityRepository;
 import com.example.services.CityService;
 import com.example.services.mappers.CityMapper;
 import com.example.services.models.CityDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class CityServiceImpl implements CityService {
     public CityServiceImpl() {
     }
 
+    @Autowired
     public CityServiceImpl(CityRepository cityRepository, CityMapper cityMapper) {
         this.cityRepository = cityRepository;
         this.cityMapper = cityMapper;

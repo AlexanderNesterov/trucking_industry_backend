@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -33,8 +34,16 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("from Order o where o.searchString like %:text%")
     List<Order> getOrders(@Param("text") String text, Pageable pageable);
 
+    @Query("from Order o where o.isSendMail = false")
+    List<Order> getOrdersToSendMail();
+
     @Transactional
     @Modifying
     @Query("update Order o set o.searchString = :searchString where o.id = :orderId")
     void setOrderSearchString(@Param("searchString") String searchString, @Param("orderId") Long orderId);
+
+    @Transactional
+    @Modifying
+    @Query("update Order o set o.isSendMail = true where o.id = :orderId")
+    void setSentEmail(@Param("orderId") Long orderId);
 }

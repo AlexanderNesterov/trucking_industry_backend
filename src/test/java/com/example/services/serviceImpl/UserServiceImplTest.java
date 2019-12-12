@@ -59,7 +59,7 @@ public class UserServiceImplTest {
         assertFalse(result);
     }
 
-    @Test
+/*    @Test
     public void blockDriverAccount_SuitableAccount_True() {
         Long userId = 12L;
         Long driverId = 14L;
@@ -92,9 +92,9 @@ public class UserServiceImplTest {
                 () -> sut.blockDriverAccount(userId, driverId));
 
         assertTrue(thrown.getMessage().contains("Wrong user id " + userId + " or status"));
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void blockDriverAccount_WrongDriver_ExceptionThrows() {
         Long userId = 12L;
         Long driverId = 14L;
@@ -148,5 +148,5 @@ public class UserServiceImplTest {
                 () -> sut.blockManagerAccount(userId, managerId));
 
         assertTrue(thrown.getMessage().contains("Wrong manager id " + managerId));
-    }
+    }*/
 }

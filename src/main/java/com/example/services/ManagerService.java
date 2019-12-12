@@ -12,4 +12,5 @@ public interface ManagerService {
     List<SimpleManagerDto> getManagers(String text, int page, int pageSize);
     boolean updateManager(@Valid SimpleManagerDto user);
     boolean addManager(@Valid FullInfoManagerDto user);
+    boolean blockAccount(Long userId, Long managerId);
 }

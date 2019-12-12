@@ -16,5 +16,6 @@ public interface DriverService {
     boolean isDriverLicenseExists(String driverLicense, Long driverId);
     boolean updateDriver(@Valid SimpleDriverDto driver);
     boolean addDriver(@Valid FullInfoDriverDto driver);
+    boolean blockAccount(Long userId, Long driverId);
     void setDriverStatus(Long[] driverIds, DriverStatus status);
 }

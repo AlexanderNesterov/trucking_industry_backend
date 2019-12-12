@@ -2,6 +2,7 @@ package com.example.database.models;
 
 import com.example.database.models.commons.OrderStatus;
 import org.hibernate.annotations.Cascade;
+import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.*;
 import java.util.List;
@@ -41,6 +42,9 @@ public class Order {
 
     @Column(name = "search_string")
     private String searchString;
+
+    @Column(name = "send_mail")
+    private boolean isSendMail;
 
     public Order() {
     }
@@ -107,5 +111,13 @@ public class Order {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
+    }
+
+    public boolean isSendMail() {
+        return isSendMail;
+    }
+
+    public void setSendMail(boolean sendMail) {
+        isSendMail = sendMail;
     }
 }
