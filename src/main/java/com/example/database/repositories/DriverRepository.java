@@ -2,7 +2,6 @@ package com.example.database.repositories;
 
 import com.example.database.models.Driver;
 import com.example.database.models.commons.DriverStatus;
-import com.example.services.models.SimpleDriverDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,8 +16,6 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     @Query("from Driver d where d.status = com.example.database.models.commons.DriverStatus.REST " +
             "and d.user.status = com.example.database.models.commons.AccountStatus.ACTIVE")
     List<Driver> getFreeDrivers();
-
-    Driver getDriverByDriverLicense(String driverLicense);
 
     @Query("from Driver d where d.user.login = :driverLogin")
     Driver getDriverByLogin(@Param("driverLogin") String driverLogin);
@@ -38,6 +35,4 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     @Modifying
     @Query("update Driver d set d.status = :status where d.id in (:driverIds)")
     void setDriverStatus(@Param("driverIds") Long[] ids, @Param("status") DriverStatus status);
-
-
 }

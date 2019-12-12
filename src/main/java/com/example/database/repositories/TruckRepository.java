@@ -21,8 +21,6 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
             "com.example.database.models.commons.OrderStatus.IN_PROGRESS))")
     List<Truck> getFreeTrucks(@Param("weight") double weight);
 
-    Truck getTruckByRegistrationNumber(String registrationNumber);
-
     @Query("from Truck t where t.id = :truckId and t.capacity >= :orderWeight " +
             "and t.condition = com.example.database.models.commons.TruckCondition.SERVICEABLE " +
             "and (t.id not in (select o.truck.id from Order o where o.status in (" +

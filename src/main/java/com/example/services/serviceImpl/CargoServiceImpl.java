@@ -6,36 +6,40 @@ import com.example.database.models.commons.CargoStatus;
 import com.example.database.repositories.CargoRepository;
 import com.example.services.CargoService;
 import com.example.services.OrderService;
-import com.example.services.mappers.CargoMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+import static com.example.services.commons.message.CargoExceptionMessage.SET_STATUS_ERROR;
 
 @Service
 public class CargoServiceImpl implements CargoService {
 
-    private final CargoRepository cargoRepository;
-    private final OrderService orderService;
-    private final CargoMapper cargoMapper;
+    private CargoRepository cargoRepository;
+    private OrderService orderService;
 
-    public CargoServiceImpl(CargoRepository cargoRepository, OrderService orderService,
-                            CargoMapper cargoMapper) {
+    public CargoServiceImpl() {
+    }
+
+    public CargoServiceImpl(CargoRepository cargoRepository, OrderService orderService) {
         this.cargoRepository = cargoRepository;
         this.orderService = orderService;
-        this.cargoMapper = cargoMapper;
     }
 
     @Override
     public boolean setDeliverStatus(Long cargoId, Long orderId, Long driverId) {
-        Cargo cargo = cargoRepository.getCargoToDeliver(orderId, cargoId, driverId);
+        Optional<Cargo> cargoOpt = cargoRepository.getCargoToDeliver(orderId, cargoId, driverId);
+        Cargo cargo;
 
-        if (cargo == null) {
-            throw new ChangeOrderStatusException("Order id or driver id or cargo id or " +
-                    "cargo status or order status is wrong");
+        if (cargoOpt.isEmpty()) {
+            throw new ChangeOrderStatusException(SET_STATUS_ERROR);
+        } else {
+            cargo = cargoOpt.get();
         }
 
         cargo.setStatus(CargoStatus.DELIVERED);
         cargoRepository.save(cargo);
         orderService.tryToSetDeliverStatus(orderId);
-
         return true;
     }
 }

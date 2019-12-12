@@ -25,9 +25,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.example.services.commons.message.OrderExceptionMessage.*;
+
 @Service
 @Validated
 public class OrderServiceImpl implements OrderService {
+    private final int cargoLimit = 5;
 
     private OrderMapper orderMapper;
     private OrderRepository orderRepository;
@@ -57,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
         if (order.isPresent()) {
             return orderMapper.toDto(order.get());
         } else {
-            throw new OrderNotFoundException("Cargo with id: " + orderId + " not found");
+            throw new OrderNotFoundException(String.format(ORDER_NOT_FOUND, orderId));
         }
     }
 
@@ -101,27 +104,27 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto getOrderByDriverId(Long driverId) {
-        OrderDto orderDto = orderMapper.toDto(orderRepository.getOrderByDriverId(driverId));
+        Optional<Order> orderOpt = orderRepository.getOrderByDriverId(driverId);
 
-        if (orderDto == null) {
-            throw new OrderNotFoundException("Cargo with driver id: " + driverId + " not found");
+        if (orderOpt.isEmpty()) {
+            throw new OrderNotFoundException(String.format(ORDER_BY_DRIVER_NOT_FOUND, driverId));
+        } else {
+            return orderMapper.toDto(orderOpt.get());
         }
-
-        return orderDto;
     }
 
-    @Override
+/*    @Override
     public boolean checkOrderToBlockDriver(Long driverId) {
-        Order order = orderRepository.getOrderByDriverId(driverId);
-        return order == null;
-    }
+        Optional<Order> orderOpt = orderRepository.getOrderByDriverId(driverId);
+        return orderOpt.isEmpty();
+    }*/
 
     @Override
     public boolean setAcceptStatus(Long orderId, Long driverId) {
         Order order = getCheckedOrderToChangeStatus(orderId, driverId);
 
         if (!order.getStatus().equals(OrderStatus.CREATED)) {
-            throw new ChangeOrderStatusException("Attempt to set ACCEPT status to wrong order");
+            throw new ChangeOrderStatusException(String.format(WRONG_ORDER_STATUS, OrderStatus.IN_PROGRESS));
         }
 
         order.getCargoList().forEach(cargo -> cargo.setStatus(CargoStatus.IN_PROGRESS));
@@ -188,14 +191,14 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
-    public Order getCheckedOrderToChangeStatus(Long orderId, Long driverId) {
-        Order order = orderRepository.getOrderToChangeStatus(orderId, driverId);
+    private Order getCheckedOrderToChangeStatus(Long orderId, Long driverId) {
+        Optional<Order> order = orderRepository.getOrderToChangeStatus(orderId, driverId);
 
-        if (order == null) {
-            throw new ChangeOrderStatusException("Wrong order id or main driver id");
+        if (order.isEmpty()) {
+            throw new ChangeOrderStatusException(String.format(WRONG_ORDER_OR_DRIVER, orderId,driverId));
         }
 
-        return order;
+        return order.get();
     }
 
     private void checkSavingOrder(OrderDto savingOrder, boolean isUpdate) {
@@ -269,6 +272,10 @@ public class OrderServiceImpl implements OrderService {
 
         if (countedTotalWeight != savingOrder.getTotalWeight()) {
             throw new SavingOrderException("Incorrect total weight");
+        }
+
+        if (savingOrder.getCargoList().size() >= cargoLimit) {
+            throw new SavingOrderException("Incorrect number of cargo");
         }
     }
 

@@ -62,11 +62,11 @@ public class OrderController {
         return orderService.setRefuseStatus(orderId, driverId);
     }
 
-    @GetMapping("/for-manager/{driverId}")
+/*    @GetMapping("/for-manager/{driverId}")
     @RolesAllowed({"ROLE_ADMIN"})
     public boolean checkOrderToBlockDriver(@PathVariable Long driverId) {
         return orderService.checkOrderToBlockDriver(driverId);
-    }
+    }*/
 
     @PutMapping("/set-cancel-status/{orderId}")
     @RolesAllowed({"ROLE_ADMIN"})

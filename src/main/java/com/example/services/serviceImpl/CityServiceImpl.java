@@ -10,11 +10,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.example.services.commons.message.CityExceptionMessage.SAVING_CITY_ERROR;
+
 @Service
 public class CityServiceImpl implements CityService {
 
-    private final CityRepository cityRepository;
-    private final CityMapper cityMapper;
+    private CityRepository cityRepository;
+    private CityMapper cityMapper;
+
+    public CityServiceImpl() {
+    }
 
     public CityServiceImpl(CityRepository cityRepository, CityMapper cityMapper) {
         this.cityRepository = cityRepository;
@@ -36,10 +41,10 @@ public class CityServiceImpl implements CityService {
         List<City> existCities = cityRepository.getCitiesByNameAndCountry(city.getName(), city.getCountry());
 
         if (existCities.size() != 0) {
-            throw new SavingCityException("City with this name or country already exists");
+            throw new SavingCityException(String.format(SAVING_CITY_ERROR, city.getName()));
         }
 
         cityRepository.save(cityMapper.fromDto(city));
-        return false;
+        return true;
     }
 }

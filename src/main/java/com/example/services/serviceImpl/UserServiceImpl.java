@@ -9,20 +9,25 @@ import com.example.services.DriverService;
 import com.example.services.ManagerService;
 import com.example.services.UserService;
 import com.example.services.mappers.UserMapper;
-import com.example.services.models.FullInfoManagerDto;
 import com.example.services.models.ChangePasswordDto;
 import com.example.services.models.SimpleDriverDto;
+import com.example.services.models.SimpleManagerDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.example.services.commons.message.UserExceptionMessage.*;
+
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserMapper userMapper;
-    private final UserRepository userRepository;
-    private final DriverService driverService;
-    private final ManagerService managerService;
+    private UserMapper userMapper;
+    private UserRepository userRepository;
+    private DriverService driverService;
+    private ManagerService managerService;
+
+    public UserServiceImpl() {
+    }
 
     public UserServiceImpl(UserMapper userMapper, UserRepository userRepository,
                            DriverService driverService, ManagerService managerService) {
@@ -34,9 +39,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isLoginExists(String login) {
-        Long existUserId = userRepository.getUserIdByLogin(login);
-
-        return existUserId == null;
+        User existUser = userRepository.getUserByLogin(login);
+        return existUser == null;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class UserServiceImpl implements UserService {
         SimpleDriverDto existsDriver = driverService.getFreeDriver(driverId);
 
         if (existsDriver == null) {
-            throw new BlockAccountException("Wrong driver id or driver has an order");
+            throw new BlockAccountException(String.format(WRONG_DRIVER_OR_HAS_ORDER, driverId));
         }
 
         userRepository.setStatus(AccountStatus.BLOCKED, userId);
@@ -55,10 +59,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean blockManagerAccount(Long userId, Long managerId) {
         checkUser(userId, AccountStatus.ACTIVE);
-        FullInfoManagerDto existsManager = managerService.findById(managerId);
+        SimpleManagerDto existsManager = managerService.findById(managerId);
 
         if (existsManager == null) {
-            throw new BlockAccountException("Wrong manager id");
+            throw new BlockAccountException(String.format(WRONG_MANAGER_ID, managerId));
         }
 
         userRepository.setStatus(AccountStatus.BLOCKED, userId);
@@ -68,7 +72,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean unlockAccount(Long userId) {
         checkUser(userId, AccountStatus.BLOCKED);
-
         userRepository.setStatus(AccountStatus.ACTIVE, userId);
         return true;
     }
@@ -97,7 +100,7 @@ public class UserServiceImpl implements UserService {
         User existsUser = userRepository.getUserByIdAndStatus(userId, status);
 
         if (existsUser == null) {
-            throw new BlockAccountException("Wrong user id or wrong account status");
+            throw new BlockAccountException(String.format(WRONG_USER_OR_STATUS, userId));
         }
     }
 }

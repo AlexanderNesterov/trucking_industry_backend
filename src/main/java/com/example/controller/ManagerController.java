@@ -1,12 +1,10 @@
 package com.example.controller;
 
-import com.example.controller.exceptions.ManagerExistException;
 import com.example.controller.exceptions.ManagerNotFoundException;
+import com.example.controller.exceptions.SavingManagerException;
 import com.example.controller.response.ErrorResponse;
 import com.example.services.models.FullInfoManagerDto;
-import com.example.services.models.FullInfoUserDto;
 import com.example.services.models.SimpleManagerDto;
-import com.example.services.models.SimpleUserDto;
 import com.example.services.ManagerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +36,7 @@ public class ManagerController {
     @GetMapping("/{managerId}")
     @PreAuthorize("#managerId == authentication.principal.managerId")
     @RolesAllowed({"ROLE_ADMIN"})
-    public FullInfoManagerDto findById(@PathVariable Long managerId) {
+    public SimpleManagerDto findById(@PathVariable Long managerId) {
         return managerService.findById(managerId);
     }
 
@@ -55,7 +53,7 @@ public class ManagerController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(ManagerExistException exc) {
+    public ResponseEntity<ErrorResponse> handleException(SavingManagerException exc) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());

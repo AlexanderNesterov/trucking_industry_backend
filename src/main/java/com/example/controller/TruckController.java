@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.controller.exceptions.TruckExistsException;
+import com.example.controller.exceptions.SavingTruckException;
 import com.example.controller.exceptions.TruckNotFoundException;
 import com.example.controller.response.ErrorResponse;
 import com.example.services.models.TruckDto;
@@ -82,7 +82,7 @@ public class TruckController {
         return truckService.setServiceableStatus(truckId);
     }
 
-    @ExceptionHandler({TruckExistsException.class, ConstraintViolationException.class})
+    @ExceptionHandler({SavingTruckException.class, ConstraintViolationException.class})
     public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 

@@ -1,7 +1,7 @@
 package com.example.controller;
 
-import com.example.controller.exceptions.DriverExistsException;
 import com.example.controller.exceptions.DriverNotFoundException;
+import com.example.controller.exceptions.SavingDriverException;
 import com.example.controller.response.ErrorResponse;
 import com.example.services.models.FullInfoDriverDto;
 import com.example.services.models.SimpleDriverDto;
@@ -67,7 +67,7 @@ public class DriverController {
         return driverService.addDriver(driverDto);
     }
 
-    @ExceptionHandler({DriverExistsException.class, ConstraintViolationException.class})
+    @ExceptionHandler({SavingDriverException.class, ConstraintViolationException.class})
     public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
         ErrorResponse error = new ErrorResponse();
 

@@ -1,6 +1,5 @@
 package com.example.services.serviceImpl;
 
-import com.example.controller.exceptions.ManagerExistException;
 import com.example.controller.exceptions.ManagerNotFoundException;
 import com.example.controller.exceptions.SavingManagerException;
 import com.example.database.models.Manager;
@@ -8,9 +7,11 @@ import com.example.database.models.commons.AccountStatus;
 import com.example.database.models.commons.Role;
 import com.example.database.repositories.ManagerRepository;
 import com.example.services.ManagerService;
+import com.example.services.UserService;
 import com.example.services.mappers.ManagerMapper;
 import com.example.services.models.FullInfoManagerDto;
 import com.example.services.models.SimpleManagerDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,26 +21,38 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.services.commons.message.ManagerExceptionMessage.MANAGER_NOT_FOUND;
+import static com.example.services.commons.message.ManagerExceptionMessage.WRONG_MANAGER_ID;
+import static com.example.services.commons.message.UserExceptionMessage.LOGIN_EXISTS;
+
 @Service
 @Validated
 public class ManagerServiceImpl implements ManagerService {
 
-    private final ManagerRepository managerRepository;
-    private final ManagerMapper managerMapper;
+    private ManagerRepository managerRepository;
+    private ManagerMapper managerMapper;
+    private UserService userService;
 
-    public ManagerServiceImpl(ManagerRepository managerRepository, ManagerMapper managerMapper) {
-        this.managerRepository = managerRepository;
+    public ManagerServiceImpl(ManagerMapper managerMapper) {
         this.managerMapper = managerMapper;
     }
 
+    @Autowired
+    public ManagerServiceImpl(ManagerRepository managerRepository, UserService userService,
+                              ManagerMapper managerMapper) {
+        this.managerRepository = managerRepository;
+        this.managerMapper = managerMapper;
+        this.userService = userService;
+    }
+
     @Override
-    public FullInfoManagerDto findById(Long managerId) {
+    public SimpleManagerDto findById(Long managerId) {
         Optional<Manager> manager = managerRepository.findById(managerId);
 
         if (manager.isPresent()) {
-            return managerMapper.toFullInfoDto(manager.get());
+            return managerMapper.toDto(manager.get());
         } else {
-            throw new ManagerNotFoundException("Manager with id: " + managerId + "not found");
+            throw new ManagerNotFoundException(String.format(MANAGER_NOT_FOUND, managerId));
         }
     }
 
@@ -55,7 +68,7 @@ public class ManagerServiceImpl implements ManagerService {
         Manager sameManager;
 
         if (sameManagerOpt.isEmpty()) {
-            throw new SavingManagerException("Wrong manager id");
+            throw new SavingManagerException(String.format(WRONG_MANAGER_ID, manager.getId()));
         } else {
             sameManager = sameManagerOpt.get();
         }
@@ -65,22 +78,15 @@ public class ManagerServiceImpl implements ManagerService {
         sameManager.getUser().setPhone(manager.getUser().getPhone());
         sameManager.getUser().setEmail(manager.getUser().getEmail());
         managerRepository.save(sameManager);
-/*        FullInfoManagerDto sameManager = findById(manager.getId());
-
-        manager.getUser().setPassword(sameManager.getUser().getPassword());
-        manager.getUser().setLogin(sameManager.getUser().getLogin());
-        manager.getUser().setRole(Role.ADMIN);
-        manager.getUser().setStatus(sameManager.getUser().getStatus());
-        managerRepository.save(managerMapper.fromFullInfoDto(manager));*/
         return true;
     }
 
     @Override
     public boolean addManager(@Valid FullInfoManagerDto manager) {
-        Manager managerWithSameLogin = managerRepository.getManagerByLogin(manager.getUser().getLogin());
+        boolean isLoginExists = userService.isLoginExists(manager.getUser().getLogin());
 
-        if (managerWithSameLogin != null) {
-            throw new ManagerExistException("Manager with login: " + manager.getUser().getLogin() + "already exists");
+        if (isLoginExists) {
+            throw new SavingManagerException(String.format(LOGIN_EXISTS, manager.getUser().getLogin()));
         }
 
         manager.setId(null);

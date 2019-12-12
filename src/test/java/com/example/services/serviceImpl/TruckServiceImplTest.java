@@ -1,6 +1,7 @@
 package com.example.services.serviceImpl;
 
-import com.example.controller.exceptions.TruckExistsException;
+import com.example.controller.exceptions.SavingTruckException;
+import com.example.controller.exceptions.SetTruckConditionException;
 import com.example.controller.exceptions.TruckNotFoundException;
 import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.TruckRepository;
@@ -18,67 +19,162 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
+import static com.example.services.commons.message.TruckExceptionMessage.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TruckServiceImplTest {
 
     private TruckMapper truckMapper = new TruckMapperImpl();
-    private TruckDto addingTruck, updatingTruck;
+    private TruckDto truckDto;
 
     @InjectMocks
-    private TruckService truckService = new TruckServiceImpl(truckMapper);
+    private TruckService sut = new TruckServiceImpl(truckMapper);
 
     @Mock
     private TruckRepository truckRepository;
 
     @Before
     public void setUp() {
-        addingTruck = new TruckDto();
-        addingTruck.setModel("Scania S-900");
-        addingTruck.setCapacity(700);
-
-        updatingTruck = new TruckDto();
-        updatingTruck.setModel("Mercedes C-500");
-        updatingTruck.setCapacity(500);
+        truckDto = new TruckDto();
+        truckDto.setModel("Scania S-900");
+        truckDto.setCapacity(700);
     }
 
     @Test
-    public void addTruckSuccessfully() {
-        addingTruck.setRegistrationNumber("IL90019");
+    public void findBy_IdExists_Truck() {
+        Long truckId = 12L;
+        truckDto.setId(truckId);
 
         Mockito
-                .when(truckRepository.getTruckByRegistrationNumber(addingTruck.getRegistrationNumber()))
-                .thenReturn(null);
-        boolean t = truckService.addTruck(addingTruck);
+                .when(truckRepository.findById(truckDto.getId()))
+                .thenReturn(Optional.of(truckMapper.fromDto(truckDto)));
 
-        assertEquals("SERVICEABLE", addingTruck.getCondition().name());
-        assertNull(addingTruck.getId());
-        assertTrue(t);
+        TruckDto foundTruck = sut.findById(truckDto.getId());
+
+        assertEquals(truckDto.getRegistrationNumber(), foundTruck.getRegistrationNumber());
+        assertEquals(truckDto.getModel(), foundTruck.getModel());
+        assertEquals(truckDto.getCapacity(), foundTruck.getCapacity());
+    }
+
+    @Test
+    public void findById_TruckNotExists_ExceptionThrows() {
+        Long truckId = 10L;
+        Mockito
+                .when(truckRepository.findById(truckId))
+                .thenReturn(Optional.empty());
+
+        TruckNotFoundException thrown = assertThrows(TruckNotFoundException.class,
+                () -> sut.findById(truckId));
+
+        assertTrue(thrown.getMessage().contains("Truck with id " + truckId + " not found"));
+    }
+
+    @Test
+    public void isRegistrationNumberExist_RegistrationNumberNotExist_True() {
+        String registrationNumber = "HJ89017";
+        Long truckId = 12L;
+
+        Mockito
+                .when(truckRepository.getTruckIdByRegistrationNumber(registrationNumber))
+                .thenReturn(null);
+
+        boolean result = sut.isRegistrationNumberExists(registrationNumber, truckId);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void isRegistrationNumberExist_SameTruck_True() {
+        String registrationNumber = "HJ89017";
+        Long truckId = 12L;
+
+        Mockito
+                .when(truckRepository.getTruckIdByRegistrationNumber(registrationNumber))
+                .thenReturn(truckId);
+
+        boolean result = sut.isRegistrationNumberExists(registrationNumber, truckId);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void isRegistrationNumberExist_RegistrationNumberExist_True() {
+        String registrationNumber = "HJ89017";
+        Long truckId = 12L;
+        Long anotherTruckId = 13L;
+
+        Mockito
+                .when(truckRepository.getTruckIdByRegistrationNumber(registrationNumber))
+                .thenReturn(anotherTruckId);
+
+        boolean result = sut.isRegistrationNumberExists(registrationNumber, truckId);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void addTruck_SuitableTruck_True() {
+        Mockito
+                .when(truckRepository.getTruckIdByRegistrationNumber(truckDto.getRegistrationNumber()))
+                .thenReturn(null);
+
+        boolean result = sut.addTruck(truckDto);
+
+        assertEquals(TruckCondition.SERVICEABLE, truckDto.getCondition());
+        assertNull(truckDto.getId());
+        assertTrue(result);
     }
 
     @Test
     public void failedAddTruckSameRegistrationNumbers() {
-        addingTruck.setRegistrationNumber("BB89009");
-
-        TruckDto existsTruck = new TruckDto();
-        existsTruck.setRegistrationNumber("BB89009");
+        Long truckId = 17L;
+        Long existTruckId = 20L;
+        truckDto.setId(truckId);
 
         Mockito
-                .when(truckRepository.getTruckByRegistrationNumber(addingTruck.getRegistrationNumber())).
-                thenReturn(truckMapper.fromDto(existsTruck));
+                .when(truckRepository.getTruckIdByRegistrationNumber(truckDto.getRegistrationNumber())).
+                thenReturn(existTruckId);
 
-        TruckExistsException thrown = assertThrows(TruckExistsException.class,
-                () -> truckService.addTruck(this.addingTruck));
+        SavingTruckException thrown = assertThrows(SavingTruckException.class,
+                () -> sut.addTruck(truckDto));
 
         assertTrue(thrown.getMessage()
-                .contains("Truck with registration number: " + addingTruck.getRegistrationNumber() + " already exists"));
+                .contains("Truck with registration number " + truckDto.getRegistrationNumber() + " already exist"));
     }
 
     @Test
-    public void updateTruckWithNewRegistrationNumberSuccessfully() {
-        updatingTruck.setId(23L);
-        updatingTruck.setRegistrationNumber("AA89009");
+    public void canUpdateTruck_SuitableTruck_True() {
+        Long truckId = 2L;
+        truckDto.setId(truckId);
+
+        Mockito
+                .when(truckRepository.getTruckIdToUpdate(truckDto.getId()))
+                .thenReturn(truckId);
+
+        boolean result = sut.canUpdateTruck(truckDto.getId());
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void canUpdateTruck_WrongTruck_True() {
+        Long truckId = 2L;
+        truckDto.setId(truckId);
+
+        Mockito
+                .when(truckRepository.getTruckIdToUpdate(truckDto.getId()))
+                .thenReturn(null);
+
+        boolean result = sut.canUpdateTruck(truckDto.getId());
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void updateTruck_NewRegistrationNumber_True() {
+        Long truckId = 23L;
+        truckDto.setId(truckId);
 
         TruckDto sameTruck = new TruckDto();
         sameTruck.setId(23L);
@@ -86,92 +182,83 @@ public class TruckServiceImplTest {
         sameTruck.setCondition(TruckCondition.SERVICEABLE);
 
         Mockito
-                .when(truckRepository.getTruckByRegistrationNumber("AA89009"))
+                .when(truckRepository.getTruckIdToUpdate(truckDto.getId()))
+                .thenReturn(truckDto.getId());
+        Mockito
+                .when(truckRepository.getTruckIdByRegistrationNumber(truckDto.getRegistrationNumber()))
                 .thenReturn(null);
         Mockito
                 .when(truckRepository.findById(23L))
                 .thenReturn(Optional.of(truckMapper.fromDto(sameTruck)));
-        boolean result = truckService.updateTruck(updatingTruck);
 
-        assertEquals(sameTruck.getCondition(), updatingTruck.getCondition());
+        boolean result = sut.updateTruck(truckDto);
+
+        assertEquals(sameTruck.getCondition(), truckDto.getCondition());
         assertTrue(result);
     }
 
     @Test
-    public void successUpdateTruckWithoutRegistrationNumberSuccessfully() {
-        updatingTruck.setId(23L);
-        updatingTruck.setRegistrationNumber("AA89009");
-
-        TruckDto sameTruck = new TruckDto();
-        sameTruck.setId(23L);
-        sameTruck.setModel("Renault t-500");
-        sameTruck.setRegistrationNumber("AA89009");
-        sameTruck.setCapacity(300);
-//        sameTruck.setCondition(TruckCondition.FAULTY);
+    public void updateTruck_WrongTruck_ExceptionThrows() {
+        Long truckId = 23L;
+        truckDto.setId(truckId);
 
         Mockito
-                .when(truckRepository.getTruckByRegistrationNumber("AA89009"))
-                .thenReturn(truckMapper.fromDto(sameTruck));
-        Mockito
-                .when(truckRepository.findById(23L))
-                .thenReturn(Optional.of(truckMapper.fromDto(sameTruck)));
-        boolean result = truckService.updateTruck(updatingTruck);
+                .when(truckRepository.getTruckIdToUpdate(truckDto.getId()))
+                .thenReturn(null);
 
-        assertEquals(updatingTruck.getCondition(), updatingTruck.getCondition());
-        assertTrue(result);
+        SavingTruckException thrown = assertThrows(SavingTruckException.class,
+                () -> sut.updateTruck(truckDto));
+
+        assertTrue(thrown.getMessage().contains(String.format(WRONG_TRUCK_OR_INCLUDED_IN_ORDER, truckDto.getId())));
     }
 
     @Test
-    public void failedUpdateTruckRegistrationNumberExists() {
-        updatingTruck.setId(23L);
-        updatingTruck.setRegistrationNumber("AA89009");
+    public void updateTruck_RegistrationNumberExist_ExceptionThrows() {
+        Long truckId = 45L;
+        Long existTruckId = 60L;
+        truckDto.setId(truckId);
 
-        TruckDto sameTruck = new TruckDto();
-        sameTruck.setId(90L);
-        sameTruck.setRegistrationNumber("AA89009");
-//        sameTruck.setCondition(TruckCondition.FAULTY);
 
         Mockito
-                .when(truckRepository.getTruckByRegistrationNumber("AA89009"))
-                .thenReturn(truckMapper.fromDto(sameTruck));
+                .when(truckRepository.getTruckIdToUpdate(truckDto.getId()))
+                .thenReturn(truckDto.getId());
         Mockito
-                .when(truckRepository.findById(23L))
-                .thenReturn(Optional.of(truckMapper.fromDto(sameTruck)));
+                .when(truckRepository.getTruckIdByRegistrationNumber(truckDto.getRegistrationNumber()))
+                .thenReturn(existTruckId);
 
-        TruckExistsException thrown = assertThrows(TruckExistsException.class,
-                () -> truckService.updateTruck(updatingTruck));
+        SavingTruckException thrown = assertThrows(SavingTruckException.class,
+                () -> sut.updateTruck(truckDto));
 
         assertTrue(thrown.getMessage()
-                .contains("Truck with registration number: " +
-                        updatingTruck.getRegistrationNumber() + " already exists"));
+                .contains(String.format(REGISTRATION_NUMBER_EXISTS, truckDto.getRegistrationNumber())));
     }
+
     @Test
-    public void findByIdSuccessfully() {
-        TruckDto truckDto = new TruckDto();
-        truckDto.setId(12L);
-        truckDto.setModel("Renault t-500");
-        truckDto.setRegistrationNumber("BB89009");
-        truckDto.setCapacity(300);
+    public void setBrokenStatus_SuitableTruck_True() {
+        Long truckId = 12L;
+        TruckCondition condition = TruckCondition.SERVICEABLE;
 
         Mockito
-                .when(truckRepository.findById(12L))
+                .when(truckRepository.getTruckToSetStatus(truckId, condition))
                 .thenReturn(Optional.of(truckMapper.fromDto(truckDto)));
-        TruckDto foundTruck = truckService.findById(12L);
 
-        assertEquals("BB89009", foundTruck.getRegistrationNumber());
-        assertEquals("Renault t-500", foundTruck.getModel());
-        assertEquals(300, foundTruck.getCapacity());
+        boolean result = sut.setBrokenStatus(truckId);
+
+        assertTrue(result);
     }
 
     @Test
-    public void failedFindByIdNotFound() {
+    public void setBrokenStatus_WrongTruck_ExceptionThrows() {
+        Long truckId = 12L;
+        TruckCondition condition = TruckCondition.SERVICEABLE;
+
         Mockito
-                .when(truckRepository.findById(10L))
+                .when(truckRepository.getTruckToSetStatus(truckId, condition))
                 .thenReturn(Optional.empty());
 
-        TruckNotFoundException thrown = assertThrows(TruckNotFoundException.class,
-                () -> truckService.findById(10L));
+        SetTruckConditionException thrown = assertThrows(SetTruckConditionException.class,
+                () -> sut.setBrokenStatus(truckId));
 
-        assertTrue(thrown.getMessage().contains("Truck with id: " + 10 + " not found"));
+        assertTrue(thrown.getMessage().contains(String.format(WRONG_TRUCK_OR_CONDITION, truckId)));
     }
 }

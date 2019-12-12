@@ -14,9 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User getUserByLogin(String login);
 
-    @Query("select u.id from User u where u.login = :login")
-    Long getUserIdByLogin(@Param("login") String login);
-
     User getUserByIdAndStatus(Long id, AccountStatus status);
 
     Optional<User> getUserByLoginAndPassword(String login, String password);
