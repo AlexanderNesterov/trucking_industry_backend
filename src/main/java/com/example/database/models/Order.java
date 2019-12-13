@@ -1,6 +1,7 @@
 package com.example.database.models;
 
 import com.example.database.models.commons.OrderStatus;
+import com.example.database.models.interfaces.Searchable;
 import org.hibernate.annotations.Cascade;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order implements Searchable {
 
     @Id
     @SequenceGenerator(name = "order_seq", sequenceName = "orders_id_seq", allocationSize = 1)
@@ -119,5 +120,25 @@ public class Order {
 
     public void setSendMail(boolean sendMail) {
         isSendMail = sendMail;
+    }
+
+    @Override
+    public void combineSearchString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append(id).append(" ")
+                .append(driver.getUser().getFirstName()).append(" ")
+                .append(driver.getUser().getLastName()).append(" ")
+                .append(coDriver.getUser().getFirstName()).append(" ")
+                .append(coDriver.getUser().getLastName()).append(" ")
+                .append(truck.getRegistrationNumber()).append(" ")
+                .append(totalWeight).append(" ")
+                .append(status).append(" ");
+        cargoList.forEach(cargoDto -> sb.append(cargoDto.getTitle()).append(" "));
+        cargoList.forEach(cargoDto -> sb.append(cargoDto.getLoadLocation().getName()).append(" "));
+        cargoList.forEach(cargoDto -> sb.append(cargoDto.getDischargeLocation().getName()).append(" "));
+
+        searchString = sb.toString().toLowerCase();
     }
 }

@@ -83,8 +83,10 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setStatus(OrderStatus.CREATED);
         orderDto.getDriver().setStatus(DriverStatus.ASSIGNED);
         orderDto.getCoDriver().setStatus(DriverStatus.ASSIGNED);
-        orderDto.combineSearchString();
-        orderRepository.save(orderMapper.fromDto(orderDto));
+
+        Order order = orderMapper.fromDto(orderDto);
+        order.combineSearchString();
+        orderRepository.save(order);
         return true;
     }
 
@@ -98,12 +100,11 @@ public class OrderServiceImpl implements OrderService {
         order.getCargoList().forEach(cargo -> cargo.setStatus(CargoStatus.CREATED));
         order.getCargoList().forEach(cargo -> cargo.setId(null));
         Order savedOrder = orderRepository.save(orderMapper.fromDto(order));
-        OrderDto orderDto = orderMapper.toDto(savedOrder);
-        orderDto.combineSearchString();
+        savedOrder.combineSearchString();
         driverService.setDriverStatus(new Long[] {order.getDriver().getId(), order.getCoDriver().getId()},
                 DriverStatus.ASSIGNED);
 
-        orderRepository.setOrderSearchString(orderDto.getSearchString(), savedOrder.getId());
+        orderRepository.setOrderSearchString(savedOrder.getSearchString(), savedOrder.getId());
         return true;
     }
 
@@ -118,12 +119,6 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-/*    @Override
-    public boolean checkOrderToBlockDriver(Long driverId) {
-        Optional<Order> orderOpt = orderRepository.getOrderByDriverId(driverId);
-        return orderOpt.isEmpty();
-    }*/
-
     @Override
     public boolean setAcceptStatus(Long orderId, Long driverId) {
         Order order = getCheckedOrderToChangeStatus(orderId, driverId);
@@ -136,8 +131,8 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.IN_PROGRESS);
         order.getDriver().setStatus(DriverStatus.ACTIVE);
         order.getCoDriver().setStatus(DriverStatus.ACTIVE);
+        order.combineSearchString();
         orderRepository.save(order);
-
         return true;
     }
 
@@ -152,8 +147,8 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.REFUSED_BY_DRIVER);
         order.getDriver().setStatus(DriverStatus.REST);
         order.getCoDriver().setStatus(DriverStatus.REST);
+        order.combineSearchString();
         orderRepository.save(order);
-
         return true;
     }
 
@@ -176,6 +171,7 @@ public class OrderServiceImpl implements OrderService {
             order.setStatus(OrderStatus.DELIVERED);
             order.getDriver().setStatus(DriverStatus.REST);
             order.getCoDriver().setStatus(DriverStatus.REST);
+            order.combineSearchString();
             orderRepository.save(order);
         }
     }
@@ -192,6 +188,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.CANCELED);
         order.getDriver().setStatus(DriverStatus.REST);
         order.getCoDriver().setStatus(DriverStatus.REST);
+        order.combineSearchString();
         orderRepository.save(order);
         return true;
     }

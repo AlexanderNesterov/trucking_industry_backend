@@ -74,9 +74,11 @@ public class TruckServiceImpl implements TruckService {
         }
 
         TruckDto sameTruck = findById(truckDto.getId());
-
         truckDto.setCondition(sameTruck.getCondition());
-        truckRepository.save(truckMapper.fromDto(truckDto));
+
+        Truck truck = truckMapper.fromDto(truckDto);
+        truck.combineSearchString();
+        truckRepository.save(truck);
         return true;
     }
 
@@ -91,8 +93,9 @@ public class TruckServiceImpl implements TruckService {
 
         truckDto.setId(null);
         truckDto.setCondition(TruckCondition.SERVICEABLE);
-        truckDto.combineSearchString();
-        truckRepository.save(truckMapper.fromDto(truckDto));
+        Truck truck = truckMapper.fromDto(truckDto);
+        truck.combineSearchString();
+        truckRepository.save(truck);
         return true;
     }
 
@@ -124,6 +127,7 @@ public class TruckServiceImpl implements TruckService {
         }
 
         existsTruck.setCondition(TruckCondition.BROKEN);
+        existsTruck.combineSearchString();
         truckRepository.save(existsTruck);
         return true;
     }
@@ -140,6 +144,7 @@ public class TruckServiceImpl implements TruckService {
         }
 
         existsTruck.setCondition(TruckCondition.SERVICEABLE);
+        existsTruck.combineSearchString();
         truckRepository.save(existsTruck);
         return true;
     }

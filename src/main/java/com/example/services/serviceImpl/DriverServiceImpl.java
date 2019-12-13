@@ -47,11 +47,6 @@ public class DriverServiceImpl implements DriverService {
         this.userService = userService;
     }
 
-/*    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }*/
-
     @Override
     public boolean isDriverLicenseExists(String driverLicense, Long driverId) {
         Long existDriverId = driverRepository.getDriverIdByDriverLicense(driverLicense);
@@ -93,6 +88,7 @@ public class DriverServiceImpl implements DriverService {
         sameDriver.getUser().setLastName(driverDto.getUser().getLastName());
         sameDriver.getUser().setPhone(driverDto.getUser().getPhone());
         sameDriver.getUser().setEmail(driverDto.getUser().getEmail());
+        sameDriver.combineSearchString();
         driverRepository.save(sameDriver);
         return true;
     }
@@ -106,8 +102,10 @@ public class DriverServiceImpl implements DriverService {
         driverDto.getUser().setRole(Role.DRIVER);
         driverDto.getUser().setStatus(AccountStatus.ACTIVE);
         driverDto.setStatus(DriverStatus.REST);
-        driverDto.combineSearchString();
-        driverRepository.save(driverMapper.fromFullInfoDto(driverDto));
+
+        Driver driver = driverMapper.fromFullInfoDto(driverDto);
+        driver.combineSearchString();
+        driverRepository.save(driver);
         return true;
     }
 

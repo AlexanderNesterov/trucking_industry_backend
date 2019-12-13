@@ -1,10 +1,10 @@
 package com.example.services.models;
 
-import com.example.services.models.interfaces.Searchable;
+import com.example.database.models.interfaces.Searchable;
 
 import javax.validation.Valid;
 
-public class FullInfoManagerDto implements Searchable {
+public class FullInfoManagerDto {
     private Long id;
 
     @Valid
@@ -37,18 +37,5 @@ public class FullInfoManagerDto implements Searchable {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
-    }
-
-    @Override
-    public void combineSearchString() {
-        StringBuilder sb = new StringBuilder();
-
-        sb
-                .append(user.getFirstName()).append(" ")
-                .append(user.getLastName()).append(" ")
-                .append(user.getPhone()).append(" ")
-                .append(user.getEmail());
-
-        searchString = sb.toString().toLowerCase();
     }
 }

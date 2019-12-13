@@ -1,11 +1,13 @@
 package com.example.database.models;
 
 import com.example.database.models.commons.DriverStatus;
+import com.example.database.models.interfaces.Searchable;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "drivers")
-public class Driver {
+public class Driver implements Searchable {
 
     @Id
     @SequenceGenerator(name = "driver_seq", sequenceName = "drivers_id_seq", allocationSize = 1)
@@ -68,5 +70,19 @@ public class Driver {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
+    }
+
+    @Override
+    public void combineSearchString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append(user.getFirstName()).append(" ")
+                .append(user.getLastName()).append(" ")
+                .append(user.getEmail()).append(" ")
+                .append(user.getPhone()).append(" ")
+                .append(driverLicense);
+
+        searchString = sb.toString().toLowerCase();
     }
 }

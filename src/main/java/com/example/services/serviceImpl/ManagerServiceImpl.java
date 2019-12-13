@@ -79,23 +79,27 @@ public class ManagerServiceImpl implements ManagerService {
         sameManager.getUser().setLastName(manager.getUser().getLastName());
         sameManager.getUser().setPhone(manager.getUser().getPhone());
         sameManager.getUser().setEmail(manager.getUser().getEmail());
+        sameManager.combineSearchString();
         managerRepository.save(sameManager);
         return true;
     }
 
     @Override
-    public boolean addManager(@Valid FullInfoManagerDto manager) {
-        boolean isLoginExists = userService.isLoginExists(manager.getUser().getLogin());
+    public boolean addManager(@Valid FullInfoManagerDto managerDto) {
+        boolean isLoginExists = userService.isLoginExists(managerDto.getUser().getLogin());
 
         if (isLoginExists) {
-            throw new SavingManagerException(String.format(LOGIN_EXISTS, manager.getUser().getLogin()));
+            throw new SavingManagerException(String.format(LOGIN_EXISTS, managerDto.getUser().getLogin()));
         }
 
-        manager.setId(null);
-        manager.getUser().setRole(Role.ADMIN);
-        manager.getUser().setStatus(AccountStatus.ACTIVE);
+        managerDto.setId(null);
+        managerDto.getUser().setRole(Role.ADMIN);
+        managerDto.getUser().setStatus(AccountStatus.ACTIVE);
+
+        Manager manager = managerMapper.fromFullInfoDto(managerDto);
         manager.combineSearchString();
-        managerRepository.save(managerMapper.fromFullInfoDto(manager));
+        managerRepository.save(manager);
+
         return true;
     }
 

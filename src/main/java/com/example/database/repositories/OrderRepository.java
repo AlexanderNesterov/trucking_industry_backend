@@ -34,7 +34,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("from Order o where o.searchString like %:text%")
     List<Order> getOrders(@Param("text") String text, Pageable pageable);
 
-    @Query("from Order o where o.isSendMail = false")
+    @Query("from Order o where o.isSendMail = false " +
+            "and o.status = com.example.database.models.commons.OrderStatus.CREATED")
     List<Order> getOrdersToSendMail();
 
     @Transactional

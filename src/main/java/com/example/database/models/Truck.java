@@ -1,11 +1,13 @@
 package com.example.database.models;
 
 import com.example.database.models.commons.TruckCondition;
+import com.example.database.models.interfaces.Searchable;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "trucks")
-public class Truck {
+public class Truck implements Searchable {
 
     @Id
     @SequenceGenerator(name = "truck_seq", sequenceName = "trucks_id_seq", allocationSize = 1)
@@ -78,5 +80,18 @@ public class Truck {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
+    }
+
+    @Override
+    public void combineSearchString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append(registrationNumber).append(" ")
+                .append(model).append(" ")
+                .append(capacity).append(" ")
+                .append(condition);
+
+        searchString =  sb.toString().toLowerCase();
     }
 }
