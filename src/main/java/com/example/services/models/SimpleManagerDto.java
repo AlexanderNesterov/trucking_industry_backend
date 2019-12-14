@@ -2,6 +2,9 @@ package com.example.services.models;
 
 import javax.validation.Valid;
 
+/**
+ * Class that uses for all purposes except adding managers
+ */
 public class SimpleManagerDto {
     private Long id;
 

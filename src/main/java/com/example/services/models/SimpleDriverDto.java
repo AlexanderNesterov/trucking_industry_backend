@@ -9,6 +9,9 @@ import javax.validation.constraints.Pattern;
 
 import static com.example.services.serviceImpl.validation.Message.*;
 
+/**
+ * Class that uses for all purposes except adding drivers
+ */
 public class SimpleDriverDto {
 
     @NotNull(message = ID + IS_NULL)

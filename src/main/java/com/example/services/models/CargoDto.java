@@ -15,6 +15,7 @@ public class CargoDto {
 
     @Length(max = 256, message = DESCRIPTION + TOO_LONG + DESCRIPTION_MAX_LENGTH)
     private String description;
+
     private CityDto loadLocation;
     private CityDto dischargeLocation;
 
@@ -22,6 +23,7 @@ public class CargoDto {
     @DecimalMin(value = "1", message = WEIGHT + TOO_SMALL + WEIGHT_MIN_VALUE)
     @DecimalMax(value = "1000000", message = WEIGHT + TOO_BIG + WEIGHT_MAX_VALUE)
     private double weight;
+
     private CargoStatus status;
 
     public CargoDto() {

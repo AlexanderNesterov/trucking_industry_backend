@@ -14,8 +14,9 @@ import java.util.List;
 public interface DriverRepository extends JpaRepository<Driver, Long> {
 
     @Query("from Driver d where d.status = com.example.database.models.commons.DriverStatus.REST " +
-            "and d.user.status = com.example.database.models.commons.AccountStatus.ACTIVE ")
-    List<Driver> getFreeDrivers();
+            "and d.user.status = com.example.database.models.commons.AccountStatus.ACTIVE " +
+            "and d.searchString like %:text%")
+    List<Driver> getFreeDrivers(@Param("text") String text, Pageable pageable);
 
     @Query("from Driver d where d.user.login = :driverLogin")
     Driver getDriverByLogin(@Param("driverLogin") String driverLogin);

@@ -112,8 +112,9 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
-    public List<TruckDto> getFreeTrucks(double weight) {
-        return truckMapper.toListDto(truckRepository.getFreeTrucks(weight));
+    public List<TruckDto> getFreeTrucks(double weight, String text, int page, int pageSize) {
+        Pageable request = PageRequest.of(page - 1, pageSize);
+        return truckMapper.toListDto(truckRepository.getFreeTrucks(weight, text, request));
     }
 
     @Override

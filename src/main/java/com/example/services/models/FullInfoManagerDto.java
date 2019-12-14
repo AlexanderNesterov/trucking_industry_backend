@@ -1,9 +1,10 @@
 package com.example.services.models;
 
-import com.example.database.models.interfaces.Searchable;
-
 import javax.validation.Valid;
 
+/**
+ * Class that uses only for adding managers
+ */
 public class FullInfoManagerDto {
     private Long id;
 

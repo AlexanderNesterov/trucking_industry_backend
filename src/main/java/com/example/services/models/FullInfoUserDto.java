@@ -7,6 +7,9 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import static com.example.services.serviceImpl.validation.Message.*;
 
+/**
+ * Class that uses only for adding new user
+ */
 public class FullInfoUserDto extends SimpleUserDto {
 
     @NotBlank(message = LOGIN + IS_BLANK)

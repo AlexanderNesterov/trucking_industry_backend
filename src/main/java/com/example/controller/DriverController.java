@@ -50,8 +50,10 @@ public class DriverController {
 
     @GetMapping("/free")
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<SimpleDriverDto> getFreeDrivers() {
-        return driverService.getFreeDrivers();
+    public List<SimpleDriverDto> getFreeDrivers(@RequestParam String text,
+                                                @RequestParam int page,
+                                                @RequestParam int size) {
+        return driverService.getFreeDrivers(text, page, size);
     }
 
     @PutMapping

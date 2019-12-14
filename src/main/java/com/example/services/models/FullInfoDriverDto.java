@@ -9,6 +9,9 @@ import javax.validation.constraints.Pattern;
 
 import static com.example.services.serviceImpl.validation.Message.*;
 
+/**
+ * Class that uses only for adding new driver
+ */
 public class FullInfoDriverDto {
 
     private Long id;
@@ -16,10 +19,12 @@ public class FullInfoDriverDto {
     @NotNull(message = DRIVER_LICENSE + IS_NULL)
     @Pattern(regexp = "\\d{10}", message = DRIVER_LICENSE + INVALID_FORMAT)
     private String driverLicense;
+
     private DriverStatus status;
 
     @Valid
     private FullInfoUserDto user;
+
     private String searchString;
 
     public FullInfoDriverDto() {

@@ -45,10 +45,13 @@ public class TruckController {
         return truckService.canUpdateTruck(truckId);
     }
 
-    @GetMapping("free/{weight}")
+    @GetMapping("/free")
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<TruckDto> getFreeTrucks(@PathVariable double weight) {
-        return truckService.getFreeTrucks(weight);
+    public List<TruckDto> getFreeTrucks(@RequestParam double weight,
+                                        @RequestParam String text,
+                                        @RequestParam int page,
+                                        @RequestParam("size") int pageSize) {
+        return truckService.getFreeTrucks(weight, text, page, pageSize);
     }
 
     @GetMapping("/{truckDtoId}")

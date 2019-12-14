@@ -18,8 +18,9 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
             "o.status in (" +
             "com.example.database.models.commons.OrderStatus.CREATED, " +
             "com.example.database.models.commons.OrderStatus.REFUSED_BY_DRIVER, " +
-            "com.example.database.models.commons.OrderStatus.IN_PROGRESS))")
-    List<Truck> getFreeTrucks(@Param("weight") double weight);
+            "com.example.database.models.commons.OrderStatus.IN_PROGRESS)) " +
+            "and t.searchString like %:text%")
+    List<Truck> getFreeTrucks(@Param("weight") double weight, @Param("text") String text, Pageable pageable);
 
     @Query("from Truck t where t.id = :truckId and t.capacity >= :orderWeight " +
             "and t.condition = com.example.database.models.commons.TruckCondition.SERVICEABLE " +

@@ -46,6 +46,13 @@ public class ManagerController {
         return managerService.updateManager(managerDto);
     }
 
+    @PutMapping("/block/{userId}/{managerId}")
+    @PreAuthorize("#managerId == authentication.principal.managerId")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public boolean blockAccount(@PathVariable Long userId, @PathVariable Long managerId) {
+        return managerService.blockAccount(userId, managerId);
+    }
+
     @PostMapping
     @RolesAllowed({"ROLE_ADMIN"})
     public boolean addManager(@RequestBody FullInfoManagerDto managerDto) {

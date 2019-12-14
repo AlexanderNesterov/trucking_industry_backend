@@ -1,5 +1,8 @@
 package com.example.services.models;
 
+/**
+ * Class that contains info to change password
+ */
 public class ChangePasswordDto {
 
     private String login;
