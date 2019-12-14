@@ -1,6 +1,10 @@
 package com.example.controller;
 
+import com.example.controller.exceptions.ChangeOrderStatusException;
+import com.example.controller.response.ErrorResponse;
 import com.example.services.CargoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,5 +27,16 @@ public class CargoController {
     public boolean setDeliverStatus(@PathVariable Long cargoId, @PathVariable Long orderId,
                                     @PathVariable Long driverId) {
         return cargoService.setDeliverStatus(cargoId, orderId, driverId);
+    }
+
+    @ExceptionHandler(ChangeOrderStatusException.class)
+    public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
+        ErrorResponse error = new ErrorResponse();
+
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(exc.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

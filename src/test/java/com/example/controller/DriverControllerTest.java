@@ -20,7 +20,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.LinkedMultiValueMap;
 
+import static com.example.services.commons.message.DriverExceptionMessage.DRIVER_NOT_FOUND;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,11 +42,11 @@ public class DriverControllerTest {
     @Autowired
     private DriverController driverController;
 
-    private static FullInfoDriverDto addingDriver, updatingDriver;
+    private FullInfoDriverDto addingDriver, updatingDriver;
     private static String managerToken, driverToken;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUpDrivers() {
         addingDriver = new FullInfoDriverDto();
         FullInfoUserDto userDto = new FullInfoUserDto();
         userDto.setPassword("password");
@@ -91,11 +93,14 @@ public class DriverControllerTest {
     }
 
     @Test
-    public void findAll() throws Exception {
+    public void getDriversBySearch() throws Exception {
         mockMvc.perform(
-                get("/drivers")
+                get("/drivers/search")
                         .header("Authorization", managerToken)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("text", "")
+                        .param("page", "1")
+                        .param("size", "20"))
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(13));
     }
@@ -107,7 +112,7 @@ public class DriverControllerTest {
                         .header("Authorization", managerToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.user.login").value("driver_4"));
+                .andExpect(jsonPath("$.driverLicense").value("9080706050"));
     }
 
     @Test
@@ -117,7 +122,7 @@ public class DriverControllerTest {
                         .header("Authorization", driverToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.user.login").value("driver_1"));
+                .andExpect(jsonPath("$.driverLicense").value("0102030405"));
     }
 
     @Test
@@ -127,7 +132,7 @@ public class DriverControllerTest {
                         .header("Authorization", managerToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Driver with id: 77 not found"));
+                .andExpect(jsonPath("$.message").value(String.format(DRIVER_NOT_FOUND, 77)));
     }
 
     @Test
@@ -141,8 +146,7 @@ public class DriverControllerTest {
                 .andExpect(jsonPath("$.length()").value(5))
                 .andExpect(jsonPath("$[0].status").value("REST"))
                 .andExpect(jsonPath("$[1].status").value("REST"))
-                .andExpect(jsonPath("$[2].status").value("REST"))
-                .andDo(print());
+                .andExpect(jsonPath("$[2].status").value("REST"));
     }
 
     @Test

@@ -4,6 +4,8 @@ import com.example.security.models.CustomPrincipal;
 import com.example.security.service.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,8 +24,9 @@ import java.util.Set;
 
 public class JwtAccessFilter extends BasicAuthenticationFilter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAccessFilter.class);
+
     private static final String LOGIN_API = "/login";
-    private static final String REFRESH_API = "/refresh";
     private static final String AUTH = "Authorization";
     private static final String BEARER = "Bearer ";
     private final TokenService service;
@@ -57,8 +60,7 @@ public class JwtAccessFilter extends BasicAuthenticationFilter {
         }
 
         String reqUri = request.getRequestURI();
-        if ((path + LOGIN_API).equalsIgnoreCase(reqUri)
-                || (path + REFRESH_API).equalsIgnoreCase(reqUri)) {
+        if ((path + LOGIN_API).equalsIgnoreCase(reqUri)) {
             chain.doFilter(request, response);
             return;
         }
@@ -66,11 +68,13 @@ public class JwtAccessFilter extends BasicAuthenticationFilter {
         String auth = request.getHeader(AUTH);
         if (auth == null || auth.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            LOGGER.debug("No authentication information provided to access {}", reqUri);
             return;
         }
 
         if (!auth.startsWith(BEARER)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            LOGGER.debug("No Bearer token provided to access {}", reqUri);
             return;
         }
 
@@ -99,6 +103,7 @@ public class JwtAccessFilter extends BasicAuthenticationFilter {
                     null,
                     authority);
         } catch (Exception e) {
+            LOGGER.debug("Failed to parse token", e);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

@@ -26,9 +26,9 @@ public class TruckController {
 
     @GetMapping("/search")
     @RolesAllowed({"ROLE_ADMIN"})
-    public List<TruckDto> findAll(@RequestParam("text") String text,
-                                  @RequestParam("page") int page,
-                                  @RequestParam("size") int pageSize) {
+    public List<TruckDto> getTrucksBySearch(@RequestParam("text") String text,
+                                            @RequestParam("page") int page,
+                                            @RequestParam("size") int pageSize) {
         return truckService.getTrucks(text, page, pageSize);
     }
 

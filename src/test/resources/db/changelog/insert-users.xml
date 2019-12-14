@@ -15,6 +15,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Tierney</column>
             <column name="email">tierney@mail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_2</column>
@@ -23,6 +24,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Iwobi</column>
             <column name="email">iwobi@yandex.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_3</column>
@@ -31,6 +33,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Bellerin</column>
             <column name="email">bellerin@gmail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_4</column>
@@ -39,6 +42,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Leno</column>
             <column name="email">leno@gmail.com</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_5</column>
@@ -47,6 +51,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Holding</column>
             <column name="email">holding@mail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_6</column>
@@ -55,6 +60,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Martinelli</column>
             <column name="email">martinelli@mail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_7</column>
@@ -63,6 +69,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Viera</column>
             <column name="email">viera@mail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_8</column>
@@ -71,6 +78,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Uzumaki</column>
             <column name="email">uzumaki@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_9</column>
@@ -79,6 +87,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Uchiha</column>
             <column name="email">uchiha@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_10</column>
@@ -87,6 +96,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Sakumo</column>
             <column name="email">kakashi@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_11</column>
@@ -95,6 +105,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Maito</column>
             <column name="email">maito@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_12</column>
@@ -103,6 +114,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Sendju</column>
             <column name="email">hashirama@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_13</column>
@@ -111,6 +123,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Uchiha</column>
             <column name="email">uchiha@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">manager_1</column>
@@ -119,6 +132,16 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="last_name">Wenger</column>
             <column name="email">wenger@mail.ru</column>
             <column name="role">ADMIN</column>
+            <column name="status">ACTIVE</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_14</column>
+            <column name="password">s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ</column>
+            <column name="first_name">Petr</column>
+            <column name="last_name">Ivanov</column>
+            <column name="email">ivanov@yandex.ru</column>
+            <column name="role">DRIVER</column>
+            <column name="status">BLOCKED</column>
         </insert>
     </changeSet>
 </databaseChangeLog>

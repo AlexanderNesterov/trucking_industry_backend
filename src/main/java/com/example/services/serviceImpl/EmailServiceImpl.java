@@ -3,6 +3,8 @@ package com.example.services.serviceImpl;
 import com.example.database.models.Order;
 import com.example.services.EmailService;
 import com.example.services.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     private final JavaMailSender mailSender;
     private final OrderService orderService;
@@ -37,7 +41,7 @@ public class EmailServiceImpl implements EmailService {
 
                     orderService.setEmailSent(order.getId());
                     mailSender.send(message);
-                    System.out.println("Mail sent");
+                    LOGGER.info("Message to {} sent", email);
                 }
             }
         }

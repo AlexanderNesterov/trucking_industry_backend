@@ -14,6 +14,8 @@ import com.example.services.models.*;
 import com.example.services.OrderService;
 import com.example.services.DriverService;
 import com.example.services.TruckService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,7 @@ import static com.example.services.commons.message.OrderExceptionMessage.*;
 @Validated
 public class OrderServiceImpl implements OrderService {
     private final int cargoLimit = 5;
+    private final static Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private OrderMapper orderMapper;
     private OrderRepository orderRepository;
@@ -58,8 +61,10 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> order = orderRepository.findById(orderId);
 
         if (order.isPresent()) {
+            LOGGER.info("Order with id: {} returned", orderId);
             return orderMapper.toDto(order.get());
         } else {
+            LOGGER.warn(String.format(ORDER_NOT_FOUND, orderId));
             throw new OrderNotFoundException(String.format(ORDER_NOT_FOUND, orderId));
         }
     }
@@ -67,7 +72,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getOrders(String text, int page, int pageSize) {
         Pageable request = PageRequest.of(page - 1, pageSize);
-
         return orderMapper.toListDto(orderRepository.getOrders(text, request));
     }
 
@@ -87,6 +91,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderMapper.fromDto(orderDto);
         order.combineSearchString();
         orderRepository.save(order);
+        LOGGER.info("Order with id: {} updated", orderDto.getId());
         return true;
     }
 
@@ -105,6 +110,7 @@ public class OrderServiceImpl implements OrderService {
                 DriverStatus.ASSIGNED);
 
         orderRepository.setOrderSearchString(savedOrder.getSearchString(), savedOrder.getId());
+        LOGGER.info("Order with id: {} added", savedOrder.getId());
         return true;
     }
 
@@ -113,8 +119,10 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> orderOpt = orderRepository.getOrderByDriverId(driverId);
 
         if (orderOpt.isEmpty()) {
+            LOGGER.warn(String.format(ORDER_BY_DRIVER_NOT_FOUND, driverId));
             throw new OrderNotFoundException(String.format(ORDER_BY_DRIVER_NOT_FOUND, driverId));
         } else {
+            LOGGER.info("Order with driver id: {} returned", driverId);
             return orderMapper.toDto(orderOpt.get());
         }
     }
@@ -124,6 +132,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = getCheckedOrderToChangeStatus(orderId, driverId);
 
         if (!order.getStatus().equals(OrderStatus.CREATED)) {
+            LOGGER.warn(String.format(WRONG_ORDER_STATUS, OrderStatus.IN_PROGRESS));
             throw new ChangeOrderStatusException(String.format(WRONG_ORDER_STATUS, OrderStatus.IN_PROGRESS));
         }
 
@@ -133,6 +142,7 @@ public class OrderServiceImpl implements OrderService {
         order.getCoDriver().setStatus(DriverStatus.ACTIVE);
         order.combineSearchString();
         orderRepository.save(order);
+        LOGGER.info("Order with id: {} accepted", orderId);
         return true;
     }
 
@@ -141,7 +151,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = getCheckedOrderToChangeStatus(orderId, driverId);
 
         if (!order.getStatus().equals(OrderStatus.CREATED)) {
-            throw new ChangeOrderStatusException("Attempt to set REFUSED_BY_DRIVER status to wrong order");
+            LOGGER.warn(String.format(WRONG_ORDER_STATUS, OrderStatus.REFUSED_BY_DRIVER));
+            throw new ChangeOrderStatusException(String.format(WRONG_ORDER_STATUS, OrderStatus.REFUSED_BY_DRIVER));
         }
 
         order.setStatus(OrderStatus.REFUSED_BY_DRIVER);
@@ -149,6 +160,7 @@ public class OrderServiceImpl implements OrderService {
         order.getCoDriver().setStatus(DriverStatus.REST);
         order.combineSearchString();
         orderRepository.save(order);
+        LOGGER.info("Order with id: {} refused by driver", orderId);
         return true;
     }
 
@@ -173,6 +185,7 @@ public class OrderServiceImpl implements OrderService {
             order.getCoDriver().setStatus(DriverStatus.REST);
             order.combineSearchString();
             orderRepository.save(order);
+            LOGGER.info("Order with id: {} delivered", orderId);
         }
     }
 
@@ -181,7 +194,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.getOrderToCancel(orderId);
 
         if (order == null) {
-            throw new ChangeOrderStatusException("Wrong order id or order status");
+            LOGGER.warn(WRONG_ORDER);
+            throw new ChangeOrderStatusException(WRONG_ORDER);
         }
 
         order.getCargoList().forEach(cargo -> cargo.setStatus(CargoStatus.CANCELED));
@@ -190,6 +204,7 @@ public class OrderServiceImpl implements OrderService {
         order.getCoDriver().setStatus(DriverStatus.REST);
         order.combineSearchString();
         orderRepository.save(order);
+        LOGGER.info("Order with id: {} canceled", orderId);
         return true;
     }
 
@@ -202,6 +217,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> order = orderRepository.getOrderToChangeStatus(orderId, driverId);
 
         if (order.isEmpty()) {
+            LOGGER.warn(String.format(WRONG_ORDER_OR_DRIVER, orderId,driverId));
             throw new ChangeOrderStatusException(String.format(WRONG_ORDER_OR_DRIVER, orderId,driverId));
         }
 
@@ -224,36 +240,37 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.getOrderToUpdate(savingOrder.getId());
 
         if (order == null) {
-            throw new SavingOrderException("Wrong order id or order status not equals 'REFUSED_BY_DRIVER'");
+            LOGGER.warn(WRONG_ORDER);
+            throw new SavingOrderException(WRONG_ORDER);
         }
 
         savingOrder.setId(order.getId());
     }
 
     private void checkDriversIds(OrderDto savingOrder) {
-        StringBuilder exception = new StringBuilder();
-
         if (savingOrder.getDriver().getId() == null || savingOrder.getCoDriver().getId() == null) {
-            throw new SavingOrderException("Driver id and co-driver id cannot equals null");
+            LOGGER.warn(DRIVER_ID_NULL);
+            throw new SavingOrderException(DRIVER_ID_NULL);
         }
         if (savingOrder.getCoDriver().getId().equals(savingOrder.getDriver().getId())) {
-            exception.append("Driver id and co-driver id cannot be equals. Driver id: ");
-            exception.append(savingOrder.getDriver().getId());
-            exception.append(", co-driver id: ");
-            exception.append(savingOrder.getCoDriver().getId());
-            throw new SavingOrderException(exception.toString());
+            LOGGER.warn(String
+                    .format(EQUALS_DRIVER_ID, savingOrder.getDriver().getId(), savingOrder.getCoDriver().getId()));
+            throw new SavingOrderException(String
+                    .format(EQUALS_DRIVER_ID, savingOrder.getDriver().getId(), savingOrder.getCoDriver().getId()));
         }
     }
 
     private void checkDrivers(OrderDto savingOrder) {
         SimpleDriverDto driver = driverService.getFreeDriver(savingOrder.getDriver().getId());
         if (driver == null) {
-            throw new SavingOrderException("Wrong driver id or driver status");
+            LOGGER.warn(WRONG_ORDER);
+            throw new SavingOrderException(WRONG_DRIVER);
         }
 
         SimpleDriverDto coDriver = driverService.getFreeDriver(savingOrder.getCoDriver().getId());
         if (coDriver == null) {
-            throw new SavingOrderException("Wrong co-driver id or co-driver status");
+            LOGGER.warn(WRONG_CO_DRIVER);
+            throw new SavingOrderException(WRONG_CO_DRIVER);
         }
 
         savingOrder.setDriver(driver);
@@ -265,8 +282,8 @@ public class OrderServiceImpl implements OrderService {
                 savingOrder.getTotalWeight());
 
         if (truckDto == null) {
-            throw new SavingOrderException(
-                    "Wrong truck id or truck condition or truck already include in another cargo");
+            LOGGER.warn(WRONG_TRUCK);
+            throw new SavingOrderException(WRONG_TRUCK);
         }
 
         savingOrder.setTruck(truckDto);
@@ -278,11 +295,13 @@ public class OrderServiceImpl implements OrderService {
                 .sum();
 
         if (countedTotalWeight != savingOrder.getTotalWeight()) {
-            throw new SavingOrderException("Incorrect total weight");
+            LOGGER.warn(TOTAL_WEIGHT);
+            throw new SavingOrderException(TOTAL_WEIGHT);
         }
 
         if (savingOrder.getCargoList().size() >= cargoLimit) {
-            throw new SavingOrderException("Incorrect number of cargo");
+            LOGGER.warn(NUMBER_OF_CARGO);
+            throw new SavingOrderException(NUMBER_OF_CARGO);
         }
     }
 
@@ -292,7 +311,8 @@ public class OrderServiceImpl implements OrderService {
                         cargoDto.getLoadLocation().getId().equals(cargoDto.getDischargeLocation().getId()));
 
         if (isSameLoadAndDischargeLocation) {
-            throw new SavingOrderException("Cargo can't has equals load and discharge location");
+            LOGGER.warn(EQUALS_LOCATIONS);
+            throw new SavingOrderException(EQUALS_LOCATIONS);
         }
 
         Long[] cityIds = Stream.concat(
@@ -304,7 +324,8 @@ public class OrderServiceImpl implements OrderService {
         List<CityDto> cities = cityService.findCitiesByListId(cityIds);
 
         if (cities.size() != cityIds.length) {
-            throw new SavingOrderException("Wrong city id");
+            LOGGER.warn(WRONG_CITY);
+            throw new SavingOrderException(WRONG_CITY);
         }
 
         for (CityDto city : cities) {

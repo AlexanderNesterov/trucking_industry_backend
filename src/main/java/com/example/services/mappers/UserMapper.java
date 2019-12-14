@@ -22,6 +22,9 @@ public abstract class UserMapper {
     public String mapPassword(String password) {
         return passwordEncryptor.encrypt(password);
     }
+/*    public boolean checkPassword(String currentPassword) {
+        return passwordEncryptor.
+    }*/
 
     public abstract SimpleUserDto toDto(User user);
     public abstract List<User> fromListDto(List<SimpleUserDto> userDtos);

@@ -10,6 +10,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
     <include file="classpath:db/changelog/master-changelog.xml"/>
     <include file="insert-users.xml" relativeToChangelogFile="true"/>
     <include file="insert-drivers.xml" relativeToChangelogFile="true"/>
+    <include file="insert-managers.xml" relativeToChangelogFile="true"/>
     <include file="insert-trucks.xml" relativeToChangelogFile="true"/>
     <include file="insert-cities.xml" relativeToChangelogFile="true"/>
     <include file="insert-orders.xml" relativeToChangelogFile="true"/>

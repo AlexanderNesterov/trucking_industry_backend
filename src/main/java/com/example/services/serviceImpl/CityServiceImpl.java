@@ -6,6 +6,8 @@ import com.example.database.repositories.CityRepository;
 import com.example.services.CityService;
 import com.example.services.mappers.CityMapper;
 import com.example.services.models.CityDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import static com.example.services.commons.message.CityExceptionMessage.SAVING_C
 
 @Service
 public class CityServiceImpl implements CityService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(CityServiceImpl.class);
 
     private CityRepository cityRepository;
     private CityMapper cityMapper;
@@ -43,10 +47,12 @@ public class CityServiceImpl implements CityService {
         List<City> existCities = cityRepository.getCitiesByNameAndCountry(city.getName(), city.getCountry());
 
         if (existCities.size() != 0) {
+            LOGGER.warn(String.format(SAVING_CITY_ERROR, city.getName()));
             throw new SavingCityException(String.format(SAVING_CITY_ERROR, city.getName()));
         }
 
         cityRepository.save(cityMapper.fromDto(city));
+        LOGGER.info("City with name {} added", city.getName());
         return true;
     }
 }

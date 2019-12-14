@@ -1,6 +1,5 @@
 package com.example.controller;
 
-
 import com.example.FreightApplication;
 import com.example.security.models.LoginInfo;
 import com.example.services.models.TruckDto;
@@ -22,6 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static com.example.services.commons.message.TruckExceptionMessage.REGISTRATION_NUMBER_EXISTS;
+import static com.example.services.commons.message.TruckExceptionMessage.TRUCK_NOT_FOUND;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -72,16 +73,16 @@ public class TruckControllerTest {
     }
 
     @Test
-    public void findAll() throws Exception {
+    public void getTrucksBySearch() throws Exception {
         mockMvc.perform(
-                get("/trucks")
+                get("/trucks/search")
                         .header("Authorization", token)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("text", "")
+                        .param("page", "1")
+                        .param("size", "20"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].registrationNumber").value("BB90029"))
-                .andExpect(jsonPath("$[1].registrationNumber").value("BV87524"))
-                .andExpect(jsonPath("$[4].registrationNumber").value("KO89029"))
                 .andExpect(jsonPath("$.length()").value(6));
     }
 
@@ -93,10 +94,8 @@ public class TruckControllerTest {
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].registrationNumber").value("JK65243"));
+                .andExpect(jsonPath("$.length()").value(2));
     }
 
     @Test
@@ -116,7 +115,7 @@ public class TruckControllerTest {
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Truck with id: 10 not found"));
+                .andExpect(jsonPath("$.message").value(String.format(TRUCK_NOT_FOUND, 10L)));
     }
 
     @Test
@@ -150,7 +149,7 @@ public class TruckControllerTest {
                         .content(str))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value("Truck with registration number: BB90029 already exists"));
+                        .value(String.format(REGISTRATION_NUMBER_EXISTS, updatingTruck.getRegistrationNumber())));
     }
 
     @Test

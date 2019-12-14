@@ -84,7 +84,7 @@ public class DriverController {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(DriverNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(DriverNotFoundException exc) {
         ErrorResponse error = new ErrorResponse();
 

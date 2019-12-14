@@ -9,6 +9,8 @@ import com.example.database.repositories.TruckRepository;
 import com.example.services.models.TruckDto;
 import com.example.services.TruckService;
 import com.example.services.mappers.TruckMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,8 @@ import static com.example.services.commons.message.TruckExceptionMessage.*;
 @Service
 @Validated
 public class TruckServiceImpl implements TruckService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(TruckServiceImpl.class);
 
     private TruckRepository truckRepository;
     private TruckMapper truckMapper;
@@ -43,8 +47,10 @@ public class TruckServiceImpl implements TruckService {
         Optional<Truck> optional = truckRepository.findById(truckId);
 
         if (optional.isPresent()) {
+            LOGGER.info("Truck with id: {} returned", truckId);
             return truckMapper.toDto(optional.get());
         } else {
+            LOGGER.warn(String.format(TRUCK_NOT_FOUND, truckId));
             throw new TruckNotFoundException(String.format(TRUCK_NOT_FOUND, truckId));
         }
     }
@@ -64,12 +70,14 @@ public class TruckServiceImpl implements TruckService {
     @Override
     public boolean updateTruck(@Valid TruckDto truckDto) {
         if (!canUpdateTruck(truckDto.getId())) {
+            LOGGER.warn(String.format(WRONG_TRUCK_OR_INCLUDED_IN_ORDER, truckDto.getId()));
             throw new SavingTruckException(String.format(WRONG_TRUCK_OR_INCLUDED_IN_ORDER, truckDto.getId()));
         }
 
         Long existTruckId = truckRepository.getTruckIdByRegistrationNumber(truckDto.getRegistrationNumber());
 
         if (existTruckId != null && !existTruckId.equals(truckDto.getId())) {
+            LOGGER.warn(String.format(REGISTRATION_NUMBER_EXISTS, truckDto.getRegistrationNumber()));
             throw new SavingTruckException(String.format(REGISTRATION_NUMBER_EXISTS, truckDto.getRegistrationNumber()));
         }
 
@@ -79,6 +87,7 @@ public class TruckServiceImpl implements TruckService {
         Truck truck = truckMapper.fromDto(truckDto);
         truck.combineSearchString();
         truckRepository.save(truck);
+        LOGGER.info("Truck with id: {} updated", truckDto.getId());
         return true;
     }
 
@@ -87,6 +96,8 @@ public class TruckServiceImpl implements TruckService {
         Long existTruckId = truckRepository.getTruckIdByRegistrationNumber(truckDto.getRegistrationNumber());
 
         if (existTruckId != null) {
+            LOGGER.warn(String.format(REGISTRATION_NUMBER_EXISTS,
+                    truckDto.getRegistrationNumber()));
             throw new SavingTruckException(String.format(REGISTRATION_NUMBER_EXISTS,
                     truckDto.getRegistrationNumber()));
         }
@@ -96,6 +107,7 @@ public class TruckServiceImpl implements TruckService {
         Truck truck = truckMapper.fromDto(truckDto);
         truck.combineSearchString();
         truckRepository.save(truck);
+        LOGGER.info("Truck with registration number: {} added", truckDto.getRegistrationNumber());
         return true;
     }
 
@@ -121,6 +133,7 @@ public class TruckServiceImpl implements TruckService {
         Truck existsTruck;
 
         if (existsTruckOpt.isEmpty()) {
+            LOGGER.warn(String.format(WRONG_TRUCK_OR_CONDITION, truckId));
             throw new SetTruckConditionException(String.format(WRONG_TRUCK_OR_CONDITION, truckId));
         } else {
             existsTruck = existsTruckOpt.get();
@@ -129,6 +142,7 @@ public class TruckServiceImpl implements TruckService {
         existsTruck.setCondition(TruckCondition.BROKEN);
         existsTruck.combineSearchString();
         truckRepository.save(existsTruck);
+        LOGGER.info("Set broken status to truck with id: {}", truckId);
         return true;
     }
 
@@ -138,7 +152,8 @@ public class TruckServiceImpl implements TruckService {
         Truck existsTruck;
 
         if (existsTruckOpt.isEmpty()) {
-            throw new SetTruckConditionException("Wrong truck id or condition");
+            LOGGER.warn(WRONG_TRUCK_OR_CONDITION);
+            throw new SetTruckConditionException(WRONG_TRUCK_OR_CONDITION);
         } else {
             existsTruck = existsTruckOpt.get();
         }
@@ -146,6 +161,7 @@ public class TruckServiceImpl implements TruckService {
         existsTruck.setCondition(TruckCondition.SERVICEABLE);
         existsTruck.combineSearchString();
         truckRepository.save(existsTruck);
+        LOGGER.info("Set serviceable status to truck with id: {}", truckId);
         return true;
     }
 }

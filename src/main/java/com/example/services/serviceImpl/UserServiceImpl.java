@@ -5,80 +5,42 @@ import com.example.controller.exceptions.ChangePasswordException;
 import com.example.database.models.User;
 import com.example.database.models.commons.AccountStatus;
 import com.example.database.repositories.UserRepository;
-import com.example.services.DriverService;
-import com.example.services.ManagerService;
 import com.example.services.UserService;
 import com.example.services.mappers.UserMapper;
 import com.example.services.models.ChangePasswordDto;
-import com.example.services.models.SimpleManagerDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 import static com.example.services.commons.message.UserExceptionMessage.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private UserMapper userMapper;
     private UserRepository userRepository;
-//    private DriverService driverService;
-//    private ManagerService managerService;
+    private PasswordEncoder passwordEncoder;
 
     public UserServiceImpl() {
     }
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, UserRepository userRepository
-                           /*DriverService driverService, ManagerService managerService*/) {
+    public UserServiceImpl(UserMapper userMapper, UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
-//        this.driverService = driverService;
-//        this.managerService = managerService;
+        this.passwordEncoder = passwordEncoder;
     }
-
-/*    @Autowired
-    public void setDriverService(DriverService driverService) {
-        this.driverService = driverService;
-    }
-
-    @Autowired
-    public void setManagerService(ManagerService managerService) {
-        this.managerService = managerService;
-    }*/
 
     @Override
     public boolean isLoginExists(String login) {
         User existUser = userRepository.getUserByLogin(login);
         return existUser != null;
     }
-
-/*    @Override
-    public boolean blockDriverAccount(Long userId, Long driverId) {
-        checkUser(userId, AccountStatus.ACTIVE);
-        SimpleDriverDto existsDriver = driverService.getFreeDriver(driverId);
-
-        if (existsDriver == null) {
-            throw new BlockAccountException(String.format(WRONG_DRIVER_OR_HAS_ORDER, driverId));
-        }
-
-        userRepository.setStatus(AccountStatus.BLOCKED, userId);
-        return true;
-    }*/
-
-/*    @Override
-    public boolean blockManagerAccount(Long userId, Long managerId) {
-        checkUser(userId, AccountStatus.ACTIVE);
-        SimpleManagerDto existsManager = managerService.findById(managerId);
-
-        if (existsManager == null) {
-            throw new BlockAccountException(String.format(WRONG_MANAGER_ID, managerId));
-        }
-
-        userRepository.setStatus(AccountStatus.BLOCKED, userId);
-        return true;
-    }*/
 
     @Override
     public boolean unlockAccount(Long userId) {
@@ -89,21 +51,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean changePassword(ChangePasswordDto passwordDto) {
-        String encodedPassword = userMapper.mapPassword(passwordDto.getCurrentPassword());
-        Optional<User> existUserOpt = userRepository.getUserByLoginAndPassword(passwordDto.getLogin(), encodedPassword);
-        User existUser;
+        User user = userRepository.getUserByLogin(passwordDto.getLogin());
+        boolean isPasswordsMatches = passwordEncoder.matches(passwordDto.getCurrentPassword(), user.getPassword());
 
-        if (existUserOpt.isEmpty()) {
-            throw new ChangePasswordException("Wrong current password or login");
-        } else {
-            if (passwordDto.getNewPassword().length() < 8) {
-                throw new ChangePasswordException("Incorrect new password");
-            }
-            existUser = existUserOpt.get();
+        if (!isPasswordsMatches) {
+            LOGGER.warn(INCORRECT_CURRENT_PASSWORD);
+            throw new ChangePasswordException(INCORRECT_CURRENT_PASSWORD);
         }
 
-        existUser.setPassword(userMapper.mapPassword(passwordDto.getNewPassword()));
-        userRepository.save(existUser);
+        user.setPassword(userMapper.mapPassword(passwordDto.getNewPassword()));
+        userRepository.save(user);
+        LOGGER.info("Set new password to user with login: {}", passwordDto.getLogin());
         return true;
     }
 
@@ -112,6 +70,7 @@ public class UserServiceImpl implements UserService {
         User existsUser = userRepository.getUserByIdAndStatus(userId, status);
 
         if (existsUser == null) {
+            LOGGER.warn(String.format(WRONG_USER_OR_STATUS, userId));
             throw new BlockAccountException(String.format(WRONG_USER_OR_STATUS, userId));
         }
     }
@@ -119,6 +78,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean setStatus(AccountStatus status, Long userId) {
         userRepository.setStatus(status, userId);
+        LOGGER.info("Set status: {} to user with id: {}", status, userId);
         return true;
     }
 }

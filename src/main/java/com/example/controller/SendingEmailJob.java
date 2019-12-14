@@ -1,17 +1,15 @@
 package com.example.controller;
 
 import com.example.services.EmailService;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-@Configuration
-@EnableScheduling
-public class SendingEmailController {
+@Component
+public class SendingEmailJob {
 
     private final EmailService emailService;
 
-    public SendingEmailController(EmailService emailService) {
+    public SendingEmailJob(EmailService emailService) {
         this.emailService = emailService;
     }
 

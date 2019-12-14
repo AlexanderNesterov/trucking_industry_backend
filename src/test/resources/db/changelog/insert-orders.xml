@@ -14,6 +14,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="co_driver_id">5</column>
             <column name="total_weight">400</column>
             <column name="status">IN_PROGRESS</column>
+            <column name="search_string">order</column>
         </insert>
         <insert tableName="orders">
             <column name="truck_id">4</column>
@@ -21,6 +22,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="co_driver_id">7</column>
             <column name="total_weight">600</column>
             <column name="status">CREATED</column>
+            <column name="search_string">order</column>
         </insert>
         <insert tableName="orders">
             <column name="truck_id">2</column>
@@ -28,6 +30,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="co_driver_id">9</column>
             <column name="total_weight">800</column>
             <column name="status">CREATED</column>
+            <column name="search_string">order</column>
         </insert>
         <insert tableName="orders">
             <column name="truck_id">5</column>
@@ -35,6 +38,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="co_driver_id">11</column>
             <column name="total_weight">700</column>
             <column name="status">IN_PROGRESS</column>
+            <column name="search_string">order</column>
         </insert>
         <insert tableName="orders">
             <column name="truck_id">6</column>
@@ -42,6 +46,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="co_driver_id">13</column>
             <column name="total_weight">550</column>
             <column name="status">REFUSED_BY_DRIVER</column>
+            <column name="search_string">order</column>
         </insert>
     </changeSet>
 </databaseChangeLog>

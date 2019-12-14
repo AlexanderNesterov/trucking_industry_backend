@@ -16,8 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User getUserByIdAndStatus(Long id, AccountStatus status);
 
-    Optional<User> getUserByLoginAndPassword(String login, String password);
-
     @Transactional
     @Modifying
     @Query("update User u set u.status = :status where u.id = :userId")

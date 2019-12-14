@@ -13,6 +13,8 @@ import com.example.services.commons.message.UserExceptionMessage;
 import com.example.services.mappers.ManagerMapper;
 import com.example.services.models.FullInfoManagerDto;
 import com.example.services.models.SimpleManagerDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,8 @@ import static com.example.services.commons.message.UserExceptionMessage.LOGIN_EX
 @Service
 @Validated
 public class ManagerServiceImpl implements ManagerService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ManagerServiceImpl.class);
 
     private ManagerRepository managerRepository;
     private ManagerMapper managerMapper;
@@ -52,8 +56,10 @@ public class ManagerServiceImpl implements ManagerService {
         Optional<Manager> manager = managerRepository.findById(managerId);
 
         if (manager.isPresent()) {
+            LOGGER.info("Manager with id: {} returned", managerId);
             return managerMapper.toDto(manager.get());
         } else {
+            LOGGER.warn(String.format(MANAGER_NOT_FOUND, managerId));
             throw new ManagerNotFoundException(String.format(MANAGER_NOT_FOUND, managerId));
         }
     }
@@ -70,6 +76,7 @@ public class ManagerServiceImpl implements ManagerService {
         Manager sameManager;
 
         if (sameManagerOpt.isEmpty()) {
+            LOGGER.warn(String.format(WRONG_MANAGER_ID, manager.getId()));
             throw new SavingManagerException(String.format(WRONG_MANAGER_ID, manager.getId()));
         } else {
             sameManager = sameManagerOpt.get();
@@ -81,6 +88,7 @@ public class ManagerServiceImpl implements ManagerService {
         sameManager.getUser().setEmail(manager.getUser().getEmail());
         sameManager.combineSearchString();
         managerRepository.save(sameManager);
+        LOGGER.info("Manager with login: {} updated", sameManager.getUser().getLogin());
         return true;
     }
 
@@ -89,6 +97,7 @@ public class ManagerServiceImpl implements ManagerService {
         boolean isLoginExists = userService.isLoginExists(managerDto.getUser().getLogin());
 
         if (isLoginExists) {
+            LOGGER.warn(String.format(LOGIN_EXISTS, managerDto.getUser().getLogin()));
             throw new SavingManagerException(String.format(LOGIN_EXISTS, managerDto.getUser().getLogin()));
         }
 
@@ -99,7 +108,7 @@ public class ManagerServiceImpl implements ManagerService {
         Manager manager = managerMapper.fromFullInfoDto(managerDto);
         manager.combineSearchString();
         managerRepository.save(manager);
-
+        LOGGER.info("Manager with login: {} added", managerDto.getUser().getLogin());
         return true;
     }
 
@@ -109,10 +118,12 @@ public class ManagerServiceImpl implements ManagerService {
         SimpleManagerDto existsManager = findById(managerId);
 
         if (existsManager == null) {
+            LOGGER.warn(String.format(UserExceptionMessage.WRONG_MANAGER_ID, managerId));
             throw new BlockAccountException(String.format(UserExceptionMessage.WRONG_MANAGER_ID, managerId));
         }
 
         userService.setStatus(AccountStatus.BLOCKED, userId);
+        LOGGER.info("Manager account with id: {} blocked", managerId);
         return true;
     }
 }

@@ -13,6 +13,8 @@ import com.example.services.models.FullInfoDriverDto;
 import com.example.services.models.SimpleDriverDto;
 import com.example.services.DriverService;
 import com.example.services.mappers.DriverMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,8 @@ import static com.example.services.commons.message.UserExceptionMessage.WRONG_DR
 @Service
 @Validated
 public class DriverServiceImpl implements DriverService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(DriverServiceImpl.class);
 
     private DriverRepository driverRepository;
     private DriverMapper driverMapper;
@@ -54,13 +58,15 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public SimpleDriverDto findById(Long driverDtoId) {
-        Optional<Driver> driver = driverRepository.findById(driverDtoId);
+    public SimpleDriverDto findById(Long driverId) {
+        Optional<Driver> driver = driverRepository.findById(driverId);
 
         if (driver.isPresent()) {
+            LOGGER.info("Driver with id {} returned", driverId);
             return driverMapper.toDto(driver.get());
         } else {
-            throw new DriverNotFoundException(String.format(DRIVER_NOT_FOUND, driverDtoId));
+            LOGGER.warn(String.format(DRIVER_NOT_FOUND, driverId));
+            throw new DriverNotFoundException(String.format(DRIVER_NOT_FOUND, driverId));
         }
     }
 
@@ -76,6 +82,7 @@ public class DriverServiceImpl implements DriverService {
         Driver sameDriver;
 
         if (sameDriverOpt.isEmpty()) {
+            LOGGER.warn(String.format(WRONG_DRIVER_ID, driverDto.getId()));
             throw new SavingDriverException(String.format(WRONG_DRIVER_ID, driverDto.getId()));
         } else {
             sameDriver = sameDriverOpt.get();
@@ -90,6 +97,7 @@ public class DriverServiceImpl implements DriverService {
         sameDriver.getUser().setEmail(driverDto.getUser().getEmail());
         sameDriver.combineSearchString();
         driverRepository.save(sameDriver);
+        LOGGER.info("Driver with login {} updated", sameDriver.getUser().getLogin());
         return true;
     }
 
@@ -106,6 +114,7 @@ public class DriverServiceImpl implements DriverService {
         Driver driver = driverMapper.fromFullInfoDto(driverDto);
         driver.combineSearchString();
         driverRepository.save(driver);
+        LOGGER.info("Driver with login: {} added", driverDto.getUser().getLogin());
         return true;
     }
 
@@ -130,10 +139,12 @@ public class DriverServiceImpl implements DriverService {
         SimpleDriverDto existsDriver = getFreeDriver(driverId);
 
         if (existsDriver == null) {
+            LOGGER.warn(String.format(WRONG_DRIVER_OR_HAS_ORDER, driverId));
             throw new BlockAccountException(String.format(WRONG_DRIVER_OR_HAS_ORDER, driverId));
         }
 
         userService.setStatus(AccountStatus.BLOCKED, userId);
+        LOGGER.info("Driver account with id {} blocked", driverId);
         return true;
     }
 
@@ -144,12 +155,14 @@ public class DriverServiceImpl implements DriverService {
             return;
         }
 
+        LOGGER.warn(String.format(DRIVER_LICENSE_EXISTS, driverLicense));
         throw new SavingDriverException(String.format(DRIVER_LICENSE_EXISTS, driverLicense));
     }
 
     private void checkAddingDriver(FullInfoDriverDto savingDriver) {
         boolean isLoginExists = userService.isLoginExists(savingDriver.getUser().getLogin());
         if (isLoginExists) {
+            LOGGER.warn(String.format(LOGIN_EXISTS, savingDriver.getUser().getLogin()));
             throw new SavingDriverException(String.format(LOGIN_EXISTS, savingDriver.getUser().getLogin()));
         }
 
