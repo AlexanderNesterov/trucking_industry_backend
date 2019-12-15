@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -66,7 +67,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<SimpleManagerDto> getManagers(String text, int page, int size) {
-        Pageable request = PageRequest.of(page - 1, size);
+        Pageable request = PageRequest.of(page - 1, size, Sort.by("id").ascending());
         return managerMapper.toListDto(managerRepository.getManagers(text, request));
     }
 

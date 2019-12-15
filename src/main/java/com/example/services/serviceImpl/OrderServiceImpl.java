@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -71,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrders(String text, int page, int pageSize) {
-        Pageable request = PageRequest.of(page - 1, pageSize);
+        Pageable request = PageRequest.of(page - 1, pageSize, Sort.by("id").ascending());
         return orderMapper.toListDto(orderRepository.getOrders(text, request));
     }
 

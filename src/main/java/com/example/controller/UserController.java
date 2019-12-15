@@ -1,8 +1,12 @@
 package com.example.controller;
 
+import com.example.controller.exceptions.BlockAccountException;
+import com.example.controller.exceptions.ChangePasswordException;
+import com.example.controller.response.ErrorResponse;
 import com.example.services.UserService;
 import com.example.services.models.ChangePasswordDto;
-import org.springframework.context.annotation.Role;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +45,16 @@ public class UserController {
     @RolesAllowed({"ROLE_ADMIN"})
     public boolean changeDriverPassword(@RequestBody ChangePasswordDto passwordDto) {
         return userService.changePassword(passwordDto);
+    }
+
+    @ExceptionHandler({ChangePasswordException.class, BlockAccountException.class})
+    public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
+        ErrorResponse error = new ErrorResponse();
+
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(exc.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

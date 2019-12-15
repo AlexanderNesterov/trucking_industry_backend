@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -72,7 +73,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<SimpleDriverDto> getDrivers(String text, int page, int pageSize) {
-        Pageable request = PageRequest.of(page - 1, pageSize);
+        Pageable request = PageRequest.of(page - 1, pageSize, Sort.by("id").ascending());
         return driverMapper.toListDto(this.driverRepository.getDrivers(text, request));
     }
 
@@ -120,7 +121,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<SimpleDriverDto> getFreeDrivers(String text, int page, int pageSize) {
-        Pageable request = PageRequest.of(page - 1, pageSize);
+        Pageable request = PageRequest.of(page - 1, pageSize, Sort.by("id").ascending());
         return driverMapper.toListDto(driverRepository.getFreeDrivers(text, request));
     }
 
