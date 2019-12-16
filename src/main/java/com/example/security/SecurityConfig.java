@@ -19,22 +19,22 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true)
+@EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true)
 @Configuration
 public class SecurityConfig {
 
-/*    private final UserDetailServiceImpl userDetailService;
-//    private final AuthenticationSuccessHandler successHandler;
-//    private final TokenService tokenService;
+ /*   private final UserDetailServiceImpl userDetailService;
+    private final AuthenticationSuccessHandler successHandler;
+    private final TokenService tokenService;
 
     public SecurityConfig(UserDetailServiceImpl userDetailService, AuthenticationSuccessHandler successHandler,
                           TokenService tokenService) {
         this.userDetailService = userDetailService;
-//        this.successHandler = successHandler;
-//        this.tokenService = tokenService;*/
-//    }
+        this.successHandler = successHandler;
+        this.tokenService = tokenService;
+    }
 
-/*    @Override
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
@@ -53,9 +53,9 @@ public class SecurityConfig {
     @Bean
     IPasswordEncryptor encryptor() {
         return passwordEncoder()::encode;
-    }*/
+    }
 
-/*    @Override
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
@@ -68,15 +68,14 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAccessFilter(authenticationManager(), tokenService), AuthFilter.class);
     }*/
 
-
+    @Order(1)
     @Configuration
-    @Order(4)
-    public static class GlobalSecurityConfig extends WebSecurityConfigurerAdapter {
+    public static class GlobalConfigurationAdapter extends WebSecurityConfigurerAdapter {
         private final UserDetailServiceImpl userDetailService;
         private final AuthenticationSuccessHandler successHandler;
         private final TokenService tokenService;
 
-        public GlobalSecurityConfig(AuthenticationSuccessHandler successHandler, UserDetailServiceImpl userDetailService,
+        public GlobalConfigurationAdapter(UserDetailServiceImpl userDetailService, AuthenticationSuccessHandler successHandler,
                               TokenService tokenService) {
             this.userDetailService = userDetailService;
             this.successHandler = successHandler;
@@ -109,6 +108,7 @@ public class SecurityConfig {
             http
                     .csrf().disable()
                     .cors().disable()
+                    .antMatcher("/trucking-industry/**")
                     .authorizeRequests()
                     .antMatchers("/login").permitAll()
                     .anyRequest().authenticated()
@@ -117,41 +117,19 @@ public class SecurityConfig {
                     .addFilterBefore(new JwtAccessFilter(authenticationManager(), tokenService), AuthFilter.class);
         }
     }
-    /*@Configuration
+
     @Order(2)
-    public static class UIConfigurationAdapApiWebSecurityter extends WebSecurityConfigurerAdapter {
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .antMatcher("/webjars/**")
-                    .authorizeRequests()
-                    .anyRequest().permitAll();
-        }
-    }*/
     @Configuration
-    @Order(1)
-    public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
-
+    public static class ApiConfigurationAdapter extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                    .antMatcher("/api-docs/**")
+                    .csrf().disable()
+                    .cors().disable()
+                    .antMatcher("/**")
                     .authorizeRequests()
                     .anyRequest().permitAll();
         }
     }
 
-    @Configuration
-    @Order(3)
-    public static class UIConfigurationAdapApiWebSecurityter1 extends WebSecurityConfigurerAdapter {
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .antMatcher("/swagger-ui.html")
-                    .authorizeRequests()
-                    .anyRequest().permitAll();
-        }
-    }
 }
