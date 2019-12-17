@@ -20,6 +20,7 @@ public class HazelcastConfig {
                                 .setMaxSizeConfig(new MaxSizeConfig(200, MaxSizeConfig.MaxSizePolicy.FREE_HEAP_SIZE))
                                 .setEvictionPolicy(EvictionPolicy.LRU)
                                 .setTimeToLiveSeconds(-1));
+        config.getCPSubsystemConfig().setCPMemberCount(3);
         return config;
     }
 }

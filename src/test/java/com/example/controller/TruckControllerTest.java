@@ -5,7 +5,6 @@ import com.example.security.models.LoginInfo;
 import com.example.services.models.TruckDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.jupiter.api.Order;
@@ -24,7 +23,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import static com.example.services.commons.message.TruckExceptionMessage.REGISTRATION_NUMBER_EXISTS;
 import static com.example.services.commons.message.TruckExceptionMessage.TRUCK_NOT_FOUND;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,14 +38,11 @@ public class TruckControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private TruckController truckController;
-
     private static TruckDto updatingTruck, addingTruck;
     private static String token;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() {
         updatingTruck = new TruckDto();
         updatingTruck.setModel("MAZ 900");
         updatingTruck.setCapacity(450);
@@ -65,7 +60,7 @@ public class TruckControllerTest {
 
         String obj = new ObjectMapper().writeValueAsString(info);
         MvcResult result = mockMvc
-                .perform(post("/login").content(obj))
+                .perform(post("/trucking-industry/login").content(obj))
                 .andReturn();
 
         int length = result.getResponse().getContentAsString().length();
@@ -75,7 +70,7 @@ public class TruckControllerTest {
     @Test
     public void getTrucksBySearch() throws Exception {
         mockMvc.perform(
-                get("/trucks/search")
+                get("/trucking-industry/trucks/search")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("text", "")
@@ -89,19 +84,28 @@ public class TruckControllerTest {
     @Test
     @Order(1)
     public void getFreeTrucks() throws Exception {
+        double weight = 450;
+        String text = "";
+        int page = 1;
+        int size = 20;
+
         mockMvc.perform(
-                get("/trucks/free/450")
+                get("/trucking-industry/trucks/free")
+                        .param("weight", String.valueOf(weight))
+                        .param("text", text)
+                        .param("page", String.valueOf(page))
+                        .param("size", String.valueOf(size))
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.length()").value(1));
     }
 
     @Test
     public void findByIdSuccessfully() throws Exception {
         mockMvc.perform(
-                get("/trucks/3")
+                get("/trucking-industry/trucks/3")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -111,7 +115,7 @@ public class TruckControllerTest {
     @Test
     public void failedFindByIdNotFound() throws Exception {
         mockMvc.perform(
-                get("/trucks/10")
+                get("/trucking-industry/trucks/10")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -126,7 +130,7 @@ public class TruckControllerTest {
         String str = new ObjectMapper().writeValueAsString(updatingTruck);
 
         mockMvc.perform(
-                put("/trucks")
+                put("/trucking-industry/trucks")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(str))
@@ -143,7 +147,7 @@ public class TruckControllerTest {
         String str = new ObjectMapper().writeValueAsString(updatingTruck);
 
         mockMvc.perform(
-                put("/trucks")
+                put("/trucking-industry/trucks")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(str))
@@ -159,7 +163,7 @@ public class TruckControllerTest {
         String str = new ObjectMapper().writeValueAsString(addingTruck);
 
         mockMvc.perform(
-                post("/trucks")
+                post("/trucking-industry/trucks")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(str))
@@ -175,12 +179,12 @@ public class TruckControllerTest {
         String str = new ObjectMapper().writeValueAsString(addingTruck);
 
         mockMvc.perform(
-                post("/trucks")
+                post("/trucking-industry/trucks")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(str))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value("Truck with registration number: JK65243 already exists"));
+                        .value(String.format(REGISTRATION_NUMBER_EXISTS, addingTruck.getRegistrationNumber())));
     }
 }

@@ -3,16 +3,18 @@ package com.example.controller;
 import com.example.controller.exceptions.ChangeOrderStatusException;
 import com.example.controller.response.ErrorResponse;
 import com.example.services.CargoService;
+import com.example.services.models.CargoDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/cargo")
+@RequestMapping("/trucking-industry/cargo")
 public class CargoController {
 
     private final CargoService cargoService;
@@ -27,6 +29,12 @@ public class CargoController {
     public boolean setDeliverStatus(@PathVariable Long cargoId, @PathVariable Long orderId,
                                     @PathVariable Long driverId) {
         return cargoService.setDeliverStatus(cargoId, orderId, driverId);
+    }
+
+    @GetMapping("/{orderId}")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public List<CargoDto> getCargoListByOrderId(@PathVariable Long orderId) {
+        return cargoService.getCargoListByOrderId(orderId);
     }
 
     @ExceptionHandler(ChangeOrderStatusException.class)

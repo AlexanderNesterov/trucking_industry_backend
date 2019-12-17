@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/drivers")
+@RequestMapping("/trucking-industry/drivers")
 public class DriverController {
 
     private DriverService driverService;

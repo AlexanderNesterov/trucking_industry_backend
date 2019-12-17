@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CargoRepository extends JpaRepository<Cargo, Long> {
@@ -19,4 +20,6 @@ public interface CargoRepository extends JpaRepository<Cargo, Long> {
             "and o.status = com.example.database.models.commons.OrderStatus.IN_PROGRESS) = :driverId")
     Optional<Cargo> getCargoToDeliver(@Param("orderId") Long orderId, @Param("cargoId") Long cargoId,
                                      @Param("driverId") Long driverId);
+
+    List<Cargo> getCargoByOrderId(Long orderId);
 }

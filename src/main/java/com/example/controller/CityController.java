@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/cities")
+@RequestMapping("/trucking-industry/cities")
 public class CityController {
 
     private final CityService cityService;

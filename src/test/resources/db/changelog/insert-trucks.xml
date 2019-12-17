@@ -46,7 +46,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
         <insert tableName="trucks">
             <column name="registration_number">PM87652</column>
             <column name="model">Mercedes V-500</column>
-            <column name="capacity">600</column>
+            <column name="capacity">700</column>
             <column name="condition">SERVICEABLE</column>
             <column name="search_string">truck</column>
         </insert>

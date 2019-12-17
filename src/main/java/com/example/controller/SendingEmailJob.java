@@ -2,11 +2,10 @@ package com.example.controller;
 
 import com.example.services.EmailService;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.cp.lock.FencedLock;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.locks.Lock;
 
 @Component
 public class SendingEmailJob {
@@ -22,13 +21,18 @@ public class SendingEmailJob {
 
     @Scheduled(fixedRate = 50_000)
     public void sendMail() {
-        Lock lock = hazelcastInstance.getLock("lock");
-        lock.lock();
+        FencedLock lock = hazelcastInstance.getCPSubsystem().getLock("lock");
 
-        try {
-            emailService.sendMail();
-        } finally {
-            lock.unlock();
+        System.out.println("Try to get lock");
+        if (lock.tryLock()) {
+            try {
+
+                emailService.sendMail();
+            } finally {
+                lock.unlock();
+            }
         }
+
+        System.out.println("Doesn't get lock");
     }
 }

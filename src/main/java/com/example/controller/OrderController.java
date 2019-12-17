@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/order")
+@RequestMapping("/trucking-industry/order")
 public class OrderController {
 
     private OrderService orderService;

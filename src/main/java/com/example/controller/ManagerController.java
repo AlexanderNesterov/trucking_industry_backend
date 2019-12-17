@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/managers")
+@RequestMapping("/trucking-industry/managers")
 public class ManagerController {
 
     private final ManagerService managerService;
@@ -47,7 +47,7 @@ public class ManagerController {
     }
 
     @PutMapping("/block/{userId}/{managerId}")
-    @PreAuthorize("#managerId == authentication.principal.managerId")
+    @PreAuthorize("#managerId != authentication.principal.managerId")
     @RolesAllowed({"ROLE_ADMIN"})
     public boolean blockAccount(@PathVariable Long userId, @PathVariable Long managerId) {
         return managerService.blockAccount(userId, managerId);

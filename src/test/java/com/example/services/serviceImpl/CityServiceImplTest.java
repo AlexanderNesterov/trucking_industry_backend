@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
 
+import static com.example.services.commons.message.CityExceptionMessage.SAVING_CITY_ERROR;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -59,6 +60,6 @@ public class CityServiceImplTest {
         SavingCityException thrown = assertThrows(SavingCityException.class,
                 () -> sut.addCity(cityDto));
 
-        assertTrue(thrown.getMessage().contains("City with name " + cityDto.getName() + " already exists"));
+        assertTrue(thrown.getMessage().contains(String.format(SAVING_CITY_ERROR, cityDto.getName())));
     }
 }

@@ -10,7 +10,10 @@ import java.util.List;
 public interface CargoMapper {
 
     Cargo fromDto(CargoDto cargoDto);
+
     CargoDto toDto(Cargo cargo);
+
     List<Cargo> fromListDto(List<CargoDto> cargoDtoList);
+
     List<CargoDto> toListDto(List<Cargo> cargoList);
 }

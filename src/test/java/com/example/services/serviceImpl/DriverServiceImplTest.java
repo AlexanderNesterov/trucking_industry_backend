@@ -25,6 +25,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
+import static com.example.services.commons.message.DriverExceptionMessage.*;
+import static com.example.services.commons.message.UserExceptionMessage.LOGIN_EXISTS;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -132,7 +134,7 @@ public class DriverServiceImplTest {
         DriverNotFoundException thrown = assertThrows(DriverNotFoundException.class,
                 () -> sut.findById(driverId));
 
-        assertTrue(thrown.getMessage().contains("Driver with id " + driverId + " not found"));
+        assertTrue(thrown.getMessage().contains(String.format(DRIVER_NOT_FOUND, driverId)));
     }
 
     @Test
@@ -193,7 +195,7 @@ public class DriverServiceImplTest {
         SavingDriverException thrown = assertThrows(SavingDriverException.class,
                 () -> sut.updateDriver(driverDto));
 
-        assertTrue(thrown.getMessage().contains("Wrong driver id " + driverId));
+        assertTrue(thrown.getMessage().contains(String.format(WRONG_DRIVER_ID, driverId)));
     }
 
     @Test
@@ -215,8 +217,7 @@ public class DriverServiceImplTest {
         SavingDriverException thrown = assertThrows(SavingDriverException.class,
                 () -> sut.updateDriver(driverDto));
 
-        assertTrue(thrown.getMessage().contains("Driver with driver license " + driverDto.getDriverLicense() +
-                " already exists"));
+        assertTrue(thrown.getMessage().contains(String.format(DRIVER_LICENSE_EXISTS, driverDto.getDriverLicense())));
     }
 
     @Test
@@ -237,7 +238,6 @@ public class DriverServiceImplTest {
         assertNull(addingDriver.getUser().getId());
         assertEquals(Role.DRIVER, addingDriver.getUser().getRole());
         assertEquals(DriverStatus.REST, addingDriver.getStatus());
-        assertTrue(addingDriver.getSearchString().contains(addingDriver.getUser().getFirstName().toLowerCase()));
         assertTrue(result);
     }
 
@@ -253,7 +253,7 @@ public class DriverServiceImplTest {
                 () -> sut.addDriver(addingDriver));
 
         assertTrue(thrown.getMessage()
-                .contains("User with login " + addingDriver.getUser().getLogin() + " already exist"));
+                .contains(String.format(LOGIN_EXISTS, addingDriver.getUser().getLogin())));
     }
 
     @Test
@@ -274,6 +274,6 @@ public class DriverServiceImplTest {
                 () -> sut.addDriver(addingDriver));
 
         assertTrue(thrown.getMessage()
-                .contains("Driver with driver license " + addingDriver.getDriverLicense() + " already exist"));
+                .contains(String.format(DRIVER_LICENSE_EXISTS, addingDriver.getDriverLicense())));
     }
 }

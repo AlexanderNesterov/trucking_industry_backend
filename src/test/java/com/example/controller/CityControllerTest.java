@@ -50,7 +50,7 @@ public class CityControllerTest {
 
         String obj = new ObjectMapper().writeValueAsString(info);
         MvcResult result = mockMvc
-                .perform(post("/login").content(obj))
+                .perform(post("/trucking-industry/login").content(obj))
                 .andReturn();
 
         int length = result.getResponse().getContentAsString().length();
@@ -69,7 +69,7 @@ public class CityControllerTest {
     @Test
     public void findAll() throws Exception {
         mockMvc.perform(
-                get("/cities")
+                get("/trucking-industry/cities")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -82,7 +82,7 @@ public class CityControllerTest {
         String str = new ObjectMapper().writeValueAsString(addingCity);
 
         mockMvc.perform(
-                post("/cities")
+                post("/trucking-industry/cities")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(str))
@@ -99,7 +99,7 @@ public class CityControllerTest {
         String str = new ObjectMapper().writeValueAsString(addingCity);
 
         mockMvc.perform(
-                post("/cities")
+                post("/trucking-industry/cities")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(str))

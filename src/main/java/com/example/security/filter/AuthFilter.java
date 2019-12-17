@@ -24,7 +24,7 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
     super();
     this.setAllowSessionCreation(false);
     this.setAuthenticationManager(authManager);
-    this.setFilterProcessesUrl("/login");
+    this.setFilterProcessesUrl("/trucking-industry/login");
     this.setAuthenticationSuccessHandler(successHandler);
   }
 

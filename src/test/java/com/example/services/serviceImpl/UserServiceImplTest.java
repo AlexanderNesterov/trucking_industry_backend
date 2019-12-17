@@ -1,14 +1,10 @@
 package com.example.services.serviceImpl;
 
-import com.example.controller.exceptions.BlockAccountException;
 import com.example.database.models.User;
-import com.example.database.models.commons.AccountStatus;
 import com.example.database.repositories.UserRepository;
 import com.example.services.DriverService;
 import com.example.services.ManagerService;
 import com.example.services.UserService;
-import com.example.services.models.SimpleDriverDto;
-import com.example.services.models.SimpleManagerDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -43,7 +39,7 @@ public class UserServiceImplTest {
 
         boolean result = sut.isLoginExists(login);
 
-        assertTrue(result);
+        assertFalse(result);
     }
 
     @Test
@@ -56,7 +52,7 @@ public class UserServiceImplTest {
 
         boolean result = sut.isLoginExists(login);
 
-        assertFalse(result);
+        assertTrue(result);
     }
 
 /*    @Test

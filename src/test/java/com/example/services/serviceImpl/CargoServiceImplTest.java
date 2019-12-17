@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
+import static com.example.services.commons.message.CargoExceptionMessage.SET_STATUS_ERROR;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -62,7 +63,6 @@ public class CargoServiceImplTest {
         ChangeOrderStatusException thrown = assertThrows(ChangeOrderStatusException.class,
                 () -> sut.setDeliverStatus(cargoId, driverId, orderId));
 
-        assertTrue(thrown.getMessage().contains("Order id or driver id or cargo id or " +
-                "cargo status or order status is wrong"));
+        assertTrue(thrown.getMessage().contains(SET_STATUS_ERROR));
     }
 }

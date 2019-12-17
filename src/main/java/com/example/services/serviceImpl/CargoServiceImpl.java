@@ -6,11 +6,14 @@ import com.example.database.models.commons.CargoStatus;
 import com.example.database.repositories.CargoRepository;
 import com.example.services.CargoService;
 import com.example.services.OrderService;
+import com.example.services.mappers.CargoMapper;
+import com.example.services.models.CargoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.services.commons.message.CargoExceptionMessage.SET_STATUS_ERROR;
@@ -20,6 +23,7 @@ public class CargoServiceImpl implements CargoService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CargoServiceImpl.class);
 
+    private CargoMapper cargoMapper;
     private CargoRepository cargoRepository;
     private OrderService orderService;
 
@@ -27,7 +31,9 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Autowired
-    public CargoServiceImpl(CargoRepository cargoRepository, OrderService orderService) {
+    public CargoServiceImpl(CargoMapper cargoMapper, CargoRepository cargoRepository,
+                            OrderService orderService) {
+        this.cargoMapper = cargoMapper;
         this.cargoRepository = cargoRepository;
         this.orderService = orderService;
     }
@@ -49,5 +55,10 @@ public class CargoServiceImpl implements CargoService {
         orderService.tryToSetDeliverStatus(orderId);
         LOGGER.info("Cargo with id: {} set status {}", cargoId, CargoStatus.DELIVERED);
         return true;
+    }
+
+    @Override
+    public List<CargoDto> getCargoListByOrderId(Long orderId) {
+        return cargoMapper.toListDto(cargoRepository.getCargoByOrderId(orderId));
     }
 }

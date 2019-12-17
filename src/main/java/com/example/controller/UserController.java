@@ -14,7 +14,7 @@ import javax.annotation.security.RolesAllowed;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/users")
+@RequestMapping("/trucking-industry/users")
 public class UserController {
 
     private final UserService userService;
@@ -35,15 +35,9 @@ public class UserController {
         return userService.unlockAccount(userId);
     }
 
-    @PostMapping("/admin-password")
-    @PreAuthorize("hasRole('ROLE_ADMIN') && (#passwordDto.login == authentication.principal.subject)")
+    @PostMapping("/password")
+    @PreAuthorize("#passwordDto.login == authentication.principal.subject")
     public boolean changeAdminPassword(@RequestBody ChangePasswordDto passwordDto) {
-        return userService.changePassword(passwordDto);
-    }
-
-    @PostMapping("/driver-password/{login}")
-    @RolesAllowed({"ROLE_ADMIN"})
-    public boolean changeDriverPassword(@RequestBody ChangePasswordDto passwordDto) {
         return userService.changePassword(passwordDto);
     }
 

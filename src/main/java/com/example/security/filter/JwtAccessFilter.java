@@ -26,7 +26,7 @@ public class JwtAccessFilter extends BasicAuthenticationFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAccessFilter.class);
 
-    private static final String LOGIN_API = "/login";
+    private static final String LOGIN_API = "/trucking-industry/login";
     private static final String AUTH = "Authorization";
     private static final String BEARER = "Bearer ";
     private final TokenService service;

@@ -67,7 +67,7 @@ public class TruckServiceImplTest {
         TruckNotFoundException thrown = assertThrows(TruckNotFoundException.class,
                 () -> sut.findById(truckId));
 
-        assertTrue(thrown.getMessage().contains("Truck with id " + truckId + " not found"));
+        assertTrue(thrown.getMessage().contains(String.format(TRUCK_NOT_FOUND, truckId)));
     }
 
     @Test
@@ -140,7 +140,7 @@ public class TruckServiceImplTest {
                 () -> sut.addTruck(truckDto));
 
         assertTrue(thrown.getMessage()
-                .contains("Truck with registration number " + truckDto.getRegistrationNumber() + " already exist"));
+                .contains(String.format(REGISTRATION_NUMBER_EXISTS, truckDto.getRegistrationNumber())));
     }
 
     @Test

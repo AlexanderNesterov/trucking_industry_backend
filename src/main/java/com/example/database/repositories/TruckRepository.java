@@ -27,7 +27,7 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
             "and (t.id not in (select o.truck.id from Order o where o.status in (" +
             "com.example.database.models.commons.OrderStatus.CREATED, " +
             "com.example.database.models.commons.OrderStatus.REFUSED_BY_DRIVER, " +
-            "com.example.database.models.commons.OrderStatus.IN_PROGRESS))" +
+            "com.example.database.models.commons.OrderStatus.IN_PROGRESS)) " +
             "or t.id = (select o.truck.id from Order o where o.id = :orderId))")
     Truck getFreeTruck(@Param("truckId") Long truckId, @Param("orderId") Long orderId,
                        @Param("orderWeight") double orderWeight);

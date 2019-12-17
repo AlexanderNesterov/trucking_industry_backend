@@ -140,7 +140,6 @@ public class ManagerServiceImplTest {
         assertNull(addingManager.getId());
         assertEquals(Role.ADMIN, addingManager.getUser().getRole());
         assertEquals(AccountStatus.ACTIVE, addingManager.getUser().getStatus());
-        assertTrue(addingManager.getSearchString().contains(addingManager.getUser().getFirstName().toLowerCase()));
         assertTrue(result);
     }
 

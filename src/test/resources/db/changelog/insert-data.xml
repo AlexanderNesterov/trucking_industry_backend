@@ -7,6 +7,13 @@ xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+    <changeSet id="create_sequences" author="nesterov">
+        <createSequence sequenceName="cities_id_seq" minValue="20"/>
+        <createSequence sequenceName="users_id_seq" minValue="20"/>
+        <createSequence sequenceName="drivers_id_seq" minValue="20"/>
+        <createSequence sequenceName="trucks_id_seq" minValue="20"/>
+    </changeSet>
+
     <include file="classpath:db/changelog/master-changelog.xml"/>
     <include file="insert-users.xml" relativeToChangelogFile="true"/>
     <include file="insert-drivers.xml" relativeToChangelogFile="true"/>

@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getOrders(String text, int page, int pageSize) {
         Pageable request = PageRequest.of(page - 1, pageSize, Sort.by("id").ascending());
-        return orderMapper.toListDto(orderRepository.getOrders(text, request));
+        return orderMapper.toListDtoWithoutCargoList(orderRepository.getOrders(text, request));
     }
 
     @Override

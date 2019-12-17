@@ -2,11 +2,13 @@ package com.example.controller;
 
 import com.example.FreightApplication;
 import com.example.database.models.commons.CargoStatus;
+import com.example.database.models.commons.DriverStatus;
+import com.example.database.models.commons.OrderStatus;
+import com.example.database.models.commons.TruckCondition;
 import com.example.security.models.LoginInfo;
-import com.example.services.models.OrderDto;
-import com.example.services.models.SimpleDriverDto;
-import com.example.services.models.TruckDto;
+import com.example.services.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -22,8 +24,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static com.example.services.commons.message.OrderExceptionMessage.ORDER_BY_DRIVER_NOT_FOUND;
-import static com.example.services.commons.message.OrderExceptionMessage.ORDER_NOT_FOUND;
+import java.util.Arrays;
+
+import static com.example.services.commons.message.OrderExceptionMessage.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,18 +44,65 @@ public class OrderControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private OrderController orderController;
-
     private static OrderDto updatingOrder;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
+        SimpleDriverDto driver = new SimpleDriverDto();
+        driver.setId(1L);
+        driver.setStatus(DriverStatus.ASSIGNED);
+        driver.setDriverLicense("1020304050");
+        driver.setUser(new SimpleUserDto());
+
+        SimpleDriverDto coDriver = new SimpleDriverDto();
+        coDriver.setId(2L);
+        coDriver.setStatus(DriverStatus.ASSIGNED);
+        coDriver.setDriverLicense("1020304060");
+        coDriver.setUser(new SimpleUserDto());
+
+        TruckDto truck = new TruckDto();
+        truck.setId(6L);
+        truck.setCondition(TruckCondition.SERVICEABLE);
+        truck.setCapacity(1000);
+
+        CityDto firstCity = new CityDto();
+        firstCity.setId(2L);
+        CityDto secondCity = new CityDto();
+        secondCity.setId(5L);
+        CityDto thirdCity = new CityDto();
+        thirdCity.setId(8L);
+        CityDto fourthCity = new CityDto();
+        fourthCity.setId(1L);
+
+        CargoDto firstCargo = new CargoDto();
+        firstCargo.setTitle("Water");
+        firstCargo.setWeight(200);
+        firstCargo.setStatus(CargoStatus.CREATED);
+        firstCargo.setLoadLocation(secondCity);
+        firstCargo.setDischargeLocation(firstCity);
+
+        CargoDto secondCargo = new CargoDto();
+        secondCargo.setTitle("Fuel");
+        secondCargo.setWeight(150);
+        secondCargo.setStatus(CargoStatus.CREATED);
+        secondCargo.setLoadLocation(thirdCity);
+        secondCargo.setDischargeLocation(fourthCity);
+
+        CargoDto thirdCargo = new CargoDto();
+        thirdCargo.setTitle("Food");
+        thirdCargo.setWeight(300);
+        thirdCargo.setStatus(CargoStatus.CREATED);
+        thirdCargo.setLoadLocation(firstCity);
+        thirdCargo.setDischargeLocation(thirdCity);
+
         updatingOrder = new OrderDto();
         updatingOrder.setId(5L);
-        updatingOrder.setTruck(new TruckDto());
-        updatingOrder.setDriver(new SimpleDriverDto());
-        updatingOrder.setCoDriver(new SimpleDriverDto());
+        updatingOrder.setDriver(driver);
+        updatingOrder.setCoDriver(coDriver);
+        updatingOrder.setTruck(truck);
+        updatingOrder.setCargoList(Arrays.asList(firstCargo, secondCargo, thirdCargo));
+        updatingOrder.setTotalWeight(650);
+        updatingOrder.setStatus(OrderStatus.CREATED);
     }
 
     private String setUpToken(Long id, boolean isDriver) throws Exception {
@@ -68,7 +118,7 @@ public class OrderControllerTest {
 
         String obj = new ObjectMapper().writeValueAsString(info);
         MvcResult result = mockMvc
-                .perform(post("/login").content(obj))
+                .perform(post("/trucking-industry/login").content(obj))
                 .andReturn();
 
         int length = result.getResponse().getContentAsString().length();
@@ -80,7 +130,7 @@ public class OrderControllerTest {
         String token = setUpToken(1L, false);
 
         mockMvc.perform(
-                get("/order/search")
+                get("/trucking-industry/order/search")
                         .header("Authorization", token)
                         .param("text", "")
                         .param("page", "1")
@@ -95,7 +145,7 @@ public class OrderControllerTest {
         String token = setUpToken(1L, false);
 
         mockMvc.perform(
-                get("/order/2")
+                get("/trucking-industry/order/2")
                         .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.driver.id").value(6))
@@ -107,7 +157,7 @@ public class OrderControllerTest {
         String token = setUpToken(1L, false);
 
         mockMvc.perform(
-                get("/order/10")
+                get("/trucking-industry/order/10")
                         .header("Authorization", token))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(String.format(ORDER_NOT_FOUND, 10L)));
@@ -116,7 +166,7 @@ public class OrderControllerTest {
     @Test
     public void getCargoByDriverIdSuccessfully() throws Exception {
         Long driverId = 3L;
-        String url = String.format("/order/for-driver/%d", driverId);
+        String url = String.format("/trucking-industry/order/for-driver/%d", driverId);
         String token = setUpToken(driverId, true);
 
         mockMvc.perform(
@@ -130,7 +180,7 @@ public class OrderControllerTest {
     @Test
     public void failedGetCargoByDriverId() throws Exception {
         Long driverId = 4L;
-        String url = String.format("/order/for-driver/%d", driverId);
+        String url = String.format("/trucking-industry/order/for-driver/%d", driverId);
         String token = setUpToken(driverId, true);
 
         mockMvc.perform(
@@ -143,7 +193,7 @@ public class OrderControllerTest {
     @Test
     public void setAcceptStatusSuccessfully() throws Exception {
         Long driverId = 6L;
-        String url = String.format("/order/set-accept-status/2/%d", driverId);
+        String url = String.format("/trucking-industry/order/set-accept-status/2/%d", driverId);
         String token = setUpToken(driverId, true);
 
         mockMvc.perform(
@@ -157,7 +207,8 @@ public class OrderControllerTest {
     @Test
     public void failedSetAcceptStatusCoDriverId() throws Exception {
         Long driverId = 7L;
-        String url = String.format("/order/set-accept-status/2/%d", driverId);
+        Long orderId = 2L;
+        String url = String.format("/trucking-industry/order/set-accept-status/%d/%d",orderId, driverId);
         String token = setUpToken(driverId, true);
 
         mockMvc.perform(
@@ -165,27 +216,29 @@ public class OrderControllerTest {
                         .header("Authorization", token))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value("Wrong order id or main driver id"));
+                        .value(String.format(WRONG_ORDER_OR_DRIVER, orderId, driverId)));
     }
 
     @Test
     public void failedSetAcceptStatusWrongDriver() throws Exception {
         Long driverId = 12L;
+        Long orderId = 2L;
         String token = setUpToken(driverId, true);
-        String url = String.format("/order/set-accept-status/2/%d", driverId);
+        String url = String.format("/trucking-industry/order/set-accept-status/%d/%d", orderId, driverId);
 
         mockMvc.perform(
                 put(url)
                         .header("Authorization", token))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value("Wrong order id or main driver id"));
+                        .value(String.format(WRONG_ORDER_OR_DRIVER, orderId, driverId)));
     }
 
     @Test
     public void failedSetAcceptStatusWrongCargoStatus() throws Exception {
         Long driverId = 3L;
-        String url = String.format("/order/set-accept-status/1/%d", driverId);
+        Long orderId = 1L;
+        String url = String.format("/trucking-industry/order/set-accept-status/%d/%d", orderId, driverId);
         String token = setUpToken(driverId, true);
 
         mockMvc.perform(
@@ -193,13 +246,13 @@ public class OrderControllerTest {
                         .header("Authorization", token))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value("Attempt to set ACCEPT status to wrong order"));
+                        .value(String.format(WRONG_ORDER_STATUS, OrderStatus.IN_PROGRESS)));
     }
 
     @Test
     public void setRefusedStatusSuccessfully() throws Exception {
         Long driverId = 8L;
-        String url = String.format("/order/set-refuse-status/3/%d", driverId);
+        String url = String.format("/trucking-industry/order/set-refuse-status/3/%d", driverId);
         String token = setUpToken(driverId, true);
 
         mockMvc.perform(
@@ -214,15 +267,15 @@ public class OrderControllerTest {
     public void updateCargoSuccessfully() throws Exception {
         String token = setUpToken(1L, false);
 
-        updatingOrder.setTotalWeight(300);
+/*        updatingOrder.setTotalWeight(300);
         updatingOrder.getTruck().setId(6L);
         updatingOrder.getDriver().setId(1L);
-        updatingOrder.getCoDriver().setId(2L);
+        updatingOrder.getCoDriver().setId(2L);*/
 
         String str = new ObjectMapper().writeValueAsString(updatingOrder);
 
         mockMvc.perform(
-                put("/order")
+                put("/trucking-industry/order")
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(str))
