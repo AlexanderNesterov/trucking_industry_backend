@@ -1,7 +1,6 @@
 package com.example.services.models;
 
 import com.example.database.models.commons.DriverStatus;
-import com.example.database.models.interfaces.Searchable;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

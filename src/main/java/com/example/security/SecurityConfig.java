@@ -76,7 +76,7 @@ public class SecurityConfig {
         private final TokenService tokenService;
 
         public GlobalConfigurationAdapter(UserDetailServiceImpl userDetailService, AuthenticationSuccessHandler successHandler,
-                              TokenService tokenService) {
+                                          TokenService tokenService) {
             this.userDetailService = userDetailService;
             this.successHandler = successHandler;
             this.tokenService = tokenService;

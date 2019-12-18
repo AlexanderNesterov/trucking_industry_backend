@@ -14,8 +14,8 @@ public interface ManagerService {
     SimpleManagerDto findById(Long managerId);
 
     /**
-     * @param text text from search string
-     * @param page number of page
+     * @param text     text from search string
+     * @param page     number of page
      * @param pageSize size of page
      * @return list of {@link com.example.services.models.SimpleManagerDto}
      */

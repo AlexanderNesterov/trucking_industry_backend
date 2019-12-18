@@ -5,6 +5,7 @@ import com.example.database.models.commons.Role;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+
 import static com.example.services.serviceImpl.validation.Message.*;
 
 /**

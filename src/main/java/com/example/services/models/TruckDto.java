@@ -1,7 +1,6 @@
 package com.example.services.models;
 
 import com.example.database.models.commons.TruckCondition;
-import com.example.database.models.interfaces.Searchable;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;

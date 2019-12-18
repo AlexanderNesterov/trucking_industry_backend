@@ -176,7 +176,7 @@
         </preConditions>
         <modifyDataType tableName="users" columnName="password" newDataType="varchar(96)"/>
     </changeSet>
-    
+
     <changeSet id="7" author="nesterov">
         <preConditions>
             <tableExists tableName="orders"/>
@@ -221,7 +221,9 @@
         </preConditions>
         <insert tableName="users">
             <column name="login">administrator</column>
-            <column name="password">JltIM9amwN+otroA2WW/1U70Yy/qgBPjQdXVv0lLcBl7nOw+Naoz9R/NEezc9uaI2O5E3GFVbf7H2KMzfJ1l+Z9kidNTJkRF</column>
+            <column name="password">
+                JltIM9amwN+otroA2WW/1U70Yy/qgBPjQdXVv0lLcBl7nOw+Naoz9R/NEezc9uaI2O5E3GFVbf7H2KMzfJ1l+Z9kidNTJkRF
+            </column>
             <column name="first_name">Admin</column>
             <column name="last_name">Admin</column>
             <column name="email">admin@admin.admin</column>

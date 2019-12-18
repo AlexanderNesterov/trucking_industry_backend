@@ -2,17 +2,17 @@ package com.example.services.serviceImpl;
 
 import com.example.controller.exceptions.SavingOrderException;
 import com.example.database.models.commons.CargoStatus;
-import com.example.database.models.commons.OrderStatus;
 import com.example.database.models.commons.DriverStatus;
+import com.example.database.models.commons.OrderStatus;
 import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.OrderRepository;
 import com.example.services.CityService;
+import com.example.services.DriverService;
 import com.example.services.OrderService;
+import com.example.services.TruckService;
 import com.example.services.mappers.OrderMapper;
 import com.example.services.mappers.OrderMapperImpl;
 import com.example.services.models.*;
-import com.example.services.DriverService;
-import com.example.services.TruckService;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -23,7 +23,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +30,6 @@ import java.util.stream.Stream;
 
 import static com.example.services.commons.message.OrderExceptionMessage.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 @FixMethodOrder(MethodSorters.JVM)

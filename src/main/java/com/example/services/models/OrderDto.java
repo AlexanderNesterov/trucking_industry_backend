@@ -1,10 +1,11 @@
 package com.example.services.models;
 
 import com.example.database.models.commons.OrderStatus;
-import com.example.database.models.interfaces.Searchable;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static com.example.services.serviceImpl.validation.Message.*;

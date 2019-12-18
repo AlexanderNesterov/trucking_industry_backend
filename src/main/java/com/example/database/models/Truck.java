@@ -92,6 +92,6 @@ public class Truck implements Searchable {
                 .append(capacity).append(" ")
                 .append(condition);
 
-        searchString =  sb.toString().toLowerCase();
+        searchString = sb.toString().toLowerCase();
     }
 }

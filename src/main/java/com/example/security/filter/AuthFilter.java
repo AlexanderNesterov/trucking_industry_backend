@@ -7,7 +7,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -17,27 +16,27 @@ import java.io.IOException;
 
 public class AuthFilter extends UsernamePasswordAuthenticationFilter {
 
-  private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
-  public AuthFilter(AuthenticationSuccessHandler successHandler,
-                    AuthenticationManager authManager) {
-    super();
-    this.setAllowSessionCreation(false);
-    this.setAuthenticationManager(authManager);
-    this.setFilterProcessesUrl("/trucking-industry/login");
-    this.setAuthenticationSuccessHandler(successHandler);
-  }
-
-  @Override
-  public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response)
-      throws AuthenticationException {
-    try {
-      LoginInfo user = mapper.readValue(request.getReader(), LoginInfo.class);
-      return getAuthenticationManager().authenticate(
-          new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
-    } catch (IOException e) {
-      throw new BadCredentialsException("Failed to parse user login info");
+    public AuthFilter(AuthenticationSuccessHandler successHandler,
+                      AuthenticationManager authManager) {
+        super();
+        this.setAllowSessionCreation(false);
+        this.setAuthenticationManager(authManager);
+        this.setFilterProcessesUrl("/trucking-industry/login");
+        this.setAuthenticationSuccessHandler(successHandler);
     }
-  }
+
+    @Override
+    public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response)
+            throws AuthenticationException {
+        try {
+            LoginInfo user = mapper.readValue(request.getReader(), LoginInfo.class);
+            return getAuthenticationManager().authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
+        } catch (IOException e) {
+            throw new BadCredentialsException("Failed to parse user login info");
+        }
+    }
 
 }

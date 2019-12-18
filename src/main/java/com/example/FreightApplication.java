@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @PropertySource("classpath:./application.properties")
 public class FreightApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(FreightApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FreightApplication.class, args);
+    }
 }

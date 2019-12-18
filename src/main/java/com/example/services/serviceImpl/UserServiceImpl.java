@@ -14,7 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.example.services.commons.message.UserExceptionMessage.*;
+import static com.example.services.commons.message.UserExceptionMessage.INCORRECT_CURRENT_PASSWORD;
+import static com.example.services.commons.message.UserExceptionMessage.WRONG_USER_OR_STATUS;
 
 @Service
 public class UserServiceImpl implements UserService {

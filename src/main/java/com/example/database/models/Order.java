@@ -2,8 +2,6 @@ package com.example.database.models;
 
 import com.example.database.models.commons.OrderStatus;
 import com.example.database.models.interfaces.Searchable;
-import org.hibernate.annotations.Cascade;
-import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.*;
 import java.util.List;
@@ -30,7 +28,7 @@ public class Order implements Searchable {
     @JoinColumn(name = "co_driver_id")
     private Driver coDriver;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private List<Cargo> cargoList;
 

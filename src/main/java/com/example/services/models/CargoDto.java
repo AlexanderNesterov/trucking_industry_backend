@@ -2,7 +2,12 @@ package com.example.services.models;
 
 import com.example.database.models.commons.CargoStatus;
 import org.hibernate.validator.constraints.Length;
-import javax.validation.constraints.*;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import static com.example.services.serviceImpl.validation.Message.*;
 
 public class CargoDto {

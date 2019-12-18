@@ -10,7 +10,10 @@ import java.util.List;
 public interface CityMapper {
 
     City fromDto(CityDto cityDto);
+
     CityDto toDto(City city);
+
     List<City> fromListDto(List<CityDto> cityDtoList);
+
     List<CityDto> toListDto(List<City> cityList);
 }

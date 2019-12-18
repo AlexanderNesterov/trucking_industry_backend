@@ -33,7 +33,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
             final UserDetails userDetails = (UserDetails) principal;
             String token = tokenService.generateToken(userDetails.getUsername());
 
-            try(Writer writer = httpServletResponse.getWriter()) {
+            try (Writer writer = httpServletResponse.getWriter()) {
                 objectMapper.writeValue(writer, token);
             }
 

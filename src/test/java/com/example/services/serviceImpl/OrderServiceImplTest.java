@@ -7,12 +7,12 @@ import com.example.database.models.commons.OrderStatus;
 import com.example.database.models.commons.TruckCondition;
 import com.example.database.repositories.OrderRepository;
 import com.example.services.CityService;
-import com.example.services.mappers.OrderMapperImpl;
-import com.example.services.models.*;
-import com.example.services.OrderService;
 import com.example.services.DriverService;
+import com.example.services.OrderService;
 import com.example.services.TruckService;
 import com.example.services.mappers.OrderMapper;
+import com.example.services.mappers.OrderMapperImpl;
+import com.example.services.models.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,10 +22,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -134,74 +131,6 @@ public class OrderServiceImplTest {
                 () -> orderService.findById(orderId));
 
         assertTrue(thrown.getMessage().contains("Order with id " + orderId + " not found"));
-    }
-
-
-    @Test
-    public void addCargoSuccessfully() {
-//        OrderDto savingOrder = new OrderDto();
-        SimpleDriverDto firstDriver = new SimpleDriverDto();
-        firstDriver.setId(3L);
-        SimpleDriverDto coDriver = new SimpleDriverDto();
-        coDriver.setId(7L);
-        TruckDto truck = new TruckDto();
-        truck.setId(2L);
-//        CargoDto cargoDto = new CargoDto();
-/*        savingOrder.setDriver(firstDriver);
-        savingOrder.setCoDriver(coDriver);
-        savingOrder.setTruck(truck);
-        savingOrder.setCargoList(List.of(cargoDto));*/
-
-        SimpleDriverDto existFirstDriver = new SimpleDriverDto();
-        existFirstDriver.setId(firstDriver.getId());
-        existFirstDriver.setStatus(DriverStatus.REST);
-
-        SimpleDriverDto existCoDriver = new SimpleDriverDto();
-        existCoDriver.setId(coDriver.getId());
-        existCoDriver.setStatus(DriverStatus.REST);
-
-        TruckDto existTruck = new TruckDto();
-        existTruck.setId(truck.getId());
-        existTruck.setCondition(TruckCondition.SERVICEABLE);
-        existTruck.setCapacity(700);
-
-        List<CityDto> cities = Stream.concat(
-                orderDto.getCargoList().stream().map(CargoDto::getLoadLocation),
-                orderDto.getCargoList().stream().map(CargoDto::getDischargeLocation))
-                .distinct()
-                .collect(Collectors.toList());
-
-        Long[] cityIds = Stream.concat(
-                orderDto.getCargoList().stream().map(cargoDto -> cargoDto.getLoadLocation().getId()),
-                orderDto.getCargoList().stream().map(cargoDto -> cargoDto.getDischargeLocation().getId()))
-                .distinct()
-                .toArray(Long[]::new);
-
-        Mockito
-                .when(driverService.getFreeDriver(orderDto.getDriver().getId()))
-                .thenReturn(existFirstDriver);
-        Mockito
-                .when(driverService.getFreeDriver(orderDto.getCoDriver().getId()))
-                .thenReturn(existCoDriver);
-        Mockito
-                .when(truckService.getFreeTruck(orderDto.getTruck().getId(), orderDto.getId(),
-                        orderDto.getTotalWeight()))
-                .thenReturn(existTruck);
-        Mockito
-                .when(cityService.findCitiesByListId(cityIds))
-                .thenReturn(cities);
-        Mockito
-                .when(orderRepository.save(orderMapper.fromDto(orderDto)))
-                .thenReturn(orderMapper.fromDto(orderDto));
-
-        boolean result = orderService.addOrder(orderDto);
-
-        assertEquals(existFirstDriver, orderDto.getDriver());
-        assertEquals(existCoDriver, orderDto.getCoDriver());
-        assertEquals(existTruck, orderDto.getTruck());
-        assertNull(orderDto.getId());
-        assertEquals(OrderStatus.CREATED, orderDto.getStatus());
-        assertTrue(result);
     }
 
     @Test

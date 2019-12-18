@@ -5,9 +5,7 @@ import com.example.services.models.OrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.Named;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

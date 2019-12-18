@@ -14,6 +14,8 @@ public interface TruckMapper {
 
     @Mapping(target = "searchString", ignore = true)
     TruckDto toDto(Truck truck);
+
     List<Truck> fromListDto(List<TruckDto> trucksDtos);
+
     List<TruckDto> toListDto(List<Truck> trucks);
 }

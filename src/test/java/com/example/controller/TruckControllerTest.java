@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.jupiter.api.Order;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,41 +64,6 @@ public class TruckControllerTest {
 
         int length = result.getResponse().getContentAsString().length();
         token = "Bearer " + result.getResponse().getContentAsString().substring(1, length - 1);
-    }
-
-    @Test
-    public void getTrucksBySearch() throws Exception {
-        mockMvc.perform(
-                get("/trucking-industry/trucks/search")
-                        .header("Authorization", token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("text", "")
-                        .param("page", "1")
-                        .param("size", "20"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(6));
-    }
-
-    @Test
-    @Order(1)
-    public void getFreeTrucks() throws Exception {
-        double weight = 450;
-        String text = "";
-        int page = 1;
-        int size = 20;
-
-        mockMvc.perform(
-                get("/trucking-industry/trucks/free")
-                        .param("weight", String.valueOf(weight))
-                        .param("text", text)
-                        .param("page", String.valueOf(page))
-                        .param("size", String.valueOf(size))
-                        .header("Authorization", token)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(1));
     }
 
     @Test

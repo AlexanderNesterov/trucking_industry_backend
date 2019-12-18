@@ -17,7 +17,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Collections;
 
 import static com.example.services.commons.message.CityExceptionMessage.SAVING_CITY_ERROR;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CityServiceImplTest {

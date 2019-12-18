@@ -7,6 +7,6 @@ package com.example.services.commons;
 @FunctionalInterface
 public interface IPasswordEncryptor {
 
-  String encrypt(String rawPassword);
+    String encrypt(String rawPassword);
 }
 

@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.FreightApplication;
-import com.example.database.models.City;
 import com.example.security.models.LoginInfo;
 import com.example.services.models.CityDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,10 +20,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static com.example.services.commons.message.CityExceptionMessage.SAVING_CITY_ERROR;
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(

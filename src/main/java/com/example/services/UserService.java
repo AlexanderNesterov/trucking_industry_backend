@@ -20,6 +20,7 @@ public interface UserService {
 
     /**
      * Set status to user account
+     *
      * @return true if status successfully set
      */
     boolean setStatus(AccountStatus status, Long userId);

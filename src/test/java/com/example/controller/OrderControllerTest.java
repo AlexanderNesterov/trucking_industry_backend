@@ -9,7 +9,6 @@ import com.example.security.models.LoginInfo;
 import com.example.services.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +16,6 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -28,7 +26,6 @@ import java.util.Arrays;
 
 import static com.example.services.commons.message.OrderExceptionMessage.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -208,7 +205,7 @@ public class OrderControllerTest {
     public void failedSetAcceptStatusCoDriverId() throws Exception {
         Long driverId = 7L;
         Long orderId = 2L;
-        String url = String.format("/trucking-industry/order/set-accept-status/%d/%d",orderId, driverId);
+        String url = String.format("/trucking-industry/order/set-accept-status/%d/%d", orderId, driverId);
         String token = setUpToken(driverId, true);
 
         mockMvc.perform(
@@ -258,27 +255,6 @@ public class OrderControllerTest {
         mockMvc.perform(
                 put(url)
                         .header("Authorization", token))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isBoolean())
-                .andExpect(jsonPath("$").value("true"));
-    }
-
-    @Test
-    public void updateCargoSuccessfully() throws Exception {
-        String token = setUpToken(1L, false);
-
-/*        updatingOrder.setTotalWeight(300);
-        updatingOrder.getTruck().setId(6L);
-        updatingOrder.getDriver().setId(1L);
-        updatingOrder.getCoDriver().setId(2L);*/
-
-        String str = new ObjectMapper().writeValueAsString(updatingOrder);
-
-        mockMvc.perform(
-                put("/trucking-industry/order")
-                        .header("Authorization", token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(str))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isBoolean())
                 .andExpect(jsonPath("$").value("true"));

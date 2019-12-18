@@ -25,11 +25,13 @@ public abstract class ManagerMapper {
     }
 
     public abstract SimpleManagerDto toDto(Manager manager);
+
     public abstract Manager fromDto(SimpleManagerDto managerDto);
+
     public abstract List<Manager> fromListDto(List<SimpleManagerDto> managerDtoList);
+
     public abstract List<SimpleManagerDto> toListDto(List<Manager> managerList);
 
     @Mapping(target = "user.password", expression = "java(mapPassword(fullInfoUserDto))")
     public abstract Manager fromFullInfoDto(FullInfoManagerDto managerDto);
-    public abstract FullInfoManagerDto toFullInfoDto(Manager manager);
 }

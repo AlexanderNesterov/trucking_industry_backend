@@ -2,7 +2,6 @@ package com.example.services.mappers;
 
 import com.example.database.models.User;
 import com.example.services.commons.IPasswordEncryptor;
-import com.example.services.models.FullInfoUserDto;
 import com.example.services.models.SimpleUserDto;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +21,10 @@ public abstract class UserMapper {
     public String mapPassword(String password) {
         return passwordEncryptor.encrypt(password);
     }
-/*    public boolean checkPassword(String currentPassword) {
-        return passwordEncryptor.
-    }*/
 
     public abstract SimpleUserDto toDto(User user);
+
     public abstract List<User> fromListDto(List<SimpleUserDto> userDtos);
+
     public abstract List<SimpleUserDto> toListDto(List<User> users);
 }

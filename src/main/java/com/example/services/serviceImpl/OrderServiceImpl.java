@@ -1,7 +1,7 @@
 package com.example.services.serviceImpl;
 
-import com.example.controller.exceptions.OrderNotFoundException;
 import com.example.controller.exceptions.ChangeOrderStatusException;
+import com.example.controller.exceptions.OrderNotFoundException;
 import com.example.controller.exceptions.SavingOrderException;
 import com.example.database.models.Order;
 import com.example.database.models.commons.CargoStatus;
@@ -9,11 +9,11 @@ import com.example.database.models.commons.DriverStatus;
 import com.example.database.models.commons.OrderStatus;
 import com.example.database.repositories.OrderRepository;
 import com.example.services.CityService;
+import com.example.services.DriverService;
+import com.example.services.OrderService;
+import com.example.services.TruckService;
 import com.example.services.mappers.OrderMapper;
 import com.example.services.models.*;
-import com.example.services.OrderService;
-import com.example.services.DriverService;
-import com.example.services.TruckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -81,22 +82,25 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getOrdersToSendMail();
     }
 
+    @Transactional
     @Override
     public boolean updateOrder(@Valid OrderDto orderDto) {
         checkSavingOrder(orderDto, true);
 
+        orderDto.getCargoList().forEach(cargo -> cargo.setStatus(CargoStatus.CREATED));
         orderDto.setStatus(OrderStatus.CREATED);
         orderDto.getDriver().setStatus(DriverStatus.ASSIGNED);
         orderDto.getCoDriver().setStatus(DriverStatus.ASSIGNED);
 
         Order order = orderMapper.fromDto(orderDto);
+        order.getCargoList().forEach(cargo -> cargo.setOrder(order));
         order.combineSearchString();
         orderRepository.save(order);
         LOGGER.info("Order with id: {} updated", orderDto.getId());
         return true;
     }
 
-    // save id into search string
+    @Transactional
     @Override
     public boolean addOrder(@Valid OrderDto order) {
         checkSavingOrder(order, false);
@@ -107,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
         order.getCargoList().forEach(cargo -> cargo.setId(null));
         Order savedOrder = orderRepository.save(orderMapper.fromDto(order));
         savedOrder.combineSearchString();
-        driverService.setDriverStatus(new Long[] {order.getDriver().getId(), order.getCoDriver().getId()},
+        driverService.setDriverStatus(new Long[]{order.getDriver().getId(), order.getCoDriver().getId()},
                 DriverStatus.ASSIGNED);
 
         orderRepository.setOrderSearchString(savedOrder.getSearchString(), savedOrder.getId());
@@ -218,8 +222,8 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> order = orderRepository.getOrderToChangeStatus(orderId, driverId);
 
         if (order.isEmpty()) {
-            LOGGER.warn(String.format(WRONG_ORDER_OR_DRIVER, orderId,driverId));
-            throw new ChangeOrderStatusException(String.format(WRONG_ORDER_OR_DRIVER, orderId,driverId));
+            LOGGER.warn(String.format(WRONG_ORDER_OR_DRIVER, orderId, driverId));
+            throw new ChangeOrderStatusException(String.format(WRONG_ORDER_OR_DRIVER, orderId, driverId));
         }
 
         return order.get();

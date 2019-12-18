@@ -19,7 +19,7 @@ public interface CargoRepository extends JpaRepository<Cargo, Long> {
             "and o.driver.status = com.example.database.models.commons.DriverStatus.ACTIVE " +
             "and o.status = com.example.database.models.commons.OrderStatus.IN_PROGRESS) = :driverId")
     Optional<Cargo> getCargoToDeliver(@Param("orderId") Long orderId, @Param("cargoId") Long cargoId,
-                                     @Param("driverId") Long driverId);
+                                      @Param("driverId") Long driverId);
 
     List<Cargo> getCargoByOrderId(Long orderId);
 }

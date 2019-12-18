@@ -17,8 +17,8 @@ public interface DriverService {
     List<SimpleDriverDto> getFreeDrivers(String text, int page, int size);
 
     /**
-     * @param text text from search string
-     * @param page number of page
+     * @param text     text from search string
+     * @param page     number of page
      * @param pageSize size of page
      * @return list of {@link com.example.services.models.SimpleDriverDto}
      */
@@ -50,6 +50,7 @@ public interface DriverService {
 
     /**
      * Set status to drivers
+     *
      * @param driverIds array of driver id
      */
     void setDriverStatus(Long[] driverIds, DriverStatus status);
