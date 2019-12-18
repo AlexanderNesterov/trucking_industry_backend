@@ -4,7 +4,7 @@
 * DB settings:
 
     * driver-class-name: org.postgresql.Driver
-    * url: jdbc:postgresql://localhost:5432/hospital
+    * url: jdbc:postgresql://localhost:5432/trucking_industry
     * username: postgres
     * password: postgres
     
