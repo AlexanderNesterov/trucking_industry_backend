@@ -16,15 +16,15 @@ public class Order implements Searchable {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "truck_id")
     private Truck truck;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "driver_id")
     private Driver driver;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "co_driver_id")
     private Driver coDriver;
 
