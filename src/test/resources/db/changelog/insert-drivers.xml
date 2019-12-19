@@ -1,77 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog
-xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet id="insert_drivers" author="nesterov">
         <insert tableName="drivers">
             <column name="driver_license">0102030405</column>
-            <column name="user_id">1</column>
+            <column name="user_id">2</column>
             <column name="status">REST</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">1020304050</column>
-            <column name="user_id">2</column>
+            <column name="user_id">3</column>
             <column name="status">REST</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">1213141516</column>
-            <column name="user_id">3</column>
+            <column name="user_id">4</column>
             <column name="status">ACTIVE</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">9080706050</column>
-            <column name="user_id">4</column>
+            <column name="user_id">5</column>
             <column name="status">REST</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">9897969594</column>
-            <column name="user_id">5</column>
+            <column name="user_id">6</column>
             <column name="status">ACTIVE</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">1122334455</column>
-            <column name="user_id">6</column>
-            <column name="status">REST</column>
+            <column name="user_id">7</column>
+            <column name="status">ASSIGNED</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">2233445566</column>
-            <column name="user_id">7</column>
-            <column name="status">REST</column>
+            <column name="user_id">8</column>
+            <column name="status">ASSIGNED</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">3344556677</column>
-            <column name="user_id">8</column>
-            <column name="status">REST</column>
+            <column name="user_id">9</column>
+            <column name="status">ASSIGNED</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">0022998877</column>
-            <column name="user_id">9</column>
-            <column name="status">REST</column>
+            <column name="user_id">10</column>
+            <column name="status">ASSIGNED</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">7777777777</column>
-            <column name="user_id">10</column>
+            <column name="user_id">11</column>
             <column name="status">ACTIVE</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">8888888888</column>
-            <column name="user_id">11</column>
+            <column name="user_id">12</column>
             <column name="status">ACTIVE</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">9050304010</column>
-            <column name="user_id">12</column>
+            <column name="user_id">13</column>
             <column name="status">REST</column>
+            <column name="search_string">driver</column>
         </insert>
         <insert tableName="drivers">
             <column name="driver_license">1030405060</column>
-            <column name="user_id">13</column>
+            <column name="user_id">14</column>
             <column name="status">REST</column>
+            <column name="search_string">driver</column>
+        </insert>
+        <insert tableName="drivers">
+            <column name="driver_license">9274927629</column>
+            <column name="user_id">16</column>
+            <column name="status">REST</column>
+            <column name="search_string">driver</column>
         </insert>
     </changeSet>
 </databaseChangeLog>

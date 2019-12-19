@@ -1,116 +1,175 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog
-xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet id="insert_users" author="nesterov">
         <insert tableName="users">
             <column name="login">driver_1</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Kieran</column>
             <column name="last_name">Tierney</column>
             <column name="email">tierney@mail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_2</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Alex</column>
             <column name="last_name">Iwobi</column>
             <column name="email">iwobi@yandex.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_3</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Hector</column>
             <column name="last_name">Bellerin</column>
             <column name="email">bellerin@gmail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_4</column>
-            <column name="password">password</column>
+            <column name="password">
+                HrxGw59miXzr1TdsEO5KQdg6sZprLr6dVy1efAHyoSdyFIJOKpY4rofVTcvYY89LdFlpiCEL+qC1XoZGVs3AnqUjDiLpU3bY
+            </column>
             <column name="first_name">Bernd</column>
             <column name="last_name">Leno</column>
             <column name="email">leno@gmail.com</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_5</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Rob</column>
             <column name="last_name">Holding</column>
             <column name="email">holding@mail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_6</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Gabriel</column>
             <column name="last_name">Martinelli</column>
             <column name="email">martinelli@mail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_7</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Patrick</column>
             <column name="last_name">Viera</column>
             <column name="email">viera@mail.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_8</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Naruto</column>
             <column name="last_name">Uzumaki</column>
             <column name="email">uzumaki@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_9</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Sasuke</column>
             <column name="last_name">Uchiha</column>
             <column name="email">uchiha@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_10</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Kakashi</column>
             <column name="last_name">Sakumo</column>
             <column name="email">kakashi@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_11</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Gai</column>
             <column name="last_name">Maito</column>
             <column name="email">maito@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_12</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Hashirama</column>
             <column name="last_name">Sendju</column>
             <column name="email">hashirama@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
         </insert>
         <insert tableName="users">
             <column name="login">driver_13</column>
-            <column name="password">password</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
             <column name="first_name">Madara</column>
             <column name="last_name">Uchiha</column>
             <column name="email">uchiha@konoha.ru</column>
             <column name="role">DRIVER</column>
+            <column name="status">ACTIVE</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">manager_1</column>
+            <column name="password">
+                tmkWlZzi75huxUnu7ZQn3a8zcNj3Zpl4VWLgQr5ASDZEZDk337L/OaARykhhEV7RUx2j9VALo1OLloLZ+c3FdWae+mFwZp2d
+            </column>
+            <column name="first_name">Arsene</column>
+            <column name="last_name">Wenger</column>
+            <column name="email">wenger@mail.ru</column>
+            <column name="role">ADMIN</column>
+            <column name="status">ACTIVE</column>
+        </insert>
+        <insert tableName="users">
+            <column name="login">driver_14</column>
+            <column name="password">
+                s+ANWoIQ/aJqit8bUx3zzD+4AAmAo1iiesH91x0zVZdGRag9F+k6GY1pwD9vFj4Yuhid0fYRcL8/eSKLIRrAINfijbB/DrCZ
+            </column>
+            <column name="first_name">Petr</column>
+            <column name="last_name">Ivanov</column>
+            <column name="email">ivanov@yandex.ru</column>
+            <column name="role">DRIVER</column>
+            <column name="status">BLOCKED</column>
         </insert>
     </changeSet>
 </databaseChangeLog>

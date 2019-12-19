@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog
-xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="create_sequences" author="nesterov">
+        <createSequence sequenceName="cities_id_seq" minValue="20"/>
+        <createSequence sequenceName="users_id_seq" minValue="20"/>
+        <createSequence sequenceName="drivers_id_seq" minValue="20"/>
+        <createSequence sequenceName="trucks_id_seq" minValue="20"/>
+    </changeSet>
 
     <include file="classpath:db/changelog/master-changelog.xml"/>
     <include file="insert-users.xml" relativeToChangelogFile="true"/>
     <include file="insert-drivers.xml" relativeToChangelogFile="true"/>
+    <include file="insert-managers.xml" relativeToChangelogFile="true"/>
     <include file="insert-trucks.xml" relativeToChangelogFile="true"/>
+    <include file="insert-cities.xml" relativeToChangelogFile="true"/>
+    <include file="insert-orders.xml" relativeToChangelogFile="true"/>
     <include file="insert-cargo.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

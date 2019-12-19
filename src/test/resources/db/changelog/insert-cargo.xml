@@ -1,65 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog
-xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet id="insert_cargo" author="nesterov">
         <insert tableName="cargo">
             <column name="title">Water</column>
-            <column name="description">pure water</column>
-            <column name="weight">500</column>
-            <column name="load_location_id">0</column>
-            <column name="discharge_location_id">0</column>
-            <column name="truck_id">1</column>
-            <column name="driver_id">3</column>
-            <column name="co_driver_id">5</column>
+            <column name="description">Pure water</column>
+            <column name="weight">120</column>
+            <column name="load_location_id">2</column>
+            <column name="discharge_location_id">8</column>
             <column name="status">IN_PROGRESS</column>
+            <column name="order_id">1</column>
         </insert>
         <insert tableName="cargo">
-            <column name="title">Chocolate</column>
-            <column name="description">Alpien gold</column>
-            <column name="weight">400</column>
-            <column name="load_location_id">0</column>
-            <column name="discharge_location_id">0</column>
-            <column name="truck_id">4</column>
-            <column name="driver_id">6</column>
-            <column name="co_driver_id">7</column>
-            <column name="status">CREATED</column>
-        </insert>
-        <insert tableName="cargo">
-            <column name="title">Soup</column>
-            <column name="description">Ichiraku Ramen</column>
-            <column name="weight">900</column>
-            <column name="load_location_id">0</column>
-            <column name="discharge_location_id">0</column>
-            <column name="truck_id">2</column>
-            <column name="driver_id">8</column>
-            <column name="co_driver_id">9</column>
-            <column name="status">CREATED</column>
+            <column name="title">Food</column>
+            <column name="description">Ramen</column>
+            <column name="weight">280</column>
+            <column name="load_location_id">3</column>
+            <column name="discharge_location_id">7</column>
+            <column name="status">DELIVERED</column>
+            <column name="order_id">1</column>
         </insert>
         <insert tableName="cargo">
             <column name="title">Weapon</column>
-            <column name="weight">300</column>
-            <column name="load_location_id">0</column>
-            <column name="discharge_location_id">0</column>
-            <column name="truck_id">5</column>
-            <column name="driver_id">10</column>
-            <column name="co_driver_id">11</column>
-            <column name="status">IN_PROGRESS</column>
+            <column name="weight">450</column>
+            <column name="load_location_id">7</column>
+            <column name="discharge_location_id">5</column>
+            <column name="status">CREATED</column>
+            <column name="order_id">2</column>
         </insert>
         <insert tableName="cargo">
-            <column name="title">Cotton</column>
-            <column name="weight">450</column>
-            <column name="load_location_id">0</column>
-            <column name="discharge_location_id">0</column>
-            <column name="truck_id">6</column>
-            <column name="driver_id">12</column>
-            <column name="co_driver_id">13</column>
-            <column name="status">REFUSED_BY_DRIVER</column>
+            <column name="title">Grenades</column>
+            <column name="weight">150</column>
+            <column name="load_location_id">3</column>
+            <column name="discharge_location_id">2</column>
+            <column name="status">CREATED</column>
+            <column name="order_id">2</column>
+        </insert>
+        <insert tableName="cargo">
+            <column name="title">Bricks</column>
+            <column name="weight">600</column>
+            <column name="load_location_id">1</column>
+            <column name="discharge_location_id">5</column>
+            <column name="status">CREATED</column>
+            <column name="order_id">3</column>
+        </insert>
+        <insert tableName="cargo">
+            <column name="title">Glass</column>
+            <column name="weight">200</column>
+            <column name="load_location_id">7</column>
+            <column name="discharge_location_id">8</column>
+            <column name="status">CREATED</column>
+            <column name="order_id">3</column>
+        </insert>
+        <insert tableName="cargo">
+            <column name="title">Fuel</column>
+            <column name="description">Petrol</column>
+            <column name="weight">500</column>
+            <column name="load_location_id">4</column>
+            <column name="discharge_location_id">2</column>
+            <column name="status">DELIVERED</column>
+            <column name="order_id">4</column>
+        </insert>
+        <insert tableName="cargo">
+            <column name="title">Fuel</column>
+            <column name="description">Diesel</column>
+            <column name="weight">200</column>
+            <column name="load_location_id">1</column>
+            <column name="discharge_location_id">6</column>
+            <column name="status">IN_PROGRESS</column>
+            <column name="order_id">4</column>
+        </insert>
+        <insert tableName="cargo">
+            <column name="title">Paper</column>
+            <column name="weight">400</column>
+            <column name="load_location_id">3</column>
+            <column name="discharge_location_id">2</column>
+            <column name="status">CREATED</column>
+            <column name="order_id">5</column>
+        </insert>
+        <insert tableName="cargo">
+            <column name="title">Pens</column>
+            <column name="weight">150</column>
+            <column name="load_location_id">7</column>
+            <column name="discharge_location_id">3</column>
+            <column name="status">CREATED</column>
+            <column name="order_id">5</column>
         </insert>
     </changeSet>
 </databaseChangeLog>

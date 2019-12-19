@@ -1,14 +1,17 @@
 package com.example.database.models;
 
 import com.example.database.models.commons.TruckCondition;
+import com.example.database.models.interfaces.Searchable;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "trucks")
-public class Truck {
+public class Truck implements Searchable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "truck_seq", sequenceName = "trucks_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "truck_seq")
     @Column(name = "id")
     private Long id;
 
@@ -24,6 +27,9 @@ public class Truck {
     @Column(name = "condition")
     @Enumerated(value = EnumType.STRING)
     private TruckCondition condition;
+
+    @Column(name = "search_string")
+    private String searchString;
 
     public Truck() {
     }
@@ -66,5 +72,26 @@ public class Truck {
 
     public void setCondition(TruckCondition condition) {
         this.condition = condition;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
+    }
+
+    @Override
+    public void combineSearchString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append(registrationNumber).append(" ")
+                .append(model).append(" ")
+                .append(capacity).append(" ")
+                .append(condition);
+
+        searchString = sb.toString().toLowerCase();
     }
 }

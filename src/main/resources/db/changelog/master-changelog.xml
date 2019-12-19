@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog
-xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet id="1" author="nesterov">
-
         <createTable tableName="users">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -69,6 +66,59 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
     </changeSet>
 
     <changeSet id="2" author="nesterov">
+        <createTable tableName="cities">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="latitude" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="nesterov">
+        <createTable tableName="orders">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="truck_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="driver_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_driver_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_weight" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(32)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="orders" baseColumnNames="truck_id"
+                                 constraintName="fk_order_truck" referencedTableName="trucks"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="orders" baseColumnNames="driver_id"
+                                 constraintName="fk_order_driver" referencedTableName="drivers"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="orders" baseColumnNames="co_driver_id"
+                                 constraintName="fk_order_co_driver" referencedTableName="drivers"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="4" author="nesterov">
         <createTable tableName="cargo">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -80,37 +130,129 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="weight" type="numeric">
                 <constraints nullable="false"/>
             </column>
-            <column name="load_location_id" type="int"/>
-            <column name="discharge_location_id" type="int"/>
-            <column name="truck_id" type="int">
+            <column name="load_location_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="driver_id" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="co_driver_id" type="int">
+            <column name="discharge_location_id" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="status" type="int"/>
+            <column name="order_id" type="int"/>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="truck_id"
-                                 constraintName="fk_cargo_truck" referencedTableName="trucks"
+        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="load_location_id"
+                                 constraintName="fk_cargo_load_cities" referencedTableName="cities"
                                  referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="driver_id"
-                                 constraintName="fk_cargo_driver" referencedTableName="drivers"
+        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="discharge_location_id"
+                                 constraintName="fk_cargo_discharge_cities" referencedTableName="cities"
                                  referencedColumnNames="id"/>
-
-        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="co_driver_id"
-                                 constraintName="fk_cargo_co_driver" referencedTableName="drivers"
+        <addForeignKeyConstraint baseTableName="cargo" baseColumnNames="order_id"
+                                 constraintName="fk_cargo_order" referencedTableName="orders"
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="3" author="nesterov">
+    <changeSet id="5" author="nesterov">
+        <preConditions>
+            <tableExists tableName="users"/>
+            <tableExists tableName="drivers"/>
+            <tableExists tableName="trucks"/>
+            <tableExists tableName="cargo"/>
+            <columnExists tableName="users" columnName="role"/>
+            <columnExists tableName="drivers" columnName="status"/>
+            <columnExists tableName="trucks" columnName="condition"/>
+            <columnExists tableName="cargo" columnName="status"/>
+        </preConditions>
         <modifyDataType tableName="users" columnName="role" newDataType="varchar(32)"/>
         <modifyDataType tableName="drivers" columnName="status" newDataType="varchar(32)"/>
         <modifyDataType tableName="trucks" columnName="condition" newDataType="varchar(32)"/>
         <modifyDataType tableName="cargo" columnName="status" newDataType="varchar(32)"/>
+    </changeSet>
+
+    <changeSet id="6" author="nesterov">
+        <preConditions>
+            <tableExists tableName="users"/>
+            <columnExists tableName="users" columnName="password"/>
+        </preConditions>
+        <modifyDataType tableName="users" columnName="password" newDataType="varchar(96)"/>
+    </changeSet>
+
+    <changeSet id="7" author="nesterov">
+        <preConditions>
+            <tableExists tableName="orders"/>
+            <tableExists tableName="drivers"/>
+            <tableExists tableName="trucks"/>
+        </preConditions>
+        <addColumn tableName="orders">
+            <column name="search_string" type="varchar(512)"/>
+        </addColumn>
+        <addColumn tableName="drivers">
+            <column name="search_string" type="varchar(512)"/>
+        </addColumn>
+        <addColumn tableName="trucks">
+            <column name="search_string" type="varchar(512)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="8" author="nesterov">
+        <preConditions>
+            <tableExists tableName="users"/>
+        </preConditions>
+        <createTable tableName="managers">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(32)"/>
+            <column name="search_string" type="varchar(512)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="managers" baseColumnNames="user_id"
+                                 constraintName="fk_manager_user" referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="9" author="nesterov">
+        <preConditions>
+            <tableExists tableName="users"/>
+            <tableExists tableName="managers"/>
+        </preConditions>
+        <insert tableName="users">
+            <column name="login">administrator</column>
+            <column name="password">
+                JltIM9amwN+otroA2WW/1U70Yy/qgBPjQdXVv0lLcBl7nOw+Naoz9R/NEezc9uaI2O5E3GFVbf7H2KMzfJ1l+Z9kidNTJkRF
+            </column>
+            <column name="first_name">Admin</column>
+            <column name="last_name">Admin</column>
+            <column name="email">admin@admin.admin</column>
+            <column name="role">ADMIN</column>
+        </insert>
+        <insert tableName="managers">
+            <column name="user_id">1</column>
+            <column name="status">ACTIVE</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="10" author="nesterov">
+        <preConditions>
+            <tableExists tableName="managers"/>
+            <tableExists tableName="users"/>
+            <columnExists tableName="managers" columnName="status"/>
+        </preConditions>
+        <dropColumn tableName="managers" columnName="status"/>
+        <addColumn tableName="users">
+            <column name="status" type="varchar(32)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="11" author="nesterov">
+        <preConditions>
+            <tableExists tableName="orders"/>
+        </preConditions>
+        <addColumn tableName="orders">
+            <column name="send_mail" type="boolean" defaultValue="false"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>
