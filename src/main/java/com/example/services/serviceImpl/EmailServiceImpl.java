@@ -27,23 +27,29 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendMail() {
         List<Order> orderList = orderService.getOrdersToSendMail();
-        String[] myEmails = new String[]{"aleksandr_nesterov_99@mail.ru", "warr25671@gmail.com"};
 
         for (Order order : orderList) {
-            for (String email : myEmails) {
-                if (order.getDriver().getUser().getEmail().equals(email)
-                        || order.getCoDriver().getUser().getEmail().equals(email)) {
-                    SimpleMailMessage message = new SimpleMailMessage();
+            SimpleMailMessage message = new SimpleMailMessage();
 
-                    message.setTo(email);
-                    message.setSubject("New Order");
-                    message.setText("The order is assigned to you. Please check your account");
+            String email = order.getDriver().getUser().getEmail();
+            message.setTo(email);
+            message.setSubject("New Order");
+            message.setText("The order is assigned to you. Please check your account");
 
-                    orderService.setEmailSent(order.getId());
-                    mailSender.send(message);
-                    LOGGER.info("Message to {} sent", email);
-                }
-            }
+            orderService.setEmailSent(order.getId());
+            mailSender.send(message);
+            LOGGER.info("Message to {} sent", email);
+
+            message = new SimpleMailMessage();
+
+            email = order.getCoDriver().getUser().getEmail();
+            message.setTo(email);
+            message.setSubject("New Order");
+            message.setText("The order is assigned to you. Please check your account");
+
+            orderService.setEmailSent(order.getId());
+            mailSender.send(message);
+            LOGGER.info("Message to {} sent", email);
         }
     }
 }
