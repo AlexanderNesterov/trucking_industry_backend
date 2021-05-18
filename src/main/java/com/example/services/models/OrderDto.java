@@ -25,6 +25,7 @@ public class OrderDto {
     private double totalWeight;
     private OrderStatus status;
     private String searchString;
+    private List<CityDto> theBestWay;
 
     public OrderDto() {
     }
@@ -91,5 +92,13 @@ public class OrderDto {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
+    }
+
+    public List<CityDto> getTheBestWay() {
+        return theBestWay;
+    }
+
+    public void setTheBestWay(List<CityDto> theBestWay) {
+        this.theBestWay = theBestWay;
     }
 }

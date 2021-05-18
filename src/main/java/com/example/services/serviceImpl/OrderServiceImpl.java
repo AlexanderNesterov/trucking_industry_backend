@@ -10,6 +10,7 @@ import com.example.database.models.commons.OrderStatus;
 import com.example.database.repositories.OrderRepository;
 import com.example.services.CityService;
 import com.example.services.DriverService;
+import com.example.services.FindPathService;
 import com.example.services.OrderService;
 import com.example.services.TruckService;
 import com.example.services.mappers.OrderMapper;
@@ -42,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
     private DriverService driverService;
     private TruckService truckService;
     private CityService cityService;
+    private FindPathService findPathService;
 
     public OrderServiceImpl(OrderMapper orderMapper) {
         this.orderMapper = orderMapper;
@@ -50,12 +52,13 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     public OrderServiceImpl(OrderMapper orderMapper, OrderRepository orderRepository,
                             DriverService driverService, TruckService truckService,
-                            CityService cityService) {
+                            CityService cityService, FindPathService findPathService) {
         this.orderMapper = orderMapper;
         this.orderRepository = orderRepository;
         this.driverService = driverService;
         this.truckService = truckService;
         this.cityService = cityService;
+        this.findPathService = findPathService;
     }
 
     @Override
@@ -133,7 +136,9 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderNotFoundException(String.format(ORDER_BY_DRIVER_NOT_FOUND, driverId));
         } else {
             LOGGER.info("Order with driver id: {} returned", driverId);
-            return orderMapper.toDto(orderOpt.get());
+            OrderDto orderDto = orderMapper.toDto(orderOpt.get());
+            orderDto = findPathService.findPath(orderDto);
+            return orderDto;
         }
     }
 
