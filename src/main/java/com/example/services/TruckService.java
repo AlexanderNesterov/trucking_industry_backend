@@ -28,6 +28,8 @@ public interface TruckService {
 
     TruckDto getFreeTruck(Long truckId, Long orderId, double weight);
 
+    TruckDto getTruckByOrderId(Long orderId);
+
     boolean isRegistrationNumberExists(String registrationNumber, Long truckId);
 
     /**
@@ -52,4 +54,8 @@ public interface TruckService {
     boolean setBrokenStatus(Long truckId);
 
     boolean setServiceableStatus(Long truckId);
+
+    boolean setNewPosition(Long id, double longitude, double latitude);
+
+    boolean setZeroCoordinates(Long id);
 }

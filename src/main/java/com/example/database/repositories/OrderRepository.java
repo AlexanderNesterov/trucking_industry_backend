@@ -46,4 +46,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Modifying
     @Query("update Order o set o.isSendMail = true where o.id = :orderId")
     void setSentEmail(@Param("orderId") Long orderId);
+
+    @Query("from Order o where o.status = com.example.database.models.commons.OrderStatus.IN_PROGRESS")
+    List<Order> getInProgressOrders();
 }

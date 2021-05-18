@@ -47,6 +47,12 @@ public class OrderController {
         return orderService.getOrderByDriverId(driverId);
     }
 
+    @GetMapping("/in-progress")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public List<OrderDto> getInProgressOrders() {
+        return orderService.getInProgressOrders();
+    }
+
     @PutMapping("/set-accept-status/{orderId}/{driverId}")
     @PreAuthorize("#driverId == authentication.principal.driverId")
     @RolesAllowed({"ROLE_DRIVER"})

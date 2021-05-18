@@ -4,9 +4,11 @@ import com.example.database.models.Truck;
 import com.example.database.models.commons.TruckCondition;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,4 +50,17 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
 
     @Query("from Truck t where t.id = :truckId and t.condition = :condition")
     Optional<Truck> getTruckToSetStatus(@Param("truckId") Long truckId, @Param("condition") TruckCondition condition);
+
+    @Query("from Truck t where t.id = (select o.truck.id from Order o where o.id = :orderId)")
+    Optional<Truck> getTruckByOrderId(@Param("orderId") Long orderId);
+
+    @Transactional
+    @Modifying
+    @Query("update Truck t set t.longitude = :longitude, t.latitude = :latitude where t.id = :truckId")
+    void setNewPosition(@Param("truckId") Long id, @Param("longitude") double longitude, @Param("latitude") double latitude);
+
+    @Transactional
+    @Modifying
+    @Query("update Truck t set t.longitude = 0, t.latitude = 0 where t.id = :truckId")
+    void setZeroCoordinates(@Param("truckId") Long id);
 }

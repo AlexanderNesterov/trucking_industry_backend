@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.services.EmailService;
+import com.example.services.MovementSimulationService;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.cp.lock.FencedLock;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,26 +8,26 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SendingEmailJob {
+public class MoveTrucksJob {
 
-    private final EmailService emailService;
+    private final MovementSimulationService movementSimulationService;
     private final HazelcastInstance hazelcastInstance;
 
-    public SendingEmailJob(EmailService emailService,
+    public MoveTrucksJob(MovementSimulationService movementSimulationService,
                            @Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance) {
-        this.emailService = emailService;
+        this.movementSimulationService = movementSimulationService;
         this.hazelcastInstance = hazelcastInstance;
     }
 
-//    @Scheduled(fixedRate = 50_000)
-    public void sendMail() {
+    @Scheduled(fixedRate = 1_000)
+    public void moveTrucks() {
         FencedLock lock = hazelcastInstance.getCPSubsystem().getLock("lock");
 
         System.out.println("Try to get lock");
         if (lock.tryLock()) {
             try {
 
-                emailService.sendMail();
+                movementSimulationService.moveTrucks();
             } finally {
                 lock.unlock();
             }

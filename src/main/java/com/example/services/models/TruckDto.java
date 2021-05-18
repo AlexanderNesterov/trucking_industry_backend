@@ -23,6 +23,9 @@ public class TruckDto {
     @DecimalMin(value = "1", message = CAPACITY + TOO_SMALL + MIN_CAPACITY)
     @DecimalMax(value = "1000000", message = CAPACITY + TOO_BIG + MAX_CAPACITY)
     private double capacity;
+
+    private double latitude;
+    private double longitude;
     private TruckCondition condition;
     private String searchString;
 
@@ -59,6 +62,22 @@ public class TruckDto {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public TruckCondition getCondition() {
