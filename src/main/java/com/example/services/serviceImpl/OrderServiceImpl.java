@@ -78,6 +78,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderDto> getInProgressOrders() {
+        return orderMapper.toListDtoWithoutCargoList(orderRepository.getInProgressOrders());
+    }
+
+    @Override
     public List<Order> getOrdersToSendMail() {
         return orderRepository.getOrdersToSendMail();
     }

@@ -255,4 +255,13 @@
             <column name="send_mail" type="boolean" defaultValue="false"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="12" author="nesterov">
+        <addColumn tableName="trucks">
+            <column name="latitude" type="numeric"/>
+        </addColumn>
+        <addColumn tableName="trucks">
+            <column name="longitude" type="numeric"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

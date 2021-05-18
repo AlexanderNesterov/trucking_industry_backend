@@ -124,6 +124,12 @@ public class TruckServiceImpl implements TruckService {
     }
 
     @Override
+    public TruckDto getTruckByOrderId(Long orderId) {
+        Optional<Truck> truck = truckRepository.getTruckByOrderId(orderId);
+        return truck.map(value -> truckMapper.toDto(value)).orElse(null);
+    }
+
+    @Override
     public boolean canUpdateTruck(Long truckId) {
         Long existTruckId = truckRepository.getTruckIdToUpdate(truckId);
         return existTruckId != null;
@@ -164,6 +170,18 @@ public class TruckServiceImpl implements TruckService {
         existsTruck.combineSearchString();
         truckRepository.save(existsTruck);
         LOGGER.info("Set serviceable status to truck with id: {}", truckId);
+        return true;
+    }
+
+    @Override
+    public boolean setNewPosition(Long id, double longitude, double latitude) {
+        truckRepository.setNewPosition(id, longitude, latitude);
+        return true;
+    }
+
+    @Override
+    public boolean setZeroCoordinates(Long id) {
+        truckRepository.setZeroCoordinates(id);
         return true;
     }
 }

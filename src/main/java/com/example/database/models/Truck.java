@@ -24,6 +24,12 @@ public class Truck implements Searchable {
     @Column(name = "capacity")
     private double capacity;
 
+    @Column(name = "latitude")
+    private double latitude;
+
+    @Column(name = "longitude")
+    private double longitude;
+
     @Column(name = "condition")
     @Enumerated(value = EnumType.STRING)
     private TruckCondition condition;
@@ -64,6 +70,22 @@ public class Truck implements Searchable {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public TruckCondition getCondition() {

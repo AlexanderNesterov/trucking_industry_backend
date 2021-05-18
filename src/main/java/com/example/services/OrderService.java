@@ -21,6 +21,8 @@ public interface OrderService {
      */
     List<OrderDto> getOrders(String text, int page, int pageSize);
 
+    List<OrderDto> getInProgressOrders();
+
     OrderDto getOrderByDriverId(Long driverId);
 
     List<Order> getOrdersToSendMail();
